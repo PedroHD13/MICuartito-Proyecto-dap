@@ -1,77 +1,166 @@
 "use client";
 
 import { useState } from "react";
+import { useSession } from "../../useSession";
 
 export default function Home() {
   const [activeTab, setActiveTab] = useState<"login" | "register">("login");
+
   const [showRegisterPassword, setShowRegisterPassword] = useState(false);
+
+  // Datos del registro
   const [registerData, setRegisterData] = useState({
-  name: "",
-  username: "",
-  email: "",
-  password: "",
-  role: "inquilino",
-  });
-
-  const handleRegisterChange = (
-  event: React.ChangeEvent<HTMLInputElement>
-) => {
-  const { name, value } = event.target;
-
-  setRegisterData((prev) => ({
-    ...prev,
-    [name]: value,
-  }));
-};
-
-  const [registerMessage, setRegisterMessage] = useState("");
-
-  const handleRegister = (event: React.FormEvent<HTMLFormElement>) => {
-  event.preventDefault();
-
-  const users = JSON.parse(
-    localStorage.getItem("micuartito-users") || "[]"
-  );
-
-  const existingUser = users.find(
-    (user: { username: string; email: string }) =>
-      user.username === registerData.username ||
-      user.email === registerData.email
-  );
-
-  if (existingUser) {
-    setRegisterMessage(
-      "El usuario o correo electrónico ya está registrado."
-    );
-    return;
-  }
-
-  const newUser = {
-    id: Date.now(),
-    name: registerData.name,
-    username: registerData.username,
-    email: registerData.email,
-    password: registerData.password,
-    role: registerData.role,
-  };
-
-  users.push(newUser);
-
-  localStorage.setItem(
-    "micuartito-users",
-    JSON.stringify(users)
-  );
-
-  setRegisterMessage("¡Cuenta creada correctamente!");
-
-  setRegisterData({
     name: "",
     username: "",
-    email: "",
     password: "",
     role: "inquilino",
   });
-};
+
+  // Datos del login
+  const [loginData, setLoginData] = useState({
+    username: "",
+    password: "",
+  });
+
+  const [registerMessage, setRegisterMessage] = useState("");
+  const [loginMessage, setLoginMessage] = useState("");
+
+  // Sesión activa (manejada por el hook compartido)
+  const { session, login, logout } = useSession();
+
+  // =========================
+  // REGISTRO
+  // =========================
+
+  const handleRegisterChange = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    const { name, value } = event.target;
+
+    setRegisterData((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+  };
+
+  const handleRegister = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+
+    const users = JSON.parse(
+      localStorage.getItem("micuartito-users") || "[]"
+    );
+
+    const existingUser = users.find(
+      (user: { username: string }) =>
+        user.username === registerData.username
+    );
+
+    if (existingUser) {
+      setRegisterMessage("El usuario ya está registrado.");
+      return;
+    }
+
+    const newUser = {
+      id: Date.now(),
+      name: registerData.name,
+      username: registerData.username,
+      password: registerData.password,
+      role: registerData.role,
+    };
+
+    users.push(newUser);
+
+    localStorage.setItem(
+      "micuartito-users",
+      JSON.stringify(users)
+    );
+
+    setRegisterMessage("¡Cuenta creada correctamente!");
+
+    setRegisterData({
+      name: "",
+      username: "",
+      password: "",
+      role: "inquilino",
+    });
+  };
+
+  // =========================
+  // LOGIN
+  // =========================
+
+  const handleLoginChange = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    const { name, value } = event.target;
+
+    setLoginData((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+  };
+
+  const handleLogin = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+
+    const users = JSON.parse(
+      localStorage.getItem("micuartito-users") || "[]"
+    );
+
+    const foundUser = users.find(
+      (user: { username: string; password: string }) =>
+        user.username === loginData.username &&
+        user.password === loginData.password
+    );
+
+    if (!foundUser) {
+      setLoginMessage("Usuario o contraseña incorrectos.");
+      return;
+    }
+
+    login({
+      username: foundUser.username,
+      name: foundUser.name,
+      role: foundUser.role,
+    });
+
+    setLoginMessage("");
+    setLoginData({ username: "", password: "" });
+  };
+
+  const handleLogout = () => {
+    logout();
+  };
+
+  const roleMessages: Record<string, string> = {
+    inquilino: "Has ingresado al perfil de Inquilino",
+    propietario: "Has ingresado al perfil de Propietario",
+    admin: "Has ingresado como Administrador",
+  };
+
+  // =========================
+  // PANTALLA PROVISIONAL (sesión activa)
+  // =========================
+
+  if (session) {
+    return (
+      <main>
+        <div id="session-screen">
+          <div className="login-container">
+            <h2>{roleMessages[session.role] || "Sesión iniciada"}</h2>
+            <p>Usuario: {session.username}</p>
+
+            <button
+              className="btn btn-primary"
+              onClick={handleLogout}
+            >
+              Cerrar sesión
+            </button>
+          </div>
+        </div>
+      </main>
+    );
+  }
 
   return (
     <main>
@@ -86,17 +175,29 @@ export default function Home() {
             />
           </div>
 
+          {/* PESTAÑAS */}
+
           <div className="tabs">
             <button
-              className={`tab ${activeTab === "login" ? "active" : ""}`}
-              onClick={() => setActiveTab("login")}
+              className={`tab ${
+                activeTab === "login" ? "active" : ""
+              }`}
+              onClick={() => {
+                setActiveTab("login");
+                setLoginMessage("");
+              }}
             >
               Iniciar Sesión
             </button>
 
             <button
-              className={`tab ${activeTab === "register" ? "active" : ""}`}
-              onClick={() => setActiveTab("register")}
+              className={`tab ${
+                activeTab === "register" ? "active" : ""
+              }`}
+              onClick={() => {
+                setActiveTab("register");
+                setRegisterMessage("");
+              }}
             >
               Registrarse
             </button>
@@ -104,18 +205,27 @@ export default function Home() {
 
           <div className="form-container">
 
+            {/* =========================
+                LOGIN
+            ========================= */}
+
             {activeTab === "login" && (
               <div className="form-section active">
-                <form>
+
+                <form onSubmit={handleLogin}>
+
                   <div className="input-group">
-                    <label htmlFor="login-email">
+                    <label htmlFor="login-username">
                       Usuario
                     </label>
 
                     <input
                       type="text"
-                      id="login-email"
+                      id="login-username"
+                      name="username"
                       placeholder="Ingresa tu usuario"
+                      value={loginData.username}
+                      onChange={handleLoginChange}
                       required
                     />
                   </div>
@@ -128,7 +238,10 @@ export default function Home() {
                     <input
                       type="password"
                       id="login-password"
+                      name="password"
                       placeholder="••••••••"
+                      value={loginData.password}
+                      onChange={handleLoginChange}
                       required
                     />
                   </div>
@@ -139,6 +252,12 @@ export default function Home() {
                   >
                     Ingresar
                   </button>
+
+                  {loginMessage && (
+                    <div className="register-msg">
+                      {loginMessage}
+                    </div>
+                  )}
 
                   <div className="demo-info">
                     <h4>🔐 Usuarios de prueba:</h4>
@@ -153,134 +272,146 @@ export default function Home() {
                       inquilino / inquilino123
                     </p>
                   </div>
+
                 </form>
+
               </div>
             )}
 
+            {/* =========================
+                REGISTRO
+            ========================= */}
+
             {activeTab === "register" && (
-          <div className="form-section active">
-            <form onSubmit={handleRegister}>
-              <div className="input-group">
-                <label htmlFor="register-name">
-                  Nombre Completo
-                </label>
+              <div className="form-section active">
 
-                <input
-                  type="text"
-                  id="register-name"
-                  name="name"
-                  placeholder="Juan Pérez"
-                  value={registerData.name}
-                  onChange={handleRegisterChange}
-                  required
-                />
+                <form onSubmit={handleRegister}>
+
+                  <div className="input-group">
+                    <label htmlFor="register-name">
+                      Nombre Completo
+                    </label>
+
+                    <input
+                      type="text"
+                      id="register-name"
+                      name="name"
+                      placeholder="Juan Pérez"
+                      value={registerData.name}
+                      onChange={handleRegisterChange}
+                      required
+                    />
+                  </div>
+
+                  <div className="input-group">
+                    <label htmlFor="register-username">
+                      Usuario
+                    </label>
+
+                    <input
+                      type="text"
+                      id="register-username"
+                      name="username"
+                      placeholder="miusuario"
+                      value={registerData.username}
+                      onChange={handleRegisterChange}
+                      required
+                      autoComplete="off"
+                    />
+                  </div>
+
+                  <div className="input-group">
+                    <label htmlFor="register-password">
+                      Contraseña
+                    </label>
+
+                    <div className="password-wrapper">
+
+                      <input
+                        type={
+                          showRegisterPassword
+                            ? "text"
+                            : "password"
+                        }
+                        id="register-password"
+                        name="password"
+                        placeholder="Mínimo 6 caracteres"
+                        value={registerData.password}
+                        onChange={handleRegisterChange}
+                        required
+                      />
+
+                      <button
+                        type="button"
+                        className="toggle-password"
+                        onClick={() =>
+                          setShowRegisterPassword(
+                            !showRegisterPassword
+                          )
+                        }
+                        title="Mostrar/ocultar contraseña"
+                      >
+                        👁
+                      </button>
+
+                    </div>
+                  </div>
+
+                  <div className="input-group">
+                    <label>
+                      Tipo de cuenta
+                    </label>
+
+                    <div className="role-selector">
+
+                      <label className="role-option">
+                        <input
+                          type="radio"
+                          name="role"
+                          value="inquilino"
+                          checked={
+                            registerData.role === "inquilino"
+                          }
+                          onChange={handleRegisterChange}
+                        />
+
+                        <span>🔍 Busco Cuarto</span>
+                      </label>
+
+                      <label className="role-option">
+                        <input
+                          type="radio"
+                          name="role"
+                          value="propietario"
+                          checked={
+                            registerData.role === "propietario"
+                          }
+                          onChange={handleRegisterChange}
+                        />
+
+                        <span>🏠 Alquilo Cuarto</span>
+                      </label>
+
+                    </div>
+                  </div>
+
+                  <button
+                    type="submit"
+                    className="btn btn-primary"
+                  >
+                    Crear Cuenta
+                  </button>
+
+                  {registerMessage && (
+                    <div className="register-msg">
+                      {registerMessage}
+                    </div>
+                  )}
+
+                </form>
+
               </div>
-
-          <div className="input-group">
-            <label htmlFor="register-username">
-              Usuario
-            </label>
-
-            <input
-            type="text"
-            id="register-username"
-            name="username"
-            placeholder="miusuario"
-            value={registerData.username}
-            onChange={handleRegisterChange}
-            required
-            autoComplete="off"
-          />
-          </div>
-
-          <div className="input-group">
-            <label htmlFor="register-email">
-              Correo Electrónico
-            </label>
-
-            <input
-            type="email"
-            id="register-email"
-            name="email"
-            placeholder="tu@email.com"
-            value={registerData.email}
-            onChange={handleRegisterChange}
-            required
-            />
-          </div>
-
-      <div className="input-group">
-        <label htmlFor="register-password">
-          Contraseña
-        </label>
-
-        <div className="password-wrapper">
-          <input
-            type={showRegisterPassword ? "text" : "password"}
-            id="register-password"
-            name="password"
-            placeholder="Mínimo 6 caracteres"
-            value={registerData.password}
-            onChange={handleRegisterChange}
-            required
-            />
-
-          <button
-          type="button"
-          className="toggle-password"
-          onClick={() => setShowRegisterPassword(!showRegisterPassword)}
-          title="Mostrar/ocultar contraseña"
-        >
-          👁
-        </button>
-        </div>
-      </div>
-
-      <div className="input-group">
-        <label>
-          Tipo de cuenta
-        </label>
-
-        <div className="role-selector">
-          <label className="role-option">
-            <input
-                type="radio"
-                name="role"
-                value="inquilino"
-                checked={registerData.role === "inquilino"}
-                onChange={handleRegisterChange}
-            />
-            <span>🔍 Busco Cuarto</span>
-            </label>
-
-          <label className="role-option">
-        <input
-            type="radio"
-            name="role"
-            value="propietario"
-            checked={registerData.role === "propietario"}
-            onChange={handleRegisterChange}
-        />
-        <span>🏠 Alquilo Cuarto</span>
-        </label>
-        </div>
-      </div>
-
-      <button
-        type="submit"
-        className="btn btn-primary"
-      >
-        Crear Cuenta
-      </button>
-
-      {registerMessage && (
-        <div className="register-msg">
-            {registerMessage}
-        </div>
-        )}
-    </form>
-  </div>
-)}
+            )}
 
           </div>
         </div>
