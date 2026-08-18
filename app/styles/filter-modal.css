@@ -1,0 +1,298 @@
+/* ============================================
+   FILTER MODAL - ESTILOS SEPARADOS
+   ============================================ */
+
+/* Overlay - fondo oscuro */
+.filter-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 9999;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  animation: fadeInOverlay 0.3s ease;
+}
+
+/* Panel - contenido del modal */
+.filter-panel {
+  background: white;
+  width: 100%;
+  max-width: 480px;
+  max-height: 85vh;
+  border-radius: 20px 20px 0 0;
+  animation: slideUpPanel 0.3s ease;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 -10px 40px rgba(0, 0, 0, 0.2);
+}
+
+/* Header del modal */
+.filter-panel-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 20px 15px 20px;
+  border-bottom: 2px solid #f0f0f0;
+  flex-shrink: 0;
+}
+
+.filter-panel-header h2 {
+  font-size: 1.3em;
+  color: #333;
+  margin: 0;
+}
+
+.filter-panel-actions {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+/* Botones del header */
+.btn-clear-filters {
+  padding: 8px 14px;
+  background: white;
+  border: 2px solid #e0e0e0;
+  border-radius: 10px;
+  font-weight: 600;
+  cursor: pointer;
+  font-size: 0.85em;
+  color: #666;
+  transition: all 0.3s;
+}
+
+.btn-clear-filters:hover {
+  border-color: #d9764a;
+  color: #d9764a;
+}
+
+.btn-apply-filters {
+  padding: 8px 16px;
+  background: linear-gradient(135deg, #2563a8 0%, #d9764a 100%);
+  color: white;
+  border: none;
+  border-radius: 10px;
+  font-weight: 600;
+  cursor: pointer;
+  font-size: 0.85em;
+  transition: all 0.3s;
+}
+
+.btn-apply-filters:hover {
+  transform: scale(1.05);
+  box-shadow: 0 4px 15px rgba(217, 118, 74, 0.4);
+}
+
+.btn-close-filters {
+  background: none;
+  border: none;
+  font-size: 1.8em;
+  cursor: pointer;
+  color: #999;
+  padding: 0 4px;
+  line-height: 1;
+  transition: all 0.3s;
+}
+
+.btn-close-filters:hover {
+  color: #333;
+  transform: rotate(90deg);
+}
+
+/* Cuerpo del modal - scroll */
+.filter-panel-body {
+  padding: 20px 20px 30px 20px;
+  overflow-y: auto;
+  flex: 1;
+}
+
+/* Grupos de filtros */
+.filter-group {
+  margin-bottom: 24px;
+}
+
+.filter-group:last-child {
+  margin-bottom: 0;
+}
+
+.filter-group-title {
+  font-size: 1em;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 10px;
+}
+
+/* Inputs de precio */
+.price-inputs {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.price-inputs input {
+  flex: 1;
+  padding: 10px 14px;
+  border: 2px solid #e0e0e0;
+  border-radius: 8px;
+  font-size: 0.95em;
+  transition: border-color 0.3s;
+}
+
+.price-inputs input:focus {
+  outline: none;
+  border-color: #d9764a;
+}
+
+.price-inputs span {
+  color: #666;
+  font-weight: 600;
+}
+
+/* Selects */
+.filter-group select {
+  width: 100%;
+  padding: 10px 14px;
+  border: 2px solid #e0e0e0;
+  border-radius: 8px;
+  font-size: 0.95em;
+  background: white;
+  transition: border-color 0.3s;
+  cursor: pointer;
+}
+
+.filter-group select:focus {
+  outline: none;
+  border-color: #d9764a;
+}
+
+/* Checkboxes */
+.checkbox-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.checkbox-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 14px;
+  border: 2px solid #e0e0e0;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s;
+  margin: 0;
+}
+
+.checkbox-item:hover {
+  border-color: #d9764a;
+  background: #fff8f5;
+}
+
+.checkbox-item input[type="checkbox"] {
+  width: 20px;
+  height: 20px;
+  accent-color: #d9764a;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+.checkbox-item span {
+  font-size: 0.95em;
+  color: #333;
+  cursor: pointer;
+}
+
+/* Animaciones */
+@keyframes fadeInOverlay {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideUpPanel {
+  from {
+    transform: translateY(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+/* ============================================
+   RESPONSIVE
+   ============================================ */
+
+/* Tablet y desktop */
+@media (min-width: 768px) {
+  .filter-overlay {
+    align-items: center;
+  }
+
+  .filter-panel {
+    max-width: 520px;
+    border-radius: 20px;
+    max-height: 80vh;
+  }
+
+  .filter-panel-header {
+    padding: 24px 24px 16px 24px;
+  }
+
+  .filter-panel-body {
+    padding: 20px 24px 30px 24px;
+  }
+}
+
+/* Móvil */
+@media (max-width: 480px) {
+  .filter-panel-header {
+    padding: 16px 16px 12px 16px;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+
+  .filter-panel-header h2 {
+    font-size: 1.1em;
+  }
+
+  .filter-panel-actions {
+    gap: 6px;
+  }
+
+  .btn-clear-filters,
+  .btn-apply-filters {
+    padding: 6px 12px;
+    font-size: 0.8em;
+  }
+
+  .btn-close-filters {
+    font-size: 1.5em;
+  }
+
+  .filter-panel-body {
+    padding: 16px 16px 24px 16px;
+  }
+
+  .filter-group {
+    margin-bottom: 18px;
+  }
+
+  .checkbox-item {
+    padding: 8px 12px;
+  }
+
+  .price-inputs input {
+    padding: 8px 12px;
+    font-size: 0.9em;
+  }
+}

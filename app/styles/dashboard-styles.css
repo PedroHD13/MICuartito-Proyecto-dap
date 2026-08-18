@@ -1,43 +1,52 @@
 /* ============================================
-   ESTILOS DEL DASHBOARD
+   ESTILOS DEL DASHBOARD - RESPONSIVE
    ============================================ */
 
 .dashboard-container {
-  max-width: 480px;
+  max-width: 1200px;
   margin: 0 auto;
   min-height: 100vh;
   background: #f5f5f5;
-  padding-bottom: 80px;
+  padding-bottom: 0;
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
 }
 
-/* Header */
+/* Header - más espacioso en desktop */
 .dashboard-header {
   background: linear-gradient(135deg, #2563a8 0%, #d9764a 100%);
-  padding: 20px;
+  padding: 25px 30px;
   display: flex;
   justify-content: space-between;
-  align-items: flex-start;
+  align-items: center;
   color: white;
 }
 
 .user-greeting {
   display: flex;
   align-items: center;
-  gap: 15px;
+  gap: 20px;
 }
 
 .user-avatar {
-  width: 60px;
-  height: 60px;
+  width: 70px;
+  height: 70px;
   border-radius: 50%;
   background: rgba(255, 255, 255, 0.2);
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 2em;
+  font-size: 2.2em;
   font-weight: bold;
   color: white;
-  border: 2px solid rgba(255, 255, 255, 0.3);
+  border: 3px solid rgba(255, 255, 255, 0.3);
+  transition: all 0.3s;
+}
+
+.user-avatar:hover {
+  transform: scale(1.05);
+  border-color: white;
 }
 
 .greeting-text {
@@ -46,32 +55,34 @@
 }
 
 .greeting {
-  font-size: 0.85em;
+  font-size: 0.9em;
   opacity: 0.9;
 }
 
 .greeting-text h1 {
-  font-size: 1.3em;
+  font-size: 1.5em;
   margin: 2px 0;
+  font-weight: 700;
 }
 
 .user-role {
-  font-size: 0.75em;
+  font-size: 0.8em;
   background: rgba(255, 255, 255, 0.2);
-  padding: 2px 12px;
-  border-radius: 12px;
+  padding: 4px 16px;
+  border-radius: 20px;
   display: inline-block;
   width: fit-content;
+  font-weight: 600;
 }
 
 .logout-btn {
-  background: rgba(255, 255, 255, 0.2);
-  border: none;
+  background: rgba(255, 255, 255, 0.15);
+  border: 2px solid rgba(255, 255, 255, 0.2);
   color: white;
-  width: 40px;
-  height: 40px;
+  width: 48px;
+  height: 48px;
   border-radius: 50%;
-  font-size: 1.2em;
+  font-size: 1.3em;
   cursor: pointer;
   transition: all 0.3s;
   display: flex;
@@ -79,69 +90,90 @@
   justify-content: center;
 }
 
-.logout-btn:active {
-  transform: scale(0.95);
-  background: rgba(255, 255, 255, 0.3);
+.logout-btn:hover {
+  background: rgba(255, 255, 255, 0.25);
+  border-color: rgba(255, 255, 255, 0.4);
+  transform: scale(1.05);
 }
 
-/* Stats Grid */
+.logout-btn:active {
+  transform: scale(0.95);
+}
+
+/* Stats Grid - responsive */
 .stats-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 10px;
-  padding: 15px 20px;
+  gap: 15px;
+  padding: 20px 30px;
   margin-top: -20px;
 }
 
 .stat-card {
   background: white;
-  border-radius: 12px;
-  padding: 15px 10px;
+  border-radius: 16px;
+  padding: 20px 15px;
   text-align: center;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+  transition: all 0.3s;
+}
+
+.stat-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.12);
 }
 
 .stat-icon {
   display: block;
-  font-size: 1.5em;
-  margin-bottom: 4px;
+  font-size: 1.8em;
+  margin-bottom: 6px;
 }
 
 .stat-value {
   display: block;
-  font-size: 1.5em;
+  font-size: 1.8em;
   font-weight: 700;
   color: #d9764a;
 }
 
 .stat-label {
   display: block;
-  font-size: 0.75em;
+  font-size: 0.8em;
   color: #666;
-  margin-top: 2px;
+  margin-top: 4px;
+  font-weight: 500;
 }
 
-/* Quick Actions */
+/* Quick Actions - responsive grid */
 .quick-actions {
-  padding: 10px 20px;
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
+  padding: 15px 30px 20px;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 15px;
+}
+
+.quick-actions .action-card:first-child {
+  grid-column: span 2;
 }
 
 .action-card {
   background: white;
   border: none;
-  border-radius: 15px;
-  padding: 18px 20px;
+  border-radius: 16px;
+  padding: 20px 25px;
   display: flex;
   align-items: center;
-  gap: 15px;
+  gap: 18px;
   cursor: pointer;
   transition: all 0.3s;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.06);
   width: 100%;
   text-align: left;
+}
+
+.action-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
 }
 
 .action-card:active {
@@ -158,13 +190,14 @@
 }
 
 .action-card.primary .action-info p {
-  color: rgba(255, 255, 255, 0.8);
+  color: rgba(255, 255, 255, 0.85);
 }
 
 .action-icon {
-  font-size: 2em;
-  width: 50px;
+  font-size: 2.2em;
+  width: 55px;
   text-align: center;
+  flex-shrink: 0;
 }
 
 .action-info {
@@ -172,8 +205,8 @@
 }
 
 .action-info h3 {
-  font-size: 1.05em;
-  margin-bottom: 3px;
+  font-size: 1.1em;
+  margin-bottom: 4px;
   color: #333;
 }
 
@@ -185,18 +218,18 @@
 
 /* Recent Section */
 .recent-section {
-  padding: 10px 20px 20px;
+  padding: 10px 30px 30px;
 }
 
 .section-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 15px;
+  margin-bottom: 18px;
 }
 
 .section-header h3 {
-  font-size: 1.1em;
+  font-size: 1.2em;
   color: #333;
 }
 
@@ -205,34 +238,46 @@
   border: none;
   color: #2563a8;
   font-weight: 600;
-  font-size: 0.85em;
+  font-size: 0.9em;
   cursor: pointer;
+  transition: all 0.3s;
+  padding: 8px 16px;
+  border-radius: 8px;
+}
+
+.view-all:hover {
+  background: rgba(37, 99, 168, 0.08);
 }
 
 .empty-recent {
   text-align: center;
-  padding: 30px 20px;
+  padding: 40px 20px;
   background: white;
-  border-radius: 12px;
+  border-radius: 16px;
   color: #999;
 }
 
+/* Recent Rooms - responsive grid */
 .recent-rooms {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 15px;
 }
 
 .recent-room-card {
   background: white;
-  border-radius: 12px;
+  border-radius: 14px;
   overflow: hidden;
   display: flex;
-  align-items: center;
-  gap: 15px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+  flex-direction: column;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.06);
   cursor: pointer;
   transition: all 0.3s;
+}
+
+.recent-room-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.12);
 }
 
 .recent-room-card:active {
@@ -240,109 +285,195 @@
 }
 
 .recent-room-card img {
-  width: 80px;
-  height: 80px;
+  width: 100%;
+  height: 140px;
   object-fit: cover;
   flex-shrink: 0;
 }
 
 .recent-room-info {
-  padding: 10px 10px 10px 0;
+  padding: 12px 15px;
   flex: 1;
+  display: flex;
+  flex-direction: column;
 }
 
 .recent-room-info h4 {
   font-size: 0.95em;
   color: #333;
-  margin-bottom: 3px;
+  margin-bottom: 4px;
+  font-weight: 600;
+  flex: 1;
 }
 
 .recent-room-info .location {
   font-size: 0.8em;
   color: #666;
-  margin-bottom: 3px;
+  margin-bottom: 6px;
 }
 
 .recent-room-info .price {
-  font-size: 1em;
+  font-size: 1.1em;
   font-weight: 700;
   color: #d9764a;
+  margin-top: auto;
 }
 
-/* Bottom Navigation (reutilizado) */
-.bottom-nav {
-  position: fixed;
-  bottom: 0;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 100%;
-  max-width: 480px;
-  background: white;
-  box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
-  display: flex;
-  justify-content: space-around;
-  padding: 10px 0;
-  z-index: 1000;
-}
+/* ============================================
+   RESPONSIVE: TABLET Y DESKTOP
+   ============================================ */
 
-.nav-item {
-  flex: 1;
-  text-align: center;
-  padding: 8px;
-  cursor: pointer;
-  transition: all 0.3s;
-  border: none;
-  background: transparent;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 2px;
-}
-
-.nav-item:active {
-  transform: scale(0.95);
-}
-
-.nav-icon {
-  font-size: 1.5em;
-  display: block;
-}
-
-.nav-label {
-  font-size: 0.7em;
-  color: #666;
-  font-weight: 500;
-}
-
-.nav-item.active .nav-label {
-  color: #d9764a;
-  font-weight: 600;
-}
-
-.nav-item.active .nav-icon {
-  filter: drop-shadow(0 0 8px #d9764a);
-}
-
-/* Responsive */
-@media (max-width: 480px) {
+/* Tablet */
+@media (max-width: 768px) {
   .stats-grid {
-    gap: 8px;
+    gap: 10px;
+    padding: 15px 20px;
   }
-  
+
+  .stat-card {
+    padding: 15px 10px;
+  }
+
+  .stat-value {
+    font-size: 1.4em;
+  }
+
+  .quick-actions {
+    padding: 10px 20px 15px;
+    gap: 10px;
+  }
+
+  .action-card {
+    padding: 15px 18px;
+  }
+
+  .action-icon {
+    font-size: 1.8em;
+    width: 45px;
+  }
+
+  .recent-section {
+    padding: 10px 20px 20px;
+  }
+
+  .recent-rooms {
+    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+  }
+}
+
+/* Móvil (por defecto se mantiene como estaba) */
+@media (max-width: 480px) {
+  .dashboard-header {
+    padding: 20px;
+  }
+
+  .user-avatar {
+    width: 55px;
+    height: 55px;
+    font-size: 1.8em;
+  }
+
+  .greeting-text h1 {
+    font-size: 1.2em;
+  }
+
+  .stats-grid {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
+    padding: 15px 16px;
+    margin-top: -15px;
+  }
+
   .stat-card {
     padding: 12px 8px;
   }
-  
+
   .stat-value {
     font-size: 1.2em;
   }
-  
+
+  .quick-actions {
+    grid-template-columns: 1fr;
+    padding: 10px 16px 15px;
+    gap: 10px;
+  }
+
+  .quick-actions .action-card:first-child {
+    grid-column: span 1;
+  }
+
   .action-card {
     padding: 15px;
+    gap: 12px;
   }
-  
+
   .action-icon {
-    font-size: 1.5em;
+    font-size: 1.6em;
     width: 40px;
+  }
+
+  .recent-section {
+    padding: 10px 16px 20px;
+  }
+
+  .recent-rooms {
+    grid-template-columns: 1fr;
+  }
+
+  .recent-room-card {
+    flex-direction: row;
+  }
+
+  .recent-room-card img {
+    width: 80px;
+    height: 80px;
+  }
+
+  .recent-room-info h4 {
+    font-size: 0.9em;
+  }
+}
+
+/* Desktop grande */
+@media (min-width: 1200px) {
+  .dashboard-container {
+    max-width: 1400px;
+  }
+
+  .stats-grid {
+    gap: 20px;
+    padding: 25px 40px;
+  }
+
+  .stat-value {
+    font-size: 2.2em;
+  }
+
+  .quick-actions {
+    padding: 20px 40px 25px;
+    gap: 20px;
+  }
+
+  .action-card {
+    padding: 25px 30px;
+    gap: 20px;
+  }
+
+  .action-icon {
+    font-size: 2.8em;
+    width: 70px;
+  }
+
+  .action-info h3 {
+    font-size: 1.3em;
+  }
+
+  .recent-section {
+    padding: 15px 40px 35px;
+  }
+
+  .recent-rooms {
+    grid-template-columns: repeat(4, 1fr);
+    gap: 20px;
   }
 }
