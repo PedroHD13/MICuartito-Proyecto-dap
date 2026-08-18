@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { useSession } from "../../useSession";
 import "../styles/layout-styles.css";
+import "../styles/login-styles.css";
 
 export default function LoginPage() {
   const router = useRouter();

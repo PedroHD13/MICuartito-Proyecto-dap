@@ -6,8 +6,10 @@ import { useRequireAuth } from '../../../useSession';
 import { useRooms } from '../../hooks/useRooms';
 import { useFavorites } from '../../hooks/useFavorites';
 import RoomCard from '../../components/RoomCard';
+import FilterModal from '../../components/filtermodal'; // ✅ Importar el modal
 import { Room, RoomFilters } from '../../types';
 import '../../styles/buscar-styles.css';
+import '../../styles/filter-modal.css'; // ✅ Importar estilos del modal
 
 export default function BuscarPage() {
   const router = useRouter();
@@ -24,6 +26,7 @@ export default function BuscarPage() {
   // Aplicar búsqueda al cambiar el término
   useEffect(() => {
     applyFilters({ ...filters, searchTerm });
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [searchTerm]);
 
   // Contar filtros activos
@@ -56,7 +59,6 @@ export default function BuscarPage() {
   };
 
   const handleViewDetail = (room: Room) => {
-    // Por ahora mostrar alerta, luego navegar a detalle
     alert(`📋 Detalles del Cuarto:\n\n` +
       `${room.title}\n` +
       `${room.location}\n\n` +
@@ -82,6 +84,15 @@ export default function BuscarPage() {
     clearFilters();
     setSearchTerm('');
     setSortBy('price-asc');
+    setIsFilterModalOpen(false); // ✅ Cerrar modal al limpiar
+  };
+
+  const handleOpenModal = () => {
+    setIsFilterModalOpen(true);
+  };
+
+  const handleCloseModal = () => {
+    setIsFilterModalOpen(false);
   };
 
   const goToHome = () => router.push('/inquilino');
@@ -114,7 +125,7 @@ export default function BuscarPage() {
       <div className="filter-section">
         <button 
           className="filter-btn primary" 
-          onClick={() => setIsFilterModalOpen(true)}
+          onClick={handleOpenModal} // ✅ Usar función para abrir
         >
           🎛️ Filtros
           {activeFiltersCount > 0 && (
@@ -125,7 +136,7 @@ export default function BuscarPage() {
           <button 
             className="filter-btn"
             onClick={handleClearFilters}
-            style={{ background: '#f44336', color: 'white', borderColor: '#f44336' }}
+            style={{ background: '#fee2e2', borderColor: '#fca5a5', color: '#dc2626' }}
           >
             ✕ Limpiar
           </button>
@@ -143,13 +154,13 @@ export default function BuscarPage() {
         </button>
       </div>
 
-      {/* Rooms List */}
-      <div className="rooms-container">
+      {/* Rooms Grid */}
+      <div className="rooms-grid">
         {rooms.length === 0 ? (
-          <div style={{ textAlign: 'center', padding: '40px 20px', color: '#666' }}>
-            <div style={{ fontSize: '3em', marginBottom: '15px' }}>😔</div>
+          <div className="empty-state" style={{ gridColumn: '1 / -1' }}>
+            <div className="empty-icon">😔</div>
             <h3 style={{ marginBottom: '10px' }}>No se encontraron cuartos</h3>
-            <p>Intenta ajustar los filtros de búsqueda</p>
+            <p style={{ color: '#666' }}>Intenta ajustar los filtros de búsqueda</p>
           </div>
         ) : (
           rooms.map(room => (
@@ -165,158 +176,14 @@ export default function BuscarPage() {
         )}
       </div>
 
-      {/* Filter Modal */}
-      {isFilterModalOpen && (
-        <div className="filter-modal active" onClick={() => setIsFilterModalOpen(false)}>
-          <div className="filter-content" onClick={(e) => e.stopPropagation()}>
-            <div className="filter-scrollable">
-              <div className="filter-header">
-                <h2>Filtros</h2>
-                <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
-                  <button 
-                    className="btn-clear" 
-                    onClick={handleClearFilters}
-                  >
-                    Limpiar
-                  </button>
-                  <button 
-                    className="btn-apply" 
-                    onClick={() => setIsFilterModalOpen(false)}
-                  >
-                    ✅ Aplicar
-                  </button>
-                  <button 
-                    className="close-filter" 
-                    onClick={() => setIsFilterModalOpen(false)}
-                  >
-                    ×
-                  </button>
-                </div>
-              </div>
-
-              {/* Precio */}
-              <div className="filter-group">
-                <div className="filter-group-title">💰 Rango de Precio (Bs.)</div>
-                <div className="price-inputs">
-                  <input
-                    type="number"
-                    placeholder="Mín"
-                    value={filters.priceMin || ''}
-                    onChange={(e) => applyFilters({ ...filters, priceMin: e.target.value ? Number(e.target.value) : undefined })}
-                  />
-                  <span>-</span>
-                  <input
-                    type="number"
-                    placeholder="Máx"
-                    value={filters.priceMax || ''}
-                    onChange={(e) => applyFilters({ ...filters, priceMax: e.target.value ? Number(e.target.value) : undefined })}
-                  />
-                </div>
-              </div>
-
-              {/* Zona */}
-              <div className="filter-group">
-                <div className="filter-group-title">📍 Zona</div>
-                <select
-                  value={filters.zone || ''}
-                  onChange={(e) => applyFilters({ ...filters, zone: e.target.value })}
-                  style={{ width: '100%', padding: '10px', border: '2px solid #e0e0e0', borderRadius: '8px' }}
-                >
-                  <option value="">Todas las zonas</option>
-                  <option value="norte">Zona Norte</option>
-                  <option value="sur">Zona Sur</option>
-                  <option value="este">Zona Este</option>
-                  <option value="oeste">Zona Oeste</option>
-                  <option value="centro">Centro</option>
-                </select>
-              </div>
-
-              {/* Baño */}
-              <div className="filter-group">
-                <div className="filter-group-title">🚿 Tipo de Baño</div>
-                <div className="checkbox-list">
-                  <label className="checkbox-item">
-                    <input
-                      type="checkbox"
-                      checked={filters.bathroomPrivate || false}
-                      onChange={(e) => applyFilters({ ...filters, bathroomPrivate: e.target.checked })}
-                    />
-                    <span>Baño privado</span>
-                  </label>
-                  <label className="checkbox-item">
-                    <input
-                      type="checkbox"
-                      checked={filters.bathroomShared || false}
-                      onChange={(e) => applyFilters({ ...filters, bathroomShared: e.target.checked })}
-                    />
-                    <span>Baño compartido</span>
-                  </label>
-                </div>
-              </div>
-
-              {/* Amoblado */}
-              <div className="filter-group">
-                <div className="filter-group-title">🛋️ Mobiliario</div>
-                <div className="checkbox-list">
-                  <label className="checkbox-item">
-                    <input
-                      type="checkbox"
-                      checked={filters.furnished || false}
-                      onChange={(e) => applyFilters({ ...filters, furnished: e.target.checked })}
-                    />
-                    <span>Amoblado</span>
-                  </label>
-                </div>
-              </div>
-
-              {/* Servicios */}
-              <div className="filter-group">
-                <div className="filter-group-title">✨ Servicios Incluidos</div>
-                <div className="checkbox-list">
-                  {[
-                    { value: 'wifi', label: '📶 WiFi' },
-                    { value: 'agua', label: '💧 Agua' },
-                    { value: 'luz', label: '💡 Luz' },
-                    { value: 'gas', label: '🔥 Gas' }
-                  ].map(service => (
-                    <label key={service.value} className="checkbox-item">
-                      <input
-                        type="checkbox"
-                        checked={(filters.services || []).includes(service.value)}
-                        onChange={() => {
-                          const current = filters.services || [];
-                          const updated = current.includes(service.value)
-                            ? current.filter(s => s !== service.value)
-                            : [...current, service.value];
-                          applyFilters({ ...filters, services: updated });
-                        }}
-                      />
-                      <span>{service.label}</span>
-                    </label>
-                  ))}
-                </div>
-              </div>
-
-              {/* Capacidad */}
-              <div className="filter-group">
-                <div className="filter-group-title">👥 Capacidad</div>
-                <select
-                  value={filters.capacity || ''}
-                  onChange={(e) => applyFilters({ ...filters, capacity: e.target.value })}
-                  style={{ width: '100%', padding: '10px', border: '2px solid #e0e0e0', borderRadius: '8px' }}
-                >
-                  <option value="">Cualquier capacidad</option>
-                  <option value="1">1 persona</option>
-                  <option value="2">2 personas</option>
-                  <option value="3">3 personas</option>
-                  <option value="4">4 personas</option>
-                  <option value="4+">4 o más personas</option>
-                </select>
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
+      {/* ✅ Filter Modal - Componente separado */}
+      <FilterModal
+        isOpen={isFilterModalOpen}
+        onClose={handleCloseModal}
+        filters={filters}
+        onApply={handleApplyFilters}
+        onClear={handleClearFilters}
+      />
 
       {/* Bottom Navigation */}
       <div className="bottom-nav">
