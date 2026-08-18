@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { useSession } from "../../useSession";
 import "../styles/layout-styles.css";
+import "../styles/login-styles.css";
 
 export default function LoginPage() {
   const router = useRouter();
@@ -102,7 +103,7 @@ export default function LoginPage() {
     }));
   };
 
-  const handleLogin = (event: React.FormEvent<HTMLFormElement>) => {
+    const handleLogin = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
     const users = JSON.parse(
@@ -130,8 +131,14 @@ export default function LoginPage() {
     setLoginMessage("");
     setLoginData({ username: "", password: "" });
 
-    // ✅ Redirigir al dashboard
-    router.push("/dashboard");
+    // ✅ Redirigir según el rol
+    const roleRoutes: Record<string, string> = {
+      inquilino: "/inquilino",
+      propietario: "/propietario",
+      admin: "/admin",
+    };
+
+    router.push(roleRoutes[foundUser.role] || "/");
   };
 
   const handleLogout = () => {
