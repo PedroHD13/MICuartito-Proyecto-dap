@@ -1,12 +1,17 @@
 "use client";
 
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import { useSession } from "../../useSession";
+import "../styles/layout-styles.css";
 
-export default function Home() {
+export default function LoginPage() {
+  const router = useRouter();
+  const { session, login, logout } = useSession();
+
   const [activeTab, setActiveTab] = useState<"login" | "register">("login");
-
   const [showRegisterPassword, setShowRegisterPassword] = useState(false);
+  const [showLoginPassword, setShowLoginPassword] = useState(false);
 
   // Datos del registro
   const [registerData, setRegisterData] = useState({
@@ -24,9 +29,6 @@ export default function Home() {
 
   const [registerMessage, setRegisterMessage] = useState("");
   const [loginMessage, setLoginMessage] = useState("");
-
-  // Sesión activa (manejada por el hook compartido)
-  const { session, login, logout } = useSession();
 
   // =========================
   // REGISTRO
@@ -86,7 +88,7 @@ export default function Home() {
   };
 
   // =========================
-  // LOGIN
+  // LOGIN (CON REDIRECCIÓN)
   // =========================
 
   const handleLoginChange = (
@@ -118,6 +120,7 @@ export default function Home() {
       return;
     }
 
+    // ✅ Guardar sesión
     login({
       username: foundUser.username,
       name: foundUser.name,
@@ -126,6 +129,9 @@ export default function Home() {
 
     setLoginMessage("");
     setLoginData({ username: "", password: "" });
+
+    // ✅ Redirigir al dashboard
+    router.push("/dashboard");
   };
 
   const handleLogout = () => {
@@ -176,12 +182,9 @@ export default function Home() {
           </div>
 
           {/* PESTAÑAS */}
-
           <div className="tabs">
             <button
-              className={`tab ${
-                activeTab === "login" ? "active" : ""
-              }`}
+              className={`tab ${activeTab === "login" ? "active" : ""}`}
               onClick={() => {
                 setActiveTab("login");
                 setLoginMessage("");
@@ -191,9 +194,7 @@ export default function Home() {
             </button>
 
             <button
-              className={`tab ${
-                activeTab === "register" ? "active" : ""
-              }`}
+              className={`tab ${activeTab === "register" ? "active" : ""}`}
               onClick={() => {
                 setActiveTab("register");
                 setRegisterMessage("");
@@ -204,21 +205,12 @@ export default function Home() {
           </div>
 
           <div className="form-container">
-
-            {/* =========================
-                LOGIN
-            ========================= */}
-
+            {/* LOGIN */}
             {activeTab === "login" && (
               <div className="form-section active">
-
                 <form onSubmit={handleLogin}>
-
                   <div className="input-group">
-                    <label htmlFor="login-username">
-                      Usuario
-                    </label>
-
+                    <label htmlFor="login-username">Usuario</label>
                     <input
                       type="text"
                       id="login-username"
@@ -231,67 +223,58 @@ export default function Home() {
                   </div>
 
                   <div className="input-group">
-                    <label htmlFor="login-password">
-                      Contraseña
-                    </label>
-
-                    <input
-                      type="password"
-                      id="login-password"
-                      name="password"
-                      placeholder="••••••••"
-                      value={loginData.password}
-                      onChange={handleLoginChange}
-                      required
-                    />
+                    <label htmlFor="login-password">Contraseña</label>
+                    <div className="password-wrapper">
+                      <input
+                        type={showLoginPassword ? "text" : "password"}
+                        id="login-password"
+                        name="password"
+                        placeholder="••••••••"
+                        value={loginData.password}
+                        onChange={handleLoginChange}
+                        required
+                      />
+                      <button
+                        type="button"
+                        className="toggle-password"
+                        onClick={() => setShowLoginPassword(!showLoginPassword)}
+                      >
+                        {showLoginPassword ? '🙈' : '👁'}
+                      </button>
+                    </div>
                   </div>
 
-                  <button
-                    type="submit"
-                    className="btn btn-primary"
-                  >
+                  <button type="submit" className="btn btn-primary">
                     Ingresar
                   </button>
 
                   {loginMessage && (
-                    <div className="register-msg">
+                    <div className="register-msg error">
                       {loginMessage}
                     </div>
                   )}
 
                   <div className="demo-info">
                     <h4>🔐 Usuarios de prueba:</h4>
-
                     <p>
                       <strong>Propietario:</strong>{" "}
                       propietario / propietario123
                     </p>
-
                     <p>
                       <strong>Inquilino:</strong>{" "}
                       inquilino / inquilino123
                     </p>
                   </div>
-
                 </form>
-
               </div>
             )}
 
-            {/* =========================
-                REGISTRO
-            ========================= */}
-
+            {/* REGISTRO */}
             {activeTab === "register" && (
               <div className="form-section active">
-
                 <form onSubmit={handleRegister}>
-
                   <div className="input-group">
-                    <label htmlFor="register-name">
-                      Nombre Completo
-                    </label>
-
+                    <label htmlFor="register-name">Nombre Completo</label>
                     <input
                       type="text"
                       id="register-name"
@@ -304,10 +287,7 @@ export default function Home() {
                   </div>
 
                   <div className="input-group">
-                    <label htmlFor="register-username">
-                      Usuario
-                    </label>
-
+                    <label htmlFor="register-username">Usuario</label>
                     <input
                       type="text"
                       id="register-username"
@@ -321,18 +301,10 @@ export default function Home() {
                   </div>
 
                   <div className="input-group">
-                    <label htmlFor="register-password">
-                      Contraseña
-                    </label>
-
+                    <label htmlFor="register-password">Contraseña</label>
                     <div className="password-wrapper">
-
                       <input
-                        type={
-                          showRegisterPassword
-                            ? "text"
-                            : "password"
-                        }
+                        type={showRegisterPassword ? "text" : "password"}
                         id="register-password"
                         name="password"
                         placeholder="Mínimo 6 caracteres"
@@ -340,79 +312,54 @@ export default function Home() {
                         onChange={handleRegisterChange}
                         required
                       />
-
                       <button
                         type="button"
                         className="toggle-password"
-                        onClick={() =>
-                          setShowRegisterPassword(
-                            !showRegisterPassword
-                          )
-                        }
-                        title="Mostrar/ocultar contraseña"
+                        onClick={() => setShowRegisterPassword(!showRegisterPassword)}
                       >
-                        👁
+                        {showRegisterPassword ? '🙈' : '👁'}
                       </button>
-
                     </div>
                   </div>
 
                   <div className="input-group">
-                    <label>
-                      Tipo de cuenta
-                    </label>
-
+                    <label>Tipo de cuenta</label>
                     <div className="role-selector">
-
                       <label className="role-option">
                         <input
                           type="radio"
                           name="role"
                           value="inquilino"
-                          checked={
-                            registerData.role === "inquilino"
-                          }
+                          checked={registerData.role === "inquilino"}
                           onChange={handleRegisterChange}
                         />
-
                         <span>🔍 Busco Cuarto</span>
                       </label>
-
                       <label className="role-option">
                         <input
                           type="radio"
                           name="role"
                           value="propietario"
-                          checked={
-                            registerData.role === "propietario"
-                          }
+                          checked={registerData.role === "propietario"}
                           onChange={handleRegisterChange}
                         />
-
                         <span>🏠 Alquilo Cuarto</span>
                       </label>
-
                     </div>
                   </div>
 
-                  <button
-                    type="submit"
-                    className="btn btn-primary"
-                  >
+                  <button type="submit" className="btn btn-primary">
                     Crear Cuenta
                   </button>
 
                   {registerMessage && (
-                    <div className="register-msg">
+                    <div className={`register-msg ${registerMessage.includes('correctamente') ? 'success' : 'error'}`}>
                       {registerMessage}
                     </div>
                   )}
-
                 </form>
-
               </div>
             )}
-
           </div>
         </div>
       </div>
