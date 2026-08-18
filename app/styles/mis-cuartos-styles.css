@@ -1,0 +1,436 @@
+/* ============================================
+   ESTILOS ESPECÍFICOS PARA MIS CUARTOS
+   ============================================ */
+
+.mis-cuartos-header {
+  padding: 15px 20px 20px;
+  display: block;
+}
+
+.header-top {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+/* Stats Section */
+.stats-section {
+  padding: 15px 20px;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+}
+
+.stats-section .stat-card {
+  background: white;
+  border-radius: 12px;
+  padding: 15px 10px;
+  text-align: center;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.stats-section .stat-icon {
+  font-size: 2em;
+  margin-bottom: 8px;
+}
+
+.stat-number {
+  font-size: 1.8em;
+  font-weight: 700;
+  color: #d9764a;
+  margin-bottom: 3px;
+}
+
+.stats-section .stat-label {
+  font-size: 0.75em;
+  color: #666;
+  font-weight: 500;
+}
+
+/* Filter Tabs */
+.filter-tabs {
+  padding: 15px 20px 10px;
+  display: flex;
+  gap: 10px;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+
+.filter-tabs::-webkit-scrollbar {
+  display: none;
+}
+
+.filter-tab {
+  background: white;
+  border: 2px solid #e0e0e0;
+  padding: 10px 20px;
+  border-radius: 20px;
+  font-size: 0.9em;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: all 0.3s;
+  font-weight: 500;
+}
+
+.filter-tab:active {
+  transform: scale(0.95);
+}
+
+.filter-tab.active {
+  background: linear-gradient(135deg, #2563a8 0%, #d9764a 100%);
+  color: white;
+  border-color: transparent;
+}
+
+.filter-tab span {
+  font-weight: 700;
+}
+
+/* Action Buttons */
+.action-buttons {
+  padding: 10px 20px 15px;
+}
+
+.btn-new-room {
+  width: 100%;
+  padding: 15px;
+  background: linear-gradient(135deg, #2563a8 0%, #d9764a 100%);
+  color: white;
+  border: none;
+  border-radius: 12px;
+  font-size: 1em;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s;
+  box-shadow: 0 4px 15px rgba(217, 118, 74, 0.3);
+}
+
+.btn-new-room:active {
+  transform: scale(0.98);
+}
+
+/* My Rooms Container */
+.my-rooms-container {
+  padding: 0 20px 20px;
+}
+
+/* Room Card */
+.my-room-card {
+  background: white;
+  border-radius: 15px;
+  overflow: hidden;
+  margin-bottom: 15px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+  transition: all 0.3s;
+}
+
+.my-room-card.inactive {
+  opacity: 0.6;
+}
+
+.room-card-header {
+  position: relative;
+  height: 160px;
+  background: linear-gradient(135deg, #e0e0e0 0%, #c0c0c0 100%);
+}
+
+.room-card-header img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.room-status-badge {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  padding: 5px 12px;
+  border-radius: 15px;
+  font-size: 0.8em;
+  font-weight: 600;
+}
+
+.room-status-badge.active {
+  background: #4CAF50;
+  color: white;
+}
+
+.room-status-badge.inactive {
+  background: #757575;
+  color: white;
+}
+
+.room-views {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: rgba(0, 0, 0, 0.7);
+  color: white;
+  padding: 5px 10px;
+  border-radius: 15px;
+  font-size: 0.8em;
+  font-weight: 600;
+}
+
+.room-card-body {
+  padding: 15px;
+}
+
+.room-card-title {
+  font-size: 1.1em;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 8px;
+}
+
+.room-card-info {
+  display: flex;
+  gap: 15px;
+  flex-wrap: wrap;
+  margin-bottom: 12px;
+}
+
+.info-item {
+  font-size: 0.85em;
+  color: #666;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.room-card-price {
+  font-size: 1.4em;
+  font-weight: 700;
+  color: #d9764a;
+  margin-bottom: 12px;
+}
+
+.room-card-price span {
+  font-size: 0.6em;
+  font-weight: 400;
+  color: #666;
+}
+
+.room-card-actions {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+}
+
+.action-btn {
+  padding: 10px;
+  border: none;
+  border-radius: 8px;
+  font-size: 0.85em;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+}
+
+.action-btn:active {
+  transform: scale(0.95);
+}
+
+.btn-edit {
+  background: #2563a8;
+  color: white;
+}
+
+.btn-toggle {
+  background: #757575;
+  color: white;
+}
+
+.btn-toggle.active {
+  background: #4CAF50;
+}
+
+.btn-delete {
+  background: #f44336;
+  color: white;
+}
+
+/* Empty State */
+.empty-state {
+  text-align: center;
+  padding: 60px 20px;
+}
+
+.empty-icon {
+  font-size: 5em;
+  margin-bottom: 20px;
+  opacity: 0.3;
+}
+
+.empty-state h3 {
+  font-size: 1.3em;
+  color: #333;
+  margin-bottom: 10px;
+}
+
+.empty-state p {
+  color: #666;
+  margin-bottom: 25px;
+  font-size: 0.95em;
+}
+
+.empty-state .btn-primary {
+  padding: 15px 30px;
+  background: linear-gradient(135deg, #2563a8 0%, #d9764a 100%);
+  color: white;
+  border: none;
+  border-radius: 12px;
+  font-size: 1em;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+/* Modal */
+.modal {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100%;
+  max-width: 480px;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 2000;
+  align-items: center;
+  justify-content: center;
+}
+
+.modal.active {
+  display: flex;
+}
+
+.modal-content {
+  background: white;
+  border-radius: 20px;
+  width: 90%;
+  max-width: 400px;
+  max-height: 80vh;
+  overflow-y: auto;
+  animation: slideUp 0.3s;
+}
+
+.modal-small {
+  max-width: 350px;
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(50px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.modal-header {
+  padding: 20px;
+  border-bottom: 2px solid #f0f0f0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.modal-header h2 {
+  font-size: 1.3em;
+  color: #333;
+}
+
+.close-modal {
+  background: none;
+  border: none;
+  font-size: 2em;
+  cursor: pointer;
+  color: #666;
+  line-height: 1;
+}
+
+.modal-body {
+  padding: 20px;
+}
+
+.modal-body p {
+  margin-bottom: 15px;
+  color: #666;
+}
+
+.modal-body .input-group {
+  margin-bottom: 15px;
+}
+
+.modal-body .input-group label {
+  display: block;
+  margin-bottom: 8px;
+  color: #333;
+  font-weight: 500;
+  font-size: 0.9em;
+}
+
+.modal-body .input-group input,
+.modal-body .input-group select,
+.modal-body .input-group textarea {
+  width: 100%;
+  padding: 12px 15px;
+  border: 2px solid #e0e0e0;
+  border-radius: 10px;
+  font-size: 1em;
+  font-family: inherit;
+}
+
+.warning-text {
+  color: #f44336;
+  font-weight: 600;
+  font-size: 0.9em;
+}
+
+.modal-actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+.modal-actions .btn-cancel {
+  flex: 1;
+  padding: 12px;
+  background: white;
+  border: 2px solid #e0e0e0;
+  border-radius: 10px;
+  font-weight: 600;
+  cursor: pointer;
+  font-size: 1em;
+}
+
+.modal-actions .btn-save {
+  flex: 2;
+  padding: 12px;
+  background: linear-gradient(135deg, #2563a8 0%, #d9764a 100%);
+  color: white;
+  border: none;
+  border-radius: 10px;
+  font-weight: 600;
+  cursor: pointer;
+  font-size: 1em;
+}
+
+.modal-actions .btn-delete {
+  flex: 1;
+  padding: 12px;
+  background: #f44336;
+  color: white;
+  border: none;
+  border-radius: 10px;
+  font-weight: 600;
+  cursor: pointer;
+  font-size: 1em;
+}
