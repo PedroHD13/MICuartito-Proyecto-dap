@@ -1,10 +1,11 @@
-"use client";
+'use client';
 
-import { useState, useEffect } from "react";
-import { useRouter } from "next/navigation";
-import { useRequireAuth } from "../../../useSession";
-import "../../styles/layout-styles.css";
-import "../../styles/perfil-styles.css";
+import { useState, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
+import { useRequireAuth } from '../../../useSession';
+import DashboardShell from '../../components/DashboardShell';
+import '../../styles/dashboard-styles.css';
+import '../../styles/perfil-styles.css';
 
 interface ProfileData {
   name: string;
@@ -21,11 +22,11 @@ interface NotificationPrefs {
   promos: boolean;
 }
 
-const PROFILE_DEFAULTS: Omit<ProfileData, "name" | "avatar"> = {
-  email: "correo@ejemplo.com",
-  phone: "+591 71234567",
-  birthdate: "1990-01-01",
-  bio: "Propietario con experiencia en alquiler de cuartos. Busco inquilinos responsables y respetuosos.",
+const PROFILE_DEFAULTS: Omit<ProfileData, 'name' | 'avatar'> = {
+  email: 'correo@ejemplo.com',
+  phone: '+591 71234567',
+  birthdate: '1990-01-01',
+  bio: 'Propietario con experiencia en alquiler de cuartos. Busco inquilinos responsables y respetuosos.',
 };
 
 const NOTIF_DEFAULTS: NotificationPrefs = {
@@ -34,29 +35,34 @@ const NOTIF_DEFAULTS: NotificationPrefs = {
   promos: false,
 };
 
-const AVATAR_OPTIONS = ["P", "C", "🧑‍💼", "👨", "👩‍💼", "👤", "🏠"];
+const AVATAR_OPTIONS = ['P', 'C', '🧑‍💼', '👨', '👩‍💼', '👤', '🏠'];
 
 export default function PerfilPropietario() {
   const router = useRouter();
-  const { session, loading, logout } = useRequireAuth("propietario");
+  const { session, loading, logout } = useRequireAuth('propietario');
 
   const [profileData, setProfileData] = useState<ProfileData | null>(null);
-  const [originalProfileData, setOriginalProfileData] =
-    useState<ProfileData | null>(null);
-  const [notifPrefs, setNotifPrefs] =
-    useState<NotificationPrefs>(NOTIF_DEFAULTS);
+  const [originalProfileData, setOriginalProfileData] = useState<ProfileData | null>(null);
+  const [notifPrefs, setNotifPrefs] = useState<NotificationPrefs>(NOTIF_DEFAULTS);
   const [isEditMode, setIsEditMode] = useState(false);
   const [myRoomsCount, setMyRoomsCount] = useState(0);
+  const [greeting, setGreeting] = useState('');
 
-  const profileKey = session ? `profileData_${session.username}` : "";
-  const notifKey = session ? `notifPrefs_${session.username}` : "";
+  const profileKey = session ? `profileData_${session.username}` : '';
+  const notifKey = session ? `notifPrefs_${session.username}` : '';
+
+  // Configurar saludo según la hora
+  useEffect(() => {
+    const hour = new Date().getHours();
+    if (hour < 12) setGreeting('🌅 Buenos días');
+    else if (hour < 18) setGreeting('☀️ Buenas tardes');
+    else setGreeting('🌙 Buenas noches');
+  }, []);
 
   useEffect(() => {
     if (!session) return;
 
-    const savedProfile = JSON.parse(
-      localStorage.getItem(profileKey) || "{}"
-    );
+    const savedProfile = JSON.parse(localStorage.getItem(profileKey) || '{}');
 
     const loaded: ProfileData = {
       name: savedProfile.name || session.name,
@@ -70,10 +76,10 @@ export default function PerfilPropietario() {
     setProfileData(loaded);
     setOriginalProfileData(loaded);
 
-    const savedNotifs = JSON.parse(localStorage.getItem(notifKey) || "{}");
+    const savedNotifs = JSON.parse(localStorage.getItem(notifKey) || '{}');
     setNotifPrefs({ ...NOTIF_DEFAULTS, ...savedNotifs });
 
-    const storedRooms = JSON.parse(localStorage.getItem("cuartos") || "[]");
+    const storedRooms = JSON.parse(localStorage.getItem('cuartos') || '[]');
     setMyRoomsCount(storedRooms.length);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [session]);
@@ -82,10 +88,7 @@ export default function PerfilPropietario() {
     return null;
   }
 
-  const handleFieldChange = (
-    field: keyof ProfileData,
-    value: string
-  ) => {
+  const handleFieldChange = (field: keyof ProfileData, value: string) => {
     setProfileData((prev) => (prev ? { ...prev, [field]: value } : prev));
   };
 
@@ -94,11 +97,14 @@ export default function PerfilPropietario() {
       cancelEdit();
     } else {
       setIsEditMode(true);
+      // Agregar clase al body para modo edición
+      document.body.classList.add('edit-mode');
     }
   };
 
   const cancelEdit = () => {
     setIsEditMode(false);
+    document.body.classList.remove('edit-mode');
     if (originalProfileData) {
       setProfileData(originalProfileData);
     }
@@ -108,20 +114,20 @@ export default function PerfilPropietario() {
     if (!profileData) return;
 
     if (!profileData.name || !profileData.email) {
-      alert("⚠️ El nombre y el correo son obligatorios");
+      alert('⚠️ El nombre y el correo son obligatorios');
       return;
     }
 
     localStorage.setItem(profileKey, JSON.stringify(profileData));
     setOriginalProfileData(profileData);
     setIsEditMode(false);
+    document.body.classList.remove('edit-mode');
 
-    alert("✅ Perfil actualizado exitosamente");
+    alert('✅ Perfil actualizado exitosamente');
   };
 
   const changeAvatar = () => {
-    const randomAvatar =
-      AVATAR_OPTIONS[Math.floor(Math.random() * AVATAR_OPTIONS.length)];
+    const randomAvatar = AVATAR_OPTIONS[Math.floor(Math.random() * AVATAR_OPTIONS.length)];
 
     setProfileData((prev) => {
       if (!prev) return prev;
@@ -142,16 +148,17 @@ export default function PerfilPropietario() {
     });
   };
 
-  const confirmLogout = () => {
-    if (confirm("¿Estás seguro que deseas cerrar sesión?")) {
+  const handleLogout = () => {
+    if (confirm('¿Estás seguro que deseas cerrar sesión?')) {
       logout();
-      router.push("/login");
+      router.push('/login');
     }
   };
 
-  const navigateWithGuard = (path: string) => {
+  const navigateTo = (path: string) => {
     if (isEditMode) {
-      if (confirm("¿Salir sin guardar los cambios?")) {
+      if (confirm('¿Salir sin guardar los cambios?')) {
+        document.body.classList.remove('edit-mode');
         router.push(path);
       }
     } else {
@@ -159,59 +166,83 @@ export default function PerfilPropietario() {
     }
   };
 
-  const goBack = () => navigateWithGuard("/propietario");
-  const goToHome = () => navigateWithGuard("/propietario");
-  const goToPublish = () => navigateWithGuard("/propietario/publicar");
-  const goToMyRooms = () => navigateWithGuard("/propietario/mis-cuartos");
-
-  const year = new Date().getFullYear();
-
   return (
-    <>
-      {/* Header */}
-      <div className="header perfil-header">
-        <div className="header-top">
-          <button className="back-btn" onClick={goBack}>
-            ←
-          </button>
-          <div className="header-title">
-            <h1>Mi Perfil</h1>
-            <p>Gestiona tu información</p>
+    <DashboardShell role="propietario" userName={session.name} onLogout={handleLogout}>
+      <div className="dashboard-content perfil-content">
+        {/* Encabezado de bienvenida */}
+        <div className="dashboard-page-header">
+          <span className="greeting">{greeting}</span>
+          <h1>Mi Perfil</h1>
+          <div style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
+            <span className="user-role">🏠 Propietario</span>
+            <button className="edit-btn-header" onClick={toggleEditMode}>
+              {isEditMode ? '✕' : '✏️'}
+            </button>
           </div>
-          <button className="edit-btn" onClick={toggleEditMode}>
-            {isEditMode ? "✕" : "✏️"}
-          </button>
         </div>
-      </div>
 
-      {/* Profile Header Card */}
-      <div className="profile-header-card">
-        <div className="profile-avatar-container">
-          <div className="profile-avatar">{profileData.avatar}</div>
-          <button className="change-avatar-btn" onClick={changeAvatar}>
-            📷
+        {/* Profile Header Card */}
+        <div className="profile-header-card">
+          <div className="profile-avatar-container">
+            <div className="profile-avatar">{profileData.avatar}</div>
+            <button className="change-avatar-btn" onClick={changeAvatar}>
+              📷
+            </button>
+          </div>
+          <h2 className="profile-name">{profileData.name}</h2>
+          <div className="profile-type-badge propietario">🏠 Propietario</div>
+          <div className="profile-stats">
+            <div className="stat-item">
+              <div className="stat-value">{myRoomsCount}</div>
+              <div className="stat-label">Cuartos</div>
+            </div>
+            <div className="stat-item">
+              <div className="stat-value">⭐ 4.5</div>
+              <div className="stat-label">Calificación</div>
+            </div>
+            <div className="stat-item">
+              <div className="stat-value">{new Date().getFullYear()}</div>
+              <div className="stat-label">Desde</div>
+            </div>
+          </div>
+        </div>
+
+        {/* Quick Actions */}
+        <div className="quick-actions">
+          <button 
+            className="action-card primary" 
+            onClick={() => navigateTo('/propietario/mis-cuartos')}
+          >
+            <span className="action-icon">🏘️</span>
+            <div className="action-info">
+              <h3>Mis Cuartos</h3>
+              <p>{myRoomsCount} publicados</p>
+            </div>
+          </button>
+
+          <button 
+            className="action-card" 
+            onClick={() => navigateTo('/propietario/publicar')}
+          >
+            <span className="action-icon">➕</span>
+            <div className="action-info">
+              <h3>Publicar</h3>
+              <p>Nuevo cuarto</p>
+            </div>
+          </button>
+
+          <button 
+            className="action-card" 
+            onClick={() => navigateTo('/propietario/dashboard')}
+          >
+            <span className="action-icon">📊</span>
+            <div className="action-info">
+              <h3>Dashboard</h3>
+              <p>Ver estadísticas</p>
+            </div>
           </button>
         </div>
-        <h2 className="profile-name">{profileData.name}</h2>
-        <div className="profile-type-badge propietario">🏠 Propietario</div>
-        <div className="profile-stats">
-          <div className="stat-item">
-            <div className="stat-value">{myRoomsCount}</div>
-            <div className="stat-label">Cuartos</div>
-          </div>
-          <div className="stat-item">
-            <div className="stat-value">⭐ 4.5</div>
-            <div className="stat-label">Calificación</div>
-          </div>
-          <div className="stat-item">
-            <div className="stat-value">{year}</div>
-            <div className="stat-label">Desde</div>
-          </div>
-        </div>
-      </div>
 
-      {/* Main Content */}
-      <div className="profile-content">
         {/* Información Personal */}
         <div className="profile-section">
           <div className="section-header">
@@ -224,7 +255,7 @@ export default function PerfilPropietario() {
               className="info-input"
               value={profileData.name}
               disabled={!isEditMode}
-              onChange={(e) => handleFieldChange("name", e.target.value)}
+              onChange={(e) => handleFieldChange('name', e.target.value)}
             />
           </div>
           <div className="info-group">
@@ -234,7 +265,7 @@ export default function PerfilPropietario() {
               className="info-input"
               value={profileData.email}
               disabled={!isEditMode}
-              onChange={(e) => handleFieldChange("email", e.target.value)}
+              onChange={(e) => handleFieldChange('email', e.target.value)}
             />
           </div>
           <div className="info-group">
@@ -244,7 +275,7 @@ export default function PerfilPropietario() {
               className="info-input"
               value={profileData.phone}
               disabled={!isEditMode}
-              onChange={(e) => handleFieldChange("phone", e.target.value)}
+              onChange={(e) => handleFieldChange('phone', e.target.value)}
             />
           </div>
           <div className="info-group">
@@ -254,9 +285,7 @@ export default function PerfilPropietario() {
               className="info-input"
               value={profileData.birthdate}
               disabled={!isEditMode}
-              onChange={(e) =>
-                handleFieldChange("birthdate", e.target.value)
-              }
+              onChange={(e) => handleFieldChange('birthdate', e.target.value)}
             />
           </div>
         </div>
@@ -273,11 +302,10 @@ export default function PerfilPropietario() {
               rows={4}
               value={profileData.bio}
               disabled={!isEditMode}
-              onChange={(e) => handleFieldChange("bio", e.target.value)}
+              onChange={(e) => handleFieldChange('bio', e.target.value)}
             />
           </div>
         </div>
-
 
         {/* Calificaciones y Reseñas */}
         <div className="profile-section">
@@ -311,7 +339,7 @@ export default function PerfilPropietario() {
                 <input
                   type="checkbox"
                   checked={notifPrefs.newInterested}
-                  onChange={() => toggleNotif("newInterested")}
+                  onChange={() => toggleNotif('newInterested')}
                 />
                 <span className="toggle-slider"></span>
               </label>
@@ -327,7 +355,7 @@ export default function PerfilPropietario() {
                 <input
                   type="checkbox"
                   checked={notifPrefs.messages}
-                  onChange={() => toggleNotif("messages")}
+                  onChange={() => toggleNotif('messages')}
                 />
                 <span className="toggle-slider"></span>
               </label>
@@ -343,7 +371,7 @@ export default function PerfilPropietario() {
                 <input
                   type="checkbox"
                   checked={notifPrefs.promos}
-                  onChange={() => toggleNotif("promos")}
+                  onChange={() => toggleNotif('promos')}
                 />
                 <span className="toggle-slider"></span>
               </label>
@@ -351,28 +379,18 @@ export default function PerfilPropietario() {
           </div>
         </div>
 
-        {/* Cuenta */}
+        {/* Cuenta y Seguridad */}
         <div className="profile-section">
           <div className="section-header">
             <h3>🔐 Cuenta y Seguridad</h3>
           </div>
           <div className="action-list">
-            <button
-              className="action-item"
-              onClick={() =>
-                alert("🔑 Cambiar Contraseña\n\n(Próximamente)")
-              }
-            >
+            <button className="action-item" onClick={() => alert('🔑 Cambiar Contraseña\n\n(Próximamente)')}>
               <span className="action-icon">🔑</span>
               <span className="action-text">Cambiar Contraseña</span>
               <span className="action-arrow">›</span>
             </button>
-            <button
-              className="action-item"
-              onClick={() =>
-                alert("🔒 Configuración de Privacidad\n\n(Próximamente)")
-              }
-            >
+            <button className="action-item" onClick={() => alert('🔒 Configuración de Privacidad\n\n(Próximamente)')}>
               <span className="action-icon">🔒</span>
               <span className="action-text">Privacidad</span>
               <span className="action-arrow">›</span>
@@ -380,36 +398,23 @@ export default function PerfilPropietario() {
           </div>
         </div>
 
-        {/* Ayuda */}
+        {/* Ayuda y Soporte */}
         <div className="profile-section">
           <div className="section-header">
             <h3>❓ Ayuda y Soporte</h3>
           </div>
           <div className="action-list">
-            <button
-              className="action-item"
-              onClick={() =>
-                alert("📚 Centro de Ayuda\n\n(Próximamente)")
-              }
-            >
+            <button className="action-item" onClick={() => alert('📚 Centro de Ayuda\n\n(Próximamente)')}>
               <span className="action-icon">📚</span>
               <span className="action-text">Centro de Ayuda</span>
               <span className="action-arrow">›</span>
             </button>
-            <button
-              className="action-item"
-              onClick={() => router.push("/contacto-whatsapp")}
-            >
+            <button className="action-item" onClick={() => router.push('/contacto-whatsapp')}>
               <span className="action-icon">💬</span>
               <span className="action-text">Contactar Soporte</span>
               <span className="action-arrow">›</span>
             </button>
-            <button
-              className="action-item"
-              onClick={() =>
-                alert("📄 Términos y Condiciones\n\n(Próximamente)")
-              }
-            >
+            <button className="action-item" onClick={() => alert('📄 Términos y Condiciones\n\n(Próximamente)')}>
               <span className="action-icon">📄</span>
               <span className="action-text">Términos y Condiciones</span>
               <span className="action-arrow">›</span>
@@ -417,14 +422,7 @@ export default function PerfilPropietario() {
           </div>
         </div>
 
-        {/* Cerrar Sesión */}
-        <div className="profile-section">
-          <button className="btn-logout" onClick={confirmLogout}>
-            🚪 Cerrar Sesión
-          </button>
-        </div>
-
-        {/* Botón Guardar (solo visible en modo edición) */}
+        {/* Botones de Guardar/Cancelar */}
         {isEditMode && (
           <div className="save-section">
             <button className="btn-save" onClick={saveProfile}>
@@ -436,26 +434,6 @@ export default function PerfilPropietario() {
           </div>
         )}
       </div>
-
-      {/* Bottom Navigation */}
-      <div className="bottom-nav">
-        <button className="nav-item" onClick={goToHome}>
-          <span className="nav-icon">🏠</span>
-          <span className="nav-label">Inicio</span>
-        </button>
-        <button className="nav-item" onClick={goToPublish}>
-          <span className="nav-icon">➕</span>
-          <span className="nav-label">Publicar</span>
-        </button>
-        <button className="nav-item" onClick={goToMyRooms}>
-          <span className="nav-icon">🏘️</span>
-          <span className="nav-label">Mis Cuartos</span>
-        </button>
-        <button className="nav-item active">
-          <span className="nav-icon">👤</span>
-          <span className="nav-label">Perfil</span>
-        </button>
-      </div>
-    </>
+    </DashboardShell>
   );
 }

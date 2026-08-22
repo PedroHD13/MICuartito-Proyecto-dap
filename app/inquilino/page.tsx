@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import { useRequireAuth } from '../../useSession';
 import { useRooms } from '../hooks/useRooms';
 import { useFavorites } from '../hooks/useFavorites';
+import DashboardShell from '../components/DashboardShell';
 import '../styles/dashboard-styles.css';
 
 export default function InquilinoDashboard() {
@@ -57,137 +58,111 @@ export default function InquilinoDashboard() {
   }
 
   const handleLogout = () => {
-  if (confirm('¿Estás seguro que deseas cerrar sesión?')) {
-    logout();
-    router.push('/login'); // ✅ Redirige al login
-  }
-};
+    if (confirm('¿Estás seguro que deseas cerrar sesión?')) {
+      logout();
+      router.push('/login'); // ✅ Redirige al login
+    }
+  };
 
   const navigateTo = (path: string) => {
     router.push(`/inquilino/${path}`);
   };
 
   return (
-    <div className="dashboard-container">
-      {/* Header */}
-      <div className="dashboard-header">
-        <div className="user-greeting">
-          <div className="user-avatar">{session.name.charAt(0).toUpperCase()}</div>
-          <div className="greeting-text">
-            <span className="greeting">{greeting}</span>
-            <h1>{session.name}</h1>
-            <span className="user-role">🔍 Inquilino</span>
+    <DashboardShell role="inquilino" userName={session.name} onLogout={handleLogout}>
+      <div className="dashboard-content">
+        {/* Encabezado de bienvenida */}
+        <div className="dashboard-page-header">
+          <span className="greeting">{greeting}</span>
+          <h1>{session.name}</h1>
+          <span className="user-role">🔍 Inquilino</span>
+        </div>
+
+        {/* Stats Cards */}
+        <div className="stats-grid">
+          <div className="stat-card">
+            <span className="stat-icon">❤️</span>
+            <span className="stat-value">{stats.favorites}</span>
+            <span className="stat-label">Favoritos</span>
+          </div>
+          <div className="stat-card">
+            <span className="stat-icon">🏠</span>
+            <span className="stat-value">{stats.availableRooms}</span>
+            <span className="stat-label">Cuartos Disponibles</span>
+          </div>
+          <div className="stat-card">
+            <span className="stat-icon">🔍</span>
+            <span className="stat-value">{stats.savedSearches}</span>
+            <span className="stat-label">Búsquedas Guardadas</span>
           </div>
         </div>
-        <button className="logout-btn" onClick={handleLogout}>
-          🚪
-        </button>
-      </div>
 
-      {/* Stats Cards */}
-      <div className="stats-grid">
-        <div className="stat-card">
-          <span className="stat-icon">❤️</span>
-          <span className="stat-value">{stats.favorites}</span>
-          <span className="stat-label">Favoritos</span>
-        </div>
-        <div className="stat-card">
-          <span className="stat-icon">🏠</span>
-          <span className="stat-value">{stats.availableRooms}</span>
-          <span className="stat-label">Cuartos Disponibles</span>
-        </div>
-        <div className="stat-card">
-          <span className="stat-icon">🔍</span>
-          <span className="stat-value">{stats.savedSearches}</span>
-          <span className="stat-label">Búsquedas Guardadas</span>
-        </div>
-      </div>
+        {/* Quick Actions */}
+        <div className="quick-actions">
+          <button className="action-card primary" onClick={() => navigateTo('buscar')}>
+            <span className="action-icon">🔍</span>
+            <div className="action-info">
+              <h3>Buscar Cuartos</h3>
+              <p>Encuentra tu espacio ideal</p>
+            </div>
+          </button>
 
-      {/* Quick Actions */}
-      <div className="quick-actions">
-        <button className="action-card primary" onClick={() => navigateTo('buscar')}>
-          <span className="action-icon">🔍</span>
-          <div className="action-info">
-            <h3>Buscar Cuartos</h3>
-            <p>Encuentra tu espacio ideal</p>
-          </div>
-        </button>
+          <button className="action-card" onClick={() => navigateTo('favoritos')}>
+            <span className="action-icon">❤️</span>
+            <div className="action-info">
+              <h3>Mis Favoritos</h3>
+              <p>{stats.favorites} cuartos guardados</p>
+            </div>
+          </button>
 
-        <button className="action-card" onClick={() => navigateTo('favoritos')}>
-          <span className="action-icon">❤️</span>
-          <div className="action-info">
-            <h3>Mis Favoritos</h3>
-            <p>{stats.favorites} cuartos guardados</p>
-          </div>
-        </button>
-
-        <button className="action-card" onClick={() => navigateTo('perfil')}>
-          <span className="action-icon">👤</span>
-          <div className="action-info">
-            <h3>Mi Perfil</h3>
-            <p>Edita tu información</p>
-          </div>
-        </button>
-      </div>
-
-      {/* Recent Rooms */}
-      <div className="recent-section">
-        <div className="section-header">
-          <h3>🆕 Cuartos Recientes</h3>
-          <button className="view-all" onClick={() => navigateTo('buscar')}>
-            Ver todos →
+          <button className="action-card" onClick={() => navigateTo('perfil')}>
+            <span className="action-icon">👤</span>
+            <div className="action-info">
+              <h3>Mi Perfil</h3>
+              <p>Edita tu información</p>
+            </div>
           </button>
         </div>
 
-        {recentRooms.length === 0 ? (
-          <div className="empty-recent">
-            <p>No hay cuartos disponibles aún</p>
+        {/* Recent Rooms */}
+        <div className="recent-section">
+          <div className="section-header">
+            <h3>🆕 Cuartos Recientes</h3>
+            <button className="view-all" onClick={() => navigateTo('buscar')}>
+              Ver todos →
+            </button>
           </div>
-        ) : (
-          <div className="recent-rooms">
-            {recentRooms.map(room => (
-              <div 
-                key={room.id} 
-                className="recent-room-card"
-                onClick={() => navigateTo('buscar')}
-              >
-                <img 
-                  src={room.image} 
-                  alt={room.title}
-                  onError={(e) => {
-                    (e.target as HTMLImageElement).src = 'https://via.placeholder.com/400x300/2563a8/ffffff?text=Cuarto';
-                  }}
-                />
-                <div className="recent-room-info">
-                  <h4>{room.title}</h4>
-                  <p className="location">📍 {room.location}</p>
-                  <p className="price">Bs. {room.price}/mes</p>
-                </div>
-              </div>
-            ))}
-          </div>
-        )}
-      </div>
 
-      {/* Bottom Navigation */}
-      <div className="bottom-nav">
-        <button className="nav-item active">
-          <span className="nav-icon">🏠</span>
-          <span className="nav-label">Inicio</span>
-        </button>
-        <button className="nav-item" onClick={() => navigateTo('buscar')}>
-          <span className="nav-icon">🔍</span>
-          <span className="nav-label">Buscar</span>
-        </button>
-        <button className="nav-item" onClick={() => navigateTo('favoritos')}>
-          <span className="nav-icon">❤️</span>
-          <span className="nav-label">Favoritos</span>
-        </button>
-        <button className="nav-item" onClick={() => navigateTo('perfil')}>
-          <span className="nav-icon">👤</span>
-          <span className="nav-label">Perfil</span>
-        </button>
+          {recentRooms.length === 0 ? (
+            <div className="empty-recent">
+              <p>No hay cuartos disponibles aún</p>
+            </div>
+          ) : (
+            <div className="recent-rooms">
+              {recentRooms.map(room => (
+                <div
+                  key={room.id}
+                  className="recent-room-card"
+                  onClick={() => navigateTo('buscar')}
+                >
+                  <img
+                    src={room.image}
+                    alt={room.title}
+                    onError={(e) => {
+                      (e.target as HTMLImageElement).src = 'https://via.placeholder.com/400x300/1A3B5D/ffffff?text=Cuarto';
+                    }}
+                  />
+                  <div className="recent-room-info">
+                    <h4>{room.title}</h4>
+                    <p className="location">📍 {room.location}</p>
+                    <p className="price">Bs. {room.price}/mes</p>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
       </div>
-    </div>
+    </DashboardShell>
   );
 }

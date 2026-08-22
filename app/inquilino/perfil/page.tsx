@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useRequireAuth } from "../../../useSession";
-import "../../styles/layout-styles.css";
+import DashboardShell from "../../components/DashboardShell";
 import "../../styles/perfil-styles.css";
 
 interface ProfileData {
@@ -170,41 +170,20 @@ export default function PerfilInquilino() {
     }
   };
 
-  // Navegación (con aviso si hay cambios sin guardar en modo edición)
-  const navigateWithGuard = (path: string) => {
-    if (isEditMode) {
-      if (confirm("¿Salir sin guardar los cambios?")) {
-        router.push(path);
-      }
-    } else {
-      router.push(path);
-    }
-  };
-
-  const goBack = () => navigateWithGuard("/inquilino");
-  const goToHome = () => navigateWithGuard("/inquilino");
-  const goToSearch = () => navigateWithGuard("/inquilino/buscar");
-  const goToFavorites = () => navigateWithGuard("/inquilino/favoritos");
-
   const year = new Date().getFullYear();
 
   return (
-    <>
-      {/* Header */}
-      <div className="header perfil-header">
-        <div className="header-top">
-          <button className="back-btn" onClick={goBack}>
-            ←
-          </button>
-          <div className="header-title">
+    <DashboardShell role="inquilino" userName={session.name} onLogout={confirmLogout}>
+      <div className="page-content perfil-page">
+        <div className="page-header page-header-with-action">
+          <div>
             <h1>Mi Perfil</h1>
             <p>Gestiona tu información</p>
           </div>
-          <button className="edit-btn" onClick={toggleEditMode}>
+          <button className="edit-btn-header" onClick={toggleEditMode}>
             {isEditMode ? "✕" : "✏️"}
           </button>
         </div>
-      </div>
 
       {/* Profile Header Card */}
       <div className="profile-header-card">
@@ -565,25 +544,7 @@ export default function PerfilInquilino() {
         )}
       </div>
 
-      {/* Bottom Navigation */}
-      <div className="bottom-nav">
-        <button className="nav-item" onClick={goToHome}>
-          <span className="nav-icon">🏠</span>
-          <span className="nav-label">Inicio</span>
-        </button>
-        <button className="nav-item" onClick={goToSearch}>
-          <span className="nav-icon">🔍</span>
-          <span className="nav-label">Buscar</span>
-        </button>
-        <button className="nav-item" onClick={goToFavorites}>
-          <span className="nav-icon">❤️</span>
-          <span className="nav-label">Favoritos</span>
-        </button>
-        <button className="nav-item active">
-          <span className="nav-icon">👤</span>
-          <span className="nav-label">Perfil</span>
-        </button>
       </div>
-    </>
+    </DashboardShell>
   );
 }

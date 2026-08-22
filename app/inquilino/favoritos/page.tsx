@@ -5,12 +5,13 @@ import { useRouter } from 'next/navigation';
 import { useRequireAuth } from '../../../useSession';
 import { useRooms } from '../../hooks/useRooms';
 import { useFavorites, FavoriteWithDate } from '../../hooks/useFavorites';
+import DashboardShell from '../../components/DashboardShell';
 import { Room } from '../../types';
 import '../../styles/favoritos-styles.css';
 
 export default function FavoritosPage() {
   const router = useRouter();
-  const { session, loading } = useRequireAuth('inquilino');
+  const { session, loading, logout } = useRequireAuth('inquilino');
   const { allRooms, refreshRooms } = useRooms();
   const { 
     favoriteIds, 
@@ -125,6 +126,13 @@ export default function FavoritosPage() {
     }
   };
 
+  const handleLogout = () => {
+    if (confirm('¿Estás seguro que deseas cerrar sesión?')) {
+      logout();
+      router.push('/login');
+    }
+  };
+
   // Calcular estadísticas
   const totalFavorites = favoriteRooms.length;
   const prices = favoriteRooms.map(r => r.price);
@@ -132,10 +140,7 @@ export default function FavoritosPage() {
   const minPrice = totalFavorites > 0 ? Math.min(...prices) : 0;
   const maxPrice = totalFavorites > 0 ? Math.max(...prices) : 0;
 
-  // Navegación
-  const goToHome = () => router.push('/inquilino');
   const goToSearch = () => router.push('/inquilino/buscar');
-  const goToProfile = () => router.push('/inquilino/perfil');
 
   // Vista de detalle
   const handleViewDetail = (room: Room) => {
@@ -236,17 +241,12 @@ export default function FavoritosPage() {
   };
 
   return (
-    <>
-      {/* Header */}
-      <div className="header favoritos-header">
-        <div className="header-top">
-          <button className="back-btn" onClick={goToHome}>←</button>
-          <div className="header-title">
-            <h1>Mis Favoritos</h1>
-            <p>Cuartos que guardaste</p>
-          </div>
+    <DashboardShell role="inquilino" userName={session.name} onLogout={handleLogout}>
+      <div className="page-content favoritos-page">
+        <div className="page-header">
+          <h1>Mis Favoritos</h1>
+          <p>Cuartos que guardaste</p>
         </div>
-      </div>
 
       {/* Stats Section */}
       <div className="stats-section">
@@ -433,7 +433,7 @@ export default function FavoritosPage() {
                         {room.title.length > 30 ? room.title.substring(0, 30) + '...' : room.title}
                       </div>
                       <div style={{ fontSize: '0.85em', color: '#666' }}>📍 {room.location}</div>
-                      <div style={{ fontSize: '1em', fontWeight: '700', color: '#d9764a', marginTop: '4px' }}>
+                      <div style={{ fontSize: '1em', fontWeight: '700', color: '#8A7554', marginTop: '4px' }}>
                         Bs. {room.price}/mes
                       </div>
                     </div>
@@ -457,25 +457,7 @@ export default function FavoritosPage() {
         </div>
       )}
 
-      {/* Bottom Navigation */}
-      <div className="bottom-nav">
-        <button className="nav-item" onClick={goToHome}>
-          <span className="nav-icon">🏠</span>
-          <span className="nav-label">Inicio</span>
-        </button>
-        <button className="nav-item" onClick={goToSearch}>
-          <span className="nav-icon">🔍</span>
-          <span className="nav-label">Buscar</span>
-        </button>
-        <button className="nav-item active">
-          <span className="nav-icon">❤️</span>
-          <span className="nav-label">Favoritos</span>
-        </button>
-        <button className="nav-item" onClick={goToProfile}>
-          <span className="nav-icon">👤</span>
-          <span className="nav-label">Perfil</span>
-        </button>
       </div>
-    </>
+    </DashboardShell>
   );
 }

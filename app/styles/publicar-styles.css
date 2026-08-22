@@ -1,20 +1,39 @@
 /* ============================================
    ESTILOS DEL FORMULARIO DE PUBLICAR CUARTO
+   (vive dentro de <DashboardShell>: .page-content
+   ya da el ancho máximo/centrado general — acá el
+   formulario usa un ancho propio más angosto,
+   más cómodo para leer y llenar en pantallas anchas)
    ============================================ */
 
-.publish-header {
-  padding: 15px 20px;
+/* Encabezado con botón de cancelar a la derecha */
+.page-header-with-action {
   display: flex;
-  align-items: center;
-  gap: 15px;
-  position: sticky;
-  top: 0;
-  z-index: 100;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.btn-cancel-link {
+  background: none;
+  border: none;
+  color: #1A3B5D;
+  font-weight: 600;
+  font-size: 0.9em;
+  cursor: pointer;
+  padding: 8px 14px;
+  border-radius: 8px;
+  flex-shrink: 0;
+  transition: background 0.2s;
+}
+
+.btn-cancel-link:hover {
+  background: rgba(26, 59, 93, 0.08);
 }
 
 .form-container {
-  padding: 20px;
-  padding-bottom: 160px;
+  max-width: 720px;
+  margin: 0 auto;
 }
 
 .section {
@@ -27,7 +46,7 @@
 
 .section-title {
   font-size: 1.1em;
-  color: #333;
+  color: #3A3D40;
   margin-bottom: 15px;
   font-weight: 600;
   display: flex;
@@ -41,18 +60,19 @@
 
 /* Fotos */
 .photo-upload-area {
-  border: 2px dashed #d9764a;
+  border: 2px dashed #D8C7A6;
   border-radius: 12px;
   padding: 30px 20px;
   text-align: center;
   cursor: pointer;
   transition: all 0.3s;
-  background: #fff9f5;
+  background: #FBF1EC;
+  display: block;
 }
 
 .photo-upload-area:hover {
-  background: #fff3e0;
-  border-color: #2563a8;
+  background: #F7E9E1;
+  border-color: #1A3B5D;
 }
 
 .photo-upload-icon {
@@ -90,7 +110,8 @@
   position: absolute;
   top: 5px;
   right: 5px;
-  background: rgba(217, 118, 74, 0.9);
+  background: #D8C7A6;
+  color: #1A3B5D;
   color: white;
   border: none;
   width: 25px;
@@ -112,7 +133,7 @@
 .input-group label {
   display: block;
   margin-bottom: 8px;
-  color: #333;
+  color: #3A3D40;
   font-weight: 500;
   font-size: 0.9em;
 }
@@ -138,7 +159,7 @@
 .input-group select:focus,
 .input-group textarea:focus {
   outline: none;
-  border-color: #d9764a;
+  border-color: #D8C7A6;
 }
 
 /* Opciones tipo radio (Privada/Compartida, Inmediata/Fecha) */
@@ -160,11 +181,11 @@
 }
 
 .option-btn:hover {
-  border-color: #d9764a;
+  border-color: #D8C7A6;
 }
 
 .option-btn.selected {
-  background: linear-gradient(135deg, #2563a8 0%, #d9764a 100%);
+  background: #1A3B5D;
   color: white;
   border-color: transparent;
 }
@@ -192,19 +213,19 @@
 }
 
 .service-item:hover {
-  border-color: #d9764a;
+  border-color: #D8C7A6;
 }
 
 .service-item.selected {
-  background: #fff3e0;
-  border-color: #d9764a;
+  background: #F6F0E6;
+  border-color: #D8C7A6;
 }
 
 .service-item input[type="checkbox"] {
   width: 20px;
   height: 20px;
   cursor: pointer;
-  accent-color: #d9764a;
+  accent-color: #D8C7A6;
 }
 
 .service-label {
@@ -230,24 +251,16 @@
   padding-left: 40px;
 }
 
-/* Botón publicar */
+/* Botón publicar: parte normal del formulario en desktop,
+   barra fija abajo solo en móvil (donde el espacio es angosto) */
 .submit-section {
-  position: fixed;
-  bottom: 70px;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 100%;
-  max-width: 480px;
-  background: white;
-  padding: 15px 20px;
-  box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
-  z-index: 99;
+  margin-top: 4px;
 }
 
 .btn-submit {
   width: 100%;
   padding: 15px;
-  background: linear-gradient(135deg, #2563a8 0%, #d9764a 100%);
+  background: #1A3B5D;
   color: white;
   border: none;
   border-radius: 12px;
@@ -257,6 +270,28 @@
   transition: all 0.3s;
 }
 
+.btn-submit:hover {
+  background: #142f4a;
+}
+
 .btn-submit:active {
   transform: scale(0.98);
+}
+
+@media (max-width: 600px) {
+  .submit-section {
+    position: fixed;
+    bottom: 78px; /* deja espacio para la barra inferior móvil */
+    left: 0;
+    width: 100%;
+    background: white;
+    padding: 12px 16px;
+    box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
+    z-index: 99;
+    margin-top: 0;
+  }
+
+  .form-container {
+    padding-bottom: 90px; /* espacio para que el último section no quede tapado por la barra fija */
+  }
 }

@@ -7,13 +7,14 @@ import { useRooms } from '../../hooks/useRooms';
 import { useFavorites } from '../../hooks/useFavorites';
 import RoomCard from '../../components/RoomCard';
 import FilterModal from '../../components/filtermodal'; // ✅ Importar el modal
+import DashboardShell from '../../components/DashboardShell';
 import { Room, RoomFilters } from '../../types';
 import '../../styles/buscar-styles.css';
 import '../../styles/filter-modal.css'; // ✅ Importar estilos del modal
 
 export default function BuscarPage() {
   const router = useRouter();
-  const { session, loading } = useRequireAuth('inquilino');
+  const { session, loading, logout } = useRequireAuth('inquilino');
   
   const { rooms, allRooms, filters, applyFilters, clearFilters, refreshRooms } = useRooms();
   const { favoriteIds, toggleFavorite, isFavorite } = useFavorites();
@@ -95,115 +96,86 @@ export default function BuscarPage() {
     setIsFilterModalOpen(false);
   };
 
-  const goToHome = () => router.push('/inquilino');
-  const goToFavorites = () => router.push('/inquilino/favoritos');
-  const goToProfile = () => router.push('/inquilino/perfil');
+  const handleLogout = () => {
+    if (confirm('¿Estás seguro que deseas cerrar sesión?')) {
+      logout();
+      router.push('/login');
+    }
+  };
 
   return (
-    <>
-      {/* Header */}
-      <div className="header buscar-header">
-        <div className="header-top">
-          <button className="back-btn" onClick={goToHome}>←</button>
-          <div className="header-title">
-            <h1>Buscar Cuartos</h1>
-            <p>Encuentra tu espacio ideal</p>
-          </div>
+    <DashboardShell role="inquilino" userName={session.name} onLogout={handleLogout}>
+      <div className="page-content search-page">
+        <div className="page-header">
+          <h1>Buscar Cuartos</h1>
+          <p>Encuentra tu espacio ideal</p>
         </div>
-        <div className="search-bar">
-          <span className="search-icon">🔍</span>
-          <input
-            type="text"
-            placeholder="Buscar por zona, barrio..."
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-          />
-        </div>
-      </div>
 
-      {/* Filter Button */}
-      <div className="filter-section">
-        <button 
-          className="filter-btn primary" 
-          onClick={handleOpenModal} // ✅ Usar función para abrir
-        >
-          🎛️ Filtros
-          {activeFiltersCount > 0 && (
-            <span className="filter-badge">{activeFiltersCount}</span>
-          )}
-        </button>
-        {activeFiltersCount > 0 && (
-          <button 
-            className="filter-btn"
-            onClick={handleClearFilters}
-            style={{ background: '#fee2e2', borderColor: '#fca5a5', color: '#dc2626' }}
-          >
-            ✕ Limpiar
-          </button>
-        )}
-      </div>
-
-      {/* Results Header */}
-      <div className="results-header">
-        <div className="results-count">
-          <strong>{rooms.length}</strong> cuartos disponibles
-        </div>
-        <button className="sort-btn" onClick={handleSort}>
-          <span>{sortBy === 'price-asc' ? '⬆️' : '⬇️'}</span>
-          <span>{sortBy === 'price-asc' ? 'Menor precio' : 'Mayor precio'}</span>
-        </button>
-      </div>
-
-      {/* Rooms Grid */}
-      <div className="rooms-grid">
-        {rooms.length === 0 ? (
-          <div className="empty-state" style={{ gridColumn: '1 / -1' }}>
-            <div className="empty-icon">😔</div>
-            <h3 style={{ marginBottom: '10px' }}>No se encontraron cuartos</h3>
-            <p style={{ color: '#666' }}>Intenta ajustar los filtros de búsqueda</p>
-          </div>
-        ) : (
-          rooms.map(room => (
-            <RoomCard
-              key={room.id}
-              room={room}
-              isFavorite={isFavorite(room.id)}
-              onToggleFavorite={toggleFavorite}
-              onViewDetail={handleViewDetail}
-              onContact={handleContact}
+        <div className="search-toolbar">
+          <div className="search-bar">
+            <span className="search-icon">🔍</span>
+            <input
+              type="text"
+              placeholder="Buscar por zona, barrio..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
             />
-          ))
-        )}
-      </div>
+          </div>
 
-      {/* ✅ Filter Modal - Componente separado */}
-      <FilterModal
-        isOpen={isFilterModalOpen}
-        onClose={handleCloseModal}
-        filters={filters}
-        onApply={handleApplyFilters}
-        onClear={handleClearFilters}
-      />
+          <div className="filter-section">
+            <button className="filter-btn primary" onClick={handleOpenModal}>
+              🎛️ Filtros
+              {activeFiltersCount > 0 && (
+                <span className="filter-badge">{activeFiltersCount}</span>
+              )}
+            </button>
+            {activeFiltersCount > 0 && (
+              <button className="filter-btn clear-filter-btn" onClick={handleClearFilters}>
+                ✕ Limpiar
+              </button>
+            )}
+          </div>
+        </div>
 
-      {/* Bottom Navigation */}
-      <div className="bottom-nav">
-        <button className="nav-item" onClick={goToHome}>
-          <span className="nav-icon">🏠</span>
-          <span className="nav-label">Inicio</span>
-        </button>
-        <button className="nav-item active">
-          <span className="nav-icon">🔍</span>
-          <span className="nav-label">Buscar</span>
-        </button>
-        <button className="nav-item" onClick={goToFavorites}>
-          <span className="nav-icon">❤️</span>
-          <span className="nav-label">Favoritos</span>
-        </button>
-        <button className="nav-item" onClick={goToProfile}>
-          <span className="nav-icon">👤</span>
-          <span className="nav-label">Perfil</span>
-        </button>
+        <div className="results-header">
+          <div className="results-count">
+            <strong>{rooms.length}</strong> cuartos disponibles
+          </div>
+          <button className="sort-btn" onClick={handleSort}>
+            <span>{sortBy === 'price-asc' ? '⬆️' : '⬇️'}</span>
+            <span>{sortBy === 'price-asc' ? 'Menor precio' : 'Mayor precio'}</span>
+          </button>
+        </div>
+
+        <div className="rooms-grid">
+          {rooms.length === 0 ? (
+            <div className="empty-state" style={{ gridColumn: '1 / -1' }}>
+              <div className="empty-icon">😔</div>
+              <h3 style={{ marginBottom: '10px' }}>No se encontraron cuartos</h3>
+              <p style={{ color: '#666' }}>Intenta ajustar los filtros de búsqueda</p>
+            </div>
+          ) : (
+            rooms.map(room => (
+              <RoomCard
+                key={room.id}
+                room={room}
+                isFavorite={isFavorite(room.id)}
+                onToggleFavorite={toggleFavorite}
+                onViewDetail={handleViewDetail}
+                onContact={handleContact}
+              />
+            ))
+          )}
+        </div>
+
+        <FilterModal
+          isOpen={isFilterModalOpen}
+          onClose={handleCloseModal}
+          filters={filters}
+          onApply={handleApplyFilters}
+          onClear={handleClearFilters}
+        />
       </div>
-    </>
+    </DashboardShell>
   );
 }

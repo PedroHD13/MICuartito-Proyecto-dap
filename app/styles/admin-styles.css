@@ -6,11 +6,11 @@
   max-width: 1200px;
   margin: 0 auto;
   min-height: 100vh;
-  background: #f5f5f5;
+  background: #F2EBE1;
 }
 
 .admin-header {
-  background: linear-gradient(135deg, #2563a8 0%, #d9764a 100%);
+  background: #1A3B5D;
   padding: 30px;
   color: white;
 }
@@ -84,7 +84,7 @@
   display: block;
   font-size: 2em;
   font-weight: 700;
-  color: #d9764a;
+  color: #8A7554;
 }
 
 .admin-stat-label {
@@ -102,7 +102,7 @@
 
 .admin-section-title {
   font-size: 1.15em;
-  color: #333;
+  color: #3A3D40;
   margin-bottom: 16px;
   font-weight: 700;
 }
@@ -120,7 +120,7 @@
   justify-content: space-between;
   align-items: center;
   padding: 12px 0;
-  border-bottom: 1px solid #f0f0f0;
+  border-bottom: 1px solid #E8DFD0;
 }
 
 .admin-breakdown-row:last-child {
@@ -134,7 +134,7 @@
 
 .admin-breakdown-value {
   font-weight: 700;
-  color: #2563a8;
+  color: #1A3B5D;
 }
 
 /* Acción rápida hacia gestión de usuarios */
@@ -168,7 +168,7 @@
 .admin-action-info h3 {
   font-size: 1.1em;
   margin-bottom: 4px;
-  color: #333;
+  color: #3A3D40;
 }
 
 .admin-action-info p {

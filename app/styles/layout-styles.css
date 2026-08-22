@@ -6,7 +6,7 @@
    ============================================ */
 
 .header {
-    background: linear-gradient(135deg, #2563a8 0%, #d9764a 100%);
+    background: #1A3B5D;
     padding: 40px 30px;
     color: white;
     display: flex;
@@ -90,10 +90,10 @@
 }
 
 .nav-item.active .nav-icon {
-    filter: drop-shadow(0 0 8px #d9764a);
+    filter: drop-shadow(0 0 8px #D8C7A6);
 }
 
 .nav-item.active .nav-label {
-    color: #d9764a;
+    color: #1A3B5D;
     font-weight: 600;
 }

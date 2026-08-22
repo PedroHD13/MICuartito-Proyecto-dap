@@ -114,8 +114,8 @@ export default function FilterModal({
                 transition: 'all 0.2s'
               }}
               onMouseEnter={(e) => {
-                e.currentTarget.style.borderColor = '#d9764a';
-                e.currentTarget.style.color = '#d9764a';
+                e.currentTarget.style.borderColor = '#D8C7A6';
+                e.currentTarget.style.color = '#8A7554';
               }}
               onMouseLeave={(e) => {
                 e.currentTarget.style.borderColor = '#e5e7eb';
@@ -128,7 +128,7 @@ export default function FilterModal({
               onClick={onClose}
               style={{
                 padding: '6px 16px',
-                background: 'linear-gradient(135deg, #2563a8 0%, #d9764a 100%)',
+                background: '#1A3B5D',
                 color: 'white',
                 border: 'none',
                 borderRadius: '8px',
@@ -216,9 +216,9 @@ export default function FilterModal({
                   outline: 'none'
                 }}
                 onFocus={(e) => {
-                  e.currentTarget.style.borderColor = '#d9764a';
+                  e.currentTarget.style.borderColor = '#D8C7A6';
                   e.currentTarget.style.background = 'white';
-                  e.currentTarget.style.boxShadow = '0 0 0 4px rgba(217,118,74,0.1)';
+                  e.currentTarget.style.boxShadow = '0 0 0 4px rgba(216,199,166,0.25)';
                 }}
                 onBlur={(e) => {
                   e.currentTarget.style.borderColor = '#e5e7eb';
@@ -246,9 +246,9 @@ export default function FilterModal({
                   outline: 'none'
                 }}
                 onFocus={(e) => {
-                  e.currentTarget.style.borderColor = '#d9764a';
+                  e.currentTarget.style.borderColor = '#D8C7A6';
                   e.currentTarget.style.background = 'white';
-                  e.currentTarget.style.boxShadow = '0 0 0 4px rgba(217,118,74,0.1)';
+                  e.currentTarget.style.boxShadow = '0 0 0 4px rgba(216,199,166,0.25)';
                 }}
                 onBlur={(e) => {
                   e.currentTarget.style.borderColor = '#e5e7eb';
@@ -291,9 +291,9 @@ export default function FilterModal({
                 paddingRight: '40px'
               }}
               onFocus={(e) => {
-                e.currentTarget.style.borderColor = '#d9764a';
+                e.currentTarget.style.borderColor = '#D8C7A6';
                 e.currentTarget.style.background = 'white';
-                e.currentTarget.style.boxShadow = '0 0 0 4px rgba(217,118,74,0.1)';
+                e.currentTarget.style.boxShadow = '0 0 0 4px rgba(216,199,166,0.25)';
               }}
               onBlur={(e) => {
                 e.currentTarget.style.borderColor = '#e5e7eb';
@@ -336,7 +336,7 @@ export default function FilterModal({
                 margin: 0
               }}
               onMouseEnter={(e) => {
-                e.currentTarget.style.borderColor = '#d9764a';
+                e.currentTarget.style.borderColor = '#D8C7A6';
                 e.currentTarget.style.background = '#fff8f5';
               }}
               onMouseLeave={(e) => {
@@ -353,7 +353,7 @@ export default function FilterModal({
                   style={{
                     width: '18px',
                     height: '18px',
-                    accentColor: '#d9764a',
+                    accentColor: '#D8C7A6',
                     cursor: 'pointer',
                     flexShrink: 0
                   }}
@@ -375,7 +375,7 @@ export default function FilterModal({
                 margin: 0
               }}
               onMouseEnter={(e) => {
-                e.currentTarget.style.borderColor = '#d9764a';
+                e.currentTarget.style.borderColor = '#D8C7A6';
                 e.currentTarget.style.background = '#fff8f5';
               }}
               onMouseLeave={(e) => {
@@ -392,7 +392,7 @@ export default function FilterModal({
                   style={{
                     width: '18px',
                     height: '18px',
-                    accentColor: '#d9764a',
+                    accentColor: '#D8C7A6',
                     cursor: 'pointer',
                     flexShrink: 0
                   }}
@@ -429,7 +429,7 @@ export default function FilterModal({
               margin: 0
             }}
             onMouseEnter={(e) => {
-              e.currentTarget.style.borderColor = '#d9764a';
+              e.currentTarget.style.borderColor = '#D8C7A6';
               e.currentTarget.style.background = '#fff8f5';
             }}
             onMouseLeave={(e) => {
@@ -446,7 +446,7 @@ export default function FilterModal({
                 style={{
                   width: '18px',
                   height: '18px',
-                  accentColor: '#d9764a',
+                  accentColor: '#D8C7A6',
                   cursor: 'pointer',
                   flexShrink: 0
                 }}
@@ -489,7 +489,7 @@ export default function FilterModal({
                   margin: 0
                 }}
                 onMouseEnter={(e) => {
-                  e.currentTarget.style.borderColor = '#d9764a';
+                  e.currentTarget.style.borderColor = '#D8C7A6';
                   e.currentTarget.style.background = '#fff8f5';
                 }}
                 onMouseLeave={(e) => {
@@ -509,7 +509,7 @@ export default function FilterModal({
                     style={{
                       width: '18px',
                       height: '18px',
-                      accentColor: '#d9764a',
+                      accentColor: '#D8C7A6',
                       cursor: 'pointer',
                       flexShrink: 0
                     }}
@@ -554,9 +554,9 @@ export default function FilterModal({
                 paddingRight: '40px'
               }}
               onFocus={(e) => {
-                e.currentTarget.style.borderColor = '#d9764a';
+                e.currentTarget.style.borderColor = '#D8C7A6';
                 e.currentTarget.style.background = 'white';
-                e.currentTarget.style.boxShadow = '0 0 0 4px rgba(217,118,74,0.1)';
+                e.currentTarget.style.boxShadow = '0 0 0 4px rgba(216,199,166,0.25)';
               }}
               onBlur={(e) => {
                 e.currentTarget.style.borderColor = '#e5e7eb';

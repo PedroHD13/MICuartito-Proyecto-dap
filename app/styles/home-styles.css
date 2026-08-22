@@ -36,7 +36,7 @@
   font-weight: 800;
   line-height: 1.1;
   margin-bottom: 18px;
-  background: linear-gradient(135deg, #2563a8 0%, #d9764a 100%);
+  background: #1A3B5D;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
 }
@@ -51,7 +51,7 @@
 
 .home-cta {
   padding: 16px 40px;
-  background: linear-gradient(135deg, #2563a8 0%, #d9764a 100%);
+  background: #1A3B5D;
   color: white;
   border: none;
   border-radius: 14px;
@@ -86,7 +86,7 @@
   flex: 1;
   max-width: 50%;
   position: relative;
-  background: linear-gradient(135deg, #2563a8 0%, #d9764a 100%);
+  background: #1A3B5D;
   overflow: hidden;
 }
 

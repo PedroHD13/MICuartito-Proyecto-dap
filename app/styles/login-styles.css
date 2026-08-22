@@ -6,7 +6,7 @@
 
 body {
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  background: linear-gradient(135deg, #2563a8 0%, #d9764a 100%);
+  background: #1A3B5D;
   min-height: 100vh;
   /* ❌ ELIMINAR max-width: 480px */
   /* ✅ Ahora el body ocupa todo el ancho */
@@ -23,7 +23,7 @@ body {
   max-width: 1200px;
   margin: 0 auto;
   padding: 0 20px;
-  background: #f5f5f5;
+  background: #F2EBE1;
   min-height: 100vh;
 }
 
@@ -58,7 +58,7 @@ body {
 }
 
 .login-header {
-  background: linear-gradient(135deg, #2563a8 0%, #d9764a 100%);
+  background: #1A3B5D;
   padding: 30px 20px;
   text-align: center;
   color: white;
@@ -74,7 +74,7 @@ body {
 
 .tabs {
   display: flex;
-  background: #f5f5f5;
+  background: #F2EBE1;
 }
 
 .tab {
@@ -92,8 +92,8 @@ body {
 
 .tab.active {
   background: white;
-  color: #d9764a;
-  border-bottom: 3px solid #d9764a;
+  color: #8A7554;
+  border-bottom: 3px solid #D8C7A6;
 }
 
 .form-container {
@@ -127,7 +127,7 @@ body {
 label {
   display: block;
   margin-bottom: 8px;
-  color: #333;
+  color: #3A3D40;
   font-weight: 500;
   font-size: 0.9em;
 }
@@ -145,7 +145,7 @@ select {
 input:focus,
 select:focus {
   outline: none;
-  border-color: #d9764a;
+  border-color: #D8C7A6;
 }
 
 .btn {
@@ -161,8 +161,8 @@ select:focus {
 }
 
 .btn-primary {
-  background: #d9764a;
-  color: white;
+  background: #D8C7A6;
+  color: #1A3B5D;
 }
 
 .btn-primary:hover {
@@ -171,15 +171,15 @@ select:focus {
 }
 
 .demo-info {
-  background: #fff3e0;
-  border-left: 4px solid #d9764a;
+  background: #F7E9E1;
+  border-left: 4px solid #D8C7A6;
   padding: 15px;
   margin-top: 20px;
   border-radius: 8px;
 }
 
 .demo-info h4 {
-  color: #d9764a;
+  color: #8A7554;
   margin-bottom: 10px;
   font-size: 0.9em;
 }
@@ -247,7 +247,7 @@ select:focus {
 /* ✅ Tablet (768px - 1024px) */
 @media (min-width: 768px) {
   body {
-    background: #f0f4f8;
+    background: #F2EBE1;
     padding: 20px;
   }
 

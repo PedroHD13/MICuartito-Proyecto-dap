@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { useRequireAuth } from '../../useSession';
 import { useRooms } from '../hooks/useRooms';
+import DashboardShell from '../components/DashboardShell';
 import '../styles/dashboard-styles.css';
 
 export default function PropietarioDashboard() {
@@ -67,126 +68,73 @@ export default function PropietarioDashboard() {
   };
 
   return (
-    <div className="dashboard-container">
-      {/* Header */}
-      <div className="dashboard-header">
-        <div className="user-greeting">
-          <div className="user-avatar">{session.name.charAt(0).toUpperCase()}</div>
-          <div className="greeting-text">
-            <span className="greeting">{greeting}</span>
-            <h1>{session.name}</h1>
-            <span className="user-role">🏠 Propietario</span>
-          </div>
-        </div>
-        <button className="logout-btn" onClick={handleLogout}>
-          🚪
-        </button>
-      </div>
-
-      {/* Stats Cards */}
-      <div className="stats-grid">
-        <div className="stat-card">
-          <span className="stat-icon">🏘️</span>
-          <span className="stat-value">{stats.myRoomsCount}</span>
-          <span className="stat-label">Mis Cuartos</span>
-        </div>
-        <div className="stat-card">
-          <span className="stat-icon">👁️</span>
-          <span className="stat-value">{stats.totalViews}</span>
-          <span className="stat-label">Vistas Totales</span>
-        </div>
-        <div className="stat-card">
-          <span className="stat-icon">📩</span>
-          <span className="stat-value">{stats.pendingRequests}</span>
-          <span className="stat-label">Solicitudes</span>
-        </div>
-      </div>
-
-      {/* Quick Actions */}
-      <div className="quick-actions">
-        <button className="action-card primary" onClick={() => navigateTo('publicar')}>
-          <span className="action-icon">➕</span>
-          <div className="action-info">
-            <h3>Publicar Cuarto</h3>
-            <p>Crea una nueva publicación</p>
-          </div>
-        </button>
-
-        <button className="action-card" onClick={() => navigateTo('mis-cuartos')}>
-          <span className="action-icon">🏠</span>
-          <div className="action-info">
-            <h3>Mis Cuartos</h3>
-            <p>{stats.myRoomsCount} publicados</p>
-          </div>
-        </button>
-
-        <button className="action-card" onClick={() => navigateTo('perfil')}>
-          <span className="action-icon">👤</span>
-          <div className="action-info">
-            <h3>Mi Perfil</h3>
-            <p>Edita tu información</p>
-          </div>
-        </button>
-      </div>
-
-      {/* Recent Rooms */}
-      <div className="recent-section">
-        <div className="section-header">
-          <h3>🆕 Mis Publicaciones Recientes</h3>
-          <button className="view-all" onClick={() => navigateTo('mis-cuartos')}>
-            Ver todos →
-          </button>
+    <DashboardShell role="propietario" userName={session.name} onLogout={handleLogout}>
+      <div className="dashboard-content">
+        {/* Encabezado de bienvenida */}
+        <div className="dashboard-page-header">
+          <span className="greeting">{greeting}</span>
+          <h1>{session.name}</h1>
+          <span className="user-role">🏠 Propietario</span>
         </div>
 
-        {myRooms.length === 0 ? (
-          <div className="empty-recent">
-            <p>Aún no has publicado ningún cuarto</p>
+        {/* Stats Cards */}
+        <div className="stats-grid">
+          <div className="stat-card">
+            <span className="stat-icon">🏘️</span>
+            <span className="stat-value">{stats.myRoomsCount}</span>
+            <span className="stat-label">Mis Cuartos</span>
           </div>
-        ) : (
-          <div className="recent-rooms">
-            {myRooms.map(room => (
-              <div
-                key={room.id}
-                className="recent-room-card"
-                onClick={() => navigateTo('mis-cuartos')}
-              >
-                <img
-                  src={room.image}
-                  alt={room.title}
-                  onError={(e) => {
-                    (e.target as HTMLImageElement).src = 'https://via.placeholder.com/400x300/2563a8/ffffff?text=Cuarto';
-                  }}
-                />
-                <div className="recent-room-info">
-                  <h4>{room.title}</h4>
-                  <p className="location">📍 {room.location}</p>
-                  <p className="price">Bs. {room.price}/mes</p>
+          <div className="stat-card">
+            <span className="stat-icon">👁️</span>
+            <span className="stat-value">{stats.totalViews}</span>
+            <span className="stat-label">Vistas Totales</span>
+          </div>
+          <div className="stat-card">
+            <span className="stat-icon">📩</span>
+            <span className="stat-value">{stats.pendingRequests}</span>
+            <span className="stat-label">Solicitudes</span>
+          </div>
+        </div>
+
+        {/* Recent Rooms */}
+        <div className="recent-section">
+          <div className="section-header">
+            <h3>🆕 Mis Publicaciones Recientes</h3>
+            <button className="view-all" onClick={() => navigateTo('mis-cuartos')}>
+              Ver todos →
+            </button>
+          </div>
+
+          {myRooms.length === 0 ? (
+            <div className="empty-recent">
+              <p>Aún no has publicado ningún cuarto</p>
+            </div>
+          ) : (
+            <div className="recent-rooms">
+              {myRooms.map(room => (
+                <div
+                  key={room.id}
+                  className="recent-room-card"
+                  onClick={() => navigateTo('mis-cuartos')}
+                >
+                  <img
+                    src={room.image}
+                    alt={room.title}
+                    onError={(e) => {
+                      (e.target as HTMLImageElement).src = 'https://via.placeholder.com/400x300/1A3B5D/ffffff?text=Cuarto';
+                    }}
+                  />
+                  <div className="recent-room-info">
+                    <h4>{room.title}</h4>
+                    <p className="location">📍 {room.location}</p>
+                    <p className="price">Bs. {room.price}/mes</p>
+                  </div>
                 </div>
-              </div>
-            ))}
-          </div>
-        )}
+              ))}
+            </div>
+          )}
+        </div>
       </div>
-
-      {/* Bottom Navigation */}
-      <div className="bottom-nav">
-        <button className="nav-item active">
-          <span className="nav-icon">🏠</span>
-          <span className="nav-label">Inicio</span>
-        </button>
-        <button className="nav-item" onClick={() => navigateTo('publicar')}>
-          <span className="nav-icon">➕</span>
-          <span className="nav-label">Publicar</span>
-        </button>
-        <button className="nav-item" onClick={() => navigateTo('mis-cuartos')}>
-          <span className="nav-icon">🏘️</span>
-          <span className="nav-label">Mis Cuartos</span>
-        </button>
-        <button className="nav-item" onClick={() => navigateTo('perfil')}>
-          <span className="nav-icon">👤</span>
-          <span className="nav-label">Perfil</span>
-        </button>
-      </div>
-    </div>
+    </DashboardShell>
   );
 }

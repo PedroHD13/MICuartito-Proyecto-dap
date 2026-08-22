@@ -1,30 +1,23 @@
 /* ============================================
    ESTILOS ESPECÍFICOS PARA MIS CUARTOS
+   (vive dentro de <DashboardShell>: el ancho máximo,
+   centrado y padding externo ya los da .page-content
+   en app-shell.css — acá solo van los estilos propios
+   de esta pantalla)
    ============================================ */
-
-.mis-cuartos-header {
-  padding: 15px 20px 20px;
-  display: block;
-}
-
-.header-top {
-  display: flex;
-  align-items: center;
-  gap: 15px;
-}
 
 /* Stats Section */
 .stats-section {
-  padding: 15px 20px;
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 10px;
+  gap: 14px;
+  margin-bottom: 18px;
 }
 
 .stats-section .stat-card {
   background: white;
   border-radius: 12px;
-  padding: 15px 10px;
+  padding: 16px 10px;
   text-align: center;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
 }
@@ -37,7 +30,7 @@
 .stat-number {
   font-size: 1.8em;
   font-weight: 700;
-  color: #d9764a;
+  color: #8A7554;
   margin-bottom: 3px;
 }
 
@@ -49,7 +42,8 @@
 
 /* Filter Tabs */
 .filter-tabs {
-  padding: 15px 20px 10px;
+  padding-bottom: 6px;
+  margin-bottom: 12px;
   display: flex;
   gap: 10px;
   overflow-x: auto;
@@ -61,25 +55,23 @@
 }
 
 .filter-tab {
-  background: white;
-  border: 2px solid #e0e0e0;
-  padding: 10px 20px;
+  flex-shrink: 0;
+  padding: 10px 18px;
   border-radius: 20px;
+  border: 2px solid #E8DFD0;
+  background: white;
+  color: #666;
   font-size: 0.9em;
-  white-space: nowrap;
+  font-weight: 600;
   cursor: pointer;
   transition: all 0.3s;
-  font-weight: 500;
-}
-
-.filter-tab:active {
-  transform: scale(0.95);
+  white-space: nowrap;
 }
 
 .filter-tab.active {
-  background: linear-gradient(135deg, #2563a8 0%, #d9764a 100%);
+  background: #1A3B5D;
+  border-color: #1A3B5D;
   color: white;
-  border-color: transparent;
 }
 
 .filter-tab span {
@@ -88,13 +80,13 @@
 
 /* Action Buttons */
 .action-buttons {
-  padding: 10px 20px 15px;
+  margin-bottom: 16px;
 }
 
 .btn-new-room {
   width: 100%;
   padding: 15px;
-  background: linear-gradient(135deg, #2563a8 0%, #d9764a 100%);
+  background: #1A3B5D;
   color: white;
   border: none;
   border-radius: 12px;
@@ -102,16 +94,44 @@
   font-weight: 600;
   cursor: pointer;
   transition: all 0.3s;
-  box-shadow: 0 4px 15px rgba(217, 118, 74, 0.3);
+  box-shadow: 0 4px 15px rgba(216, 199, 166, 0.35);
+}
+
+.btn-new-room:hover {
+  background: #142f4a;
 }
 
 .btn-new-room:active {
   transform: scale(0.98);
 }
 
-/* My Rooms Container */
+/* My Rooms Container - lista en móvil, grilla en pantallas anchas */
 .my-rooms-container {
-  padding: 0 20px 20px;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 16px;
+}
+
+@media (min-width: 700px) {
+  .my-rooms-container {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .btn-new-room {
+    width: auto;
+    padding: 14px 28px;
+  }
+
+  .action-buttons {
+    display: flex;
+    justify-content: flex-end;
+  }
+}
+
+@media (min-width: 1100px) {
+  .my-rooms-container {
+    grid-template-columns: repeat(3, 1fr);
+  }
 }
 
 /* Room Card */
@@ -119,9 +139,13 @@
   background: white;
   border-radius: 15px;
   overflow: hidden;
-  margin-bottom: 15px;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
   transition: all 0.3s;
+}
+
+.my-room-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.12);
 }
 
 .my-room-card.inactive {
@@ -179,7 +203,7 @@
 .room-card-title {
   font-size: 1.1em;
   font-weight: 600;
-  color: #333;
+  color: #3A3D40;
   margin-bottom: 8px;
 }
 
@@ -201,7 +225,7 @@
 .room-card-price {
   font-size: 1.4em;
   font-weight: 700;
-  color: #d9764a;
+  color: #8A7554;
   margin-bottom: 12px;
 }
 
@@ -236,7 +260,7 @@
 }
 
 .btn-edit {
-  background: #2563a8;
+  background: #1A3B5D;
   color: white;
 }
 
@@ -254,7 +278,6 @@
   color: white;
 }
 
-/* Empty State */
 .empty-state {
   text-align: center;
   padding: 60px 20px;
@@ -268,7 +291,7 @@
 
 .empty-state h3 {
   font-size: 1.3em;
-  color: #333;
+  color: #3A3D40;
   margin-bottom: 10px;
 }
 
@@ -280,7 +303,7 @@
 
 .empty-state .btn-primary {
   padding: 15px 30px;
-  background: linear-gradient(135deg, #2563a8 0%, #d9764a 100%);
+  background: #1A3B5D;
   color: white;
   border: none;
   border-radius: 12px;
@@ -336,7 +359,7 @@
 
 .modal-header {
   padding: 20px;
-  border-bottom: 2px solid #f0f0f0;
+  border-bottom: 2px solid #E8DFD0;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -344,7 +367,7 @@
 
 .modal-header h2 {
   font-size: 1.3em;
-  color: #333;
+  color: #3A3D40;
 }
 
 .close-modal {
@@ -372,7 +395,7 @@
 .modal-body .input-group label {
   display: block;
   margin-bottom: 8px;
-  color: #333;
+  color: #3A3D40;
   font-weight: 500;
   font-size: 0.9em;
 }
@@ -414,7 +437,7 @@
 .modal-actions .btn-save {
   flex: 2;
   padding: 12px;
-  background: linear-gradient(135deg, #2563a8 0%, #d9764a 100%);
+  background: #1A3B5D;
   color: white;
   border: none;
   border-radius: 10px;

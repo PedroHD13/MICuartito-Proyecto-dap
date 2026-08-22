@@ -25,7 +25,7 @@ const SAMPLE_ROOMS: Room[] = [
     furnished: true,
     capacity: 2,
     services: ["agua", "luz", "gas"],
-    image: "https://via.placeholder.com/400x300/d9764a/ffffff?text=Cuarto+2"
+    image: "https://via.placeholder.com/400x300/1A3B5D/ffffff?text=Cuarto+2"
   },
   {
     id: 3,
@@ -49,7 +49,7 @@ const SAMPLE_ROOMS: Room[] = [
     furnished: true,
     capacity: 1,
     services: ["wifi", "agua", "luz"],
-    image: "https://via.placeholder.com/400x300/d9764a/ffffff?text=Cuarto+4"
+    image: "https://via.placeholder.com/400x300/1A3B5D/ffffff?text=Cuarto+4"
   },
   {
     id: 5,
@@ -73,7 +73,7 @@ const SAMPLE_ROOMS: Room[] = [
     furnished: false,
     capacity: 3,
     services: ["agua", "luz"],
-    image: "https://via.placeholder.com/400x300/d9764a/ffffff?text=Cuarto+6"
+    image: "https://via.placeholder.com/400x300/1A3B5D/ffffff?text=Cuarto+6"
   }
 ];
 

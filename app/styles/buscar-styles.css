@@ -1,12 +1,66 @@
 /* ============================================
-   ROOMS GRID - CORREGIDO
+   BUSQUEDA - FORMATO COMPARTIDO CON PUBLICAR
+   ============================================ */
+
+.search-page .page-header {
+  margin-bottom: 18px;
+}
+
+.search-toolbar {
+  background: white;
+  border-radius: 15px;
+  padding: 20px;
+  margin-bottom: 22px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+}
+
+.search-toolbar .search-bar {
+  margin-bottom: 14px;
+  border: 2px solid #e0e0e0;
+  box-shadow: none;
+}
+
+.search-toolbar .search-bar:focus-within {
+  border-color: #D8C7A6;
+}
+
+.search-toolbar .filter-section {
+  margin-bottom: 0;
+}
+
+.search-toolbar .filter-btn {
+  border-radius: 10px;
+}
+
+.search-toolbar .filter-btn.primary {
+  background: #1A3B5D;
+}
+
+.clear-filter-btn {
+  background: #FBF1EC;
+  border-color: #E6B7A4;
+  color: #8A7554;
+}
+
+.clear-filter-btn:hover {
+  background: #F7E9E1;
+  border-color: #D8C7A6;
+  color: #8A7554;
+}
+
+.search-page .results-header {
+  margin-bottom: 16px;
+}
+
+/* ============================================
+   ROOMS GRID
    ============================================ */
 
 .rooms-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
   gap: 20px;
-  padding: 0 20px 20px;
+  margin-bottom: 30px;
 }
 
 /* Empty state dentro del grid */
@@ -15,7 +69,7 @@
   text-align: center;
   padding: 60px 20px;
   background: white;
-  border-radius: 16px;
+  border-radius: 15px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
 }
 
@@ -26,7 +80,7 @@
 
 .rooms-grid .empty-state h3 {
   font-size: 1.2em;
-  color: #333;
+  color: #3A3D40;
   margin-bottom: 8px;
 }
 
@@ -39,7 +93,6 @@
   .rooms-grid {
     grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
     gap: 16px;
-    padding: 0 16px 16px;
   }
 }
 
@@ -47,7 +100,6 @@
   .rooms-grid {
     grid-template-columns: 1fr;
     gap: 14px;
-    padding: 0 12px 16px;
   }
 }
 
@@ -55,6 +107,5 @@
   .rooms-grid {
     grid-template-columns: repeat(3, 1fr);
     gap: 24px;
-    padding: 0 40px 30px;
   }
 }
