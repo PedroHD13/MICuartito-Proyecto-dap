@@ -2,6 +2,7 @@
 
 import { RoomFilters } from '../types';
 import { useEffect } from 'react';
+import AppIcon from './AppIcon';
 
 interface FilterModalProps {
   isOpen: boolean;
@@ -97,7 +98,7 @@ export default function FilterModal({
             margin: 0,
             fontWeight: 700
           }}>
-            🎛️ Filtros
+            <AppIcon name="sliders" /> Filtros
           </h2>
           <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
             <button
@@ -144,7 +145,7 @@ export default function FilterModal({
                 e.currentTarget.style.transform = 'scale(1)';
               }}
             >
-              ✅ Aplicar
+              <AppIcon name="check" /> Aplicar
             </button>
             <button
               onClick={onClose}
@@ -173,7 +174,7 @@ export default function FilterModal({
                 e.currentTarget.style.color = '#9ca3af';
               }}
             >
-              ×
+              <AppIcon name="xmark" />
             </button>
           </div>
         </div>
@@ -194,7 +195,7 @@ export default function FilterModal({
               paddingBottom: '6px',
               borderBottom: '2px solid #f3f4f6'
             }}>
-              💰 Rango de Precio (Bs.)
+              <AppIcon name="moneyBill" /> Rango de Precio (Bs.)
             </div>
             <div style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
               <input
@@ -269,7 +270,7 @@ export default function FilterModal({
               paddingBottom: '6px',
               borderBottom: '2px solid #f3f4f6'
             }}>
-              📍 Zona
+              <AppIcon name="building" /> Zona
             </div>
             <select
               value={filters.zone || ''}
@@ -285,7 +286,7 @@ export default function FilterModal({
                 outline: 'none',
                 cursor: 'pointer',
                 appearance: 'none',
-                backgroundImage: "url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%236b7280' d='M6 8L1 3h10z'/%3E%3C/svg%3E\")",
+                backgroundImage: 'none',
                 backgroundRepeat: 'no-repeat',
                 backgroundPosition: 'right 14px center',
                 paddingRight: '40px'
@@ -320,7 +321,7 @@ export default function FilterModal({
               paddingBottom: '6px',
               borderBottom: '2px solid #f3f4f6'
             }}>
-              🚿 Tipo de Baño
+              <AppIcon name="shower" /> Tipo de Baño
             </div>
             <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
               <label style={{
@@ -414,7 +415,7 @@ export default function FilterModal({
               paddingBottom: '6px',
               borderBottom: '2px solid #f3f4f6'
             }}>
-              🛋️ Mobiliario
+              <AppIcon name="couch" /> Mobiliario
             </div>
             <label style={{
               display: 'flex',
@@ -467,14 +468,14 @@ export default function FilterModal({
               paddingBottom: '6px',
               borderBottom: '2px solid #f3f4f6'
             }}>
-              ✨ Servicios Incluidos
+              <AppIcon name="listCheck" /> Servicios Incluidos
             </div>
             <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
               {[
-                { value: 'wifi', label: '📶 WiFi' },
-                { value: 'agua', label: '💧 Agua' },
-                { value: 'luz', label: '💡 Luz' },
-                { value: 'gas', label: '🔥 Gas' }
+                { value: 'wifi', label: 'WiFi', icon: 'wifi' as const },
+                { value: 'agua', label: 'Agua', icon: 'droplet' as const },
+                { value: 'luz', label: 'Luz', icon: 'lightbulb' as const },
+                { value: 'gas', label: 'Gas', icon: 'fire' as const }
               ].map(service => (
                 <label key={service.value} style={{
                   display: 'flex',
@@ -515,7 +516,7 @@ export default function FilterModal({
                     }}
                   />
                   <span style={{ fontSize: '0.9em', color: '#1f2937', cursor: 'pointer', fontWeight: 500 }}>
-                    {service.label}
+                    <AppIcon name={service.icon} /> {service.label}
                   </span>
                 </label>
               ))}
@@ -532,7 +533,7 @@ export default function FilterModal({
               paddingBottom: '6px',
               borderBottom: '2px solid #f3f4f6'
             }}>
-              👥 Capacidad
+              <AppIcon name="userGroup" /> Capacidad
             </div>
             <select
               value={filters.capacity || ''}

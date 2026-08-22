@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import AppIcon from './AppIcon';
 
 export interface StoredUser {
   id: number;
@@ -45,7 +46,7 @@ export default function EditUserModal({ user, onClose, onSave }: EditUserModalPr
       <div className="edit-user-panel">
         <div className="edit-user-header">
           <h2>Editar Usuario</h2>
-          <button className="edit-user-close" onClick={onClose}>×</button>
+          <button className="edit-user-close" onClick={onClose} aria-label="Cerrar"><AppIcon name="xmark" /></button>
         </div>
 
         <div className="edit-user-body">

@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { useSession } from "../../useSession";
 import "../styles/layout-styles.css";
 import "../styles/login-styles.css";
+import AppIcon from "../components/AppIcon";
 
 export default function LoginPage() {
   const router = useRouter();
@@ -246,7 +247,7 @@ export default function LoginPage() {
                         className="toggle-password"
                         onClick={() => setShowLoginPassword(!showLoginPassword)}
                       >
-                        {showLoginPassword ? '🙈' : '👁'}
+                        <AppIcon name="eye" />
                       </button>
                     </div>
                   </div>
@@ -262,7 +263,7 @@ export default function LoginPage() {
                   )}
 
                   <div className="demo-info">
-                    <h4>🔐 Usuarios de prueba:</h4>
+                    <h4><AppIcon name="shield" /> Usuarios de prueba:</h4>
                     <p>
                       <strong>Propietario:</strong>{" "}
                       propietario / propietario123
@@ -324,7 +325,7 @@ export default function LoginPage() {
                         className="toggle-password"
                         onClick={() => setShowRegisterPassword(!showRegisterPassword)}
                       >
-                        {showRegisterPassword ? '🙈' : '👁'}
+                        <AppIcon name="eye" />
                       </button>
                     </div>
                   </div>
@@ -340,7 +341,7 @@ export default function LoginPage() {
                           checked={registerData.role === "inquilino"}
                           onChange={handleRegisterChange}
                         />
-                        <span>🔍 Busco Cuarto</span>
+                        <span><AppIcon name="magnifyingGlass" /> Busco Cuarto</span>
                       </label>
                       <label className="role-option">
                         <input
@@ -350,7 +351,7 @@ export default function LoginPage() {
                           checked={registerData.role === "propietario"}
                           onChange={handleRegisterChange}
                         />
-                        <span>🏠 Alquilo Cuarto</span>
+                        <span><AppIcon name="house" /> Alquilo Cuarto</span>
                       </label>
                     </div>
                   </div>

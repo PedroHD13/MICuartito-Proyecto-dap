@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import { useRequireAuth } from '../../../useSession';
 import DashboardShell from '../../components/DashboardShell';
 import '../../styles/publicar-styles.css';
+import AppIcon from '../../components/AppIcon';
 
 const ZONA_LABELS: Record<string, string> = {
   norte: 'Zona Norte',
@@ -103,23 +104,23 @@ export default function PublicarCuarto() {
 
   const publicarCuarto = () => {
     if (photos.length === 0) {
-      alert('⚠️ Debes agregar al menos una foto del cuarto');
+      alert('Debes agregar al menos una foto del cuarto');
       return;
     }
     if (!precio || Number(precio) <= 0) {
-      alert('⚠️ Debes ingresar un precio válido');
+      alert('Debes ingresar un precio válido');
       return;
     }
     if (!capacidad) {
-      alert('⚠️ Debes seleccionar la capacidad');
+      alert('Debes seleccionar la capacidad');
       return;
     }
     if (!zona) {
-      alert('⚠️ Debes seleccionar una zona');
+      alert('Debes seleccionar una zona');
       return;
     }
     if (cercaDe.includes('universidad') && !universidadCercana) {
-      alert('⚠️ Por favor selecciona la universidad cercana');
+      alert('Por favor selecciona la universidad cercana');
       return;
     }
 
@@ -150,7 +151,7 @@ export default function PublicarCuarto() {
     localStorage.setItem('cuartos', JSON.stringify(cuartos));
 
     alert(
-      `✅ ¡Cuarto publicado exitosamente!\n\nFotos: ${photos.length}\nTipo: ${tipo}\nUbicación: ${ubicacion}\nPrecio: Bs. ${precio}`
+      `¡Cuarto publicado exitosamente!\n\nFotos: ${photos.length}\nTipo: ${tipo}\nUbicación: ${ubicacion}\nPrecio: Bs. ${precio}`
     );
 
     router.push('/propietario');
@@ -165,18 +166,18 @@ export default function PublicarCuarto() {
             <h1>Publicar Cuarto</h1>
             <p>Completa la información</p>
           </div>
-          <button className="btn-cancel-link" onClick={goBack}>← Cancelar</button>
+          <button className="btn-cancel-link" onClick={goBack}><AppIcon name="arrowLeft" /> Cancelar</button>
         </div>
 
         <div className="form-container">
           {/* Fotografías */}
           <div className="section">
             <div className="section-title">
-              <span className="section-icon">📷</span>
+              <span className="section-icon"><AppIcon name="camera" /></span>
               Fotografías del Cuarto
             </div>
             <label htmlFor="photo-input" className="photo-upload-area">
-              <div className="photo-upload-icon">📸</div>
+              <div className="photo-upload-icon"><AppIcon name="image" /></div>
               <div className="photo-upload-text">
                 <strong>Toca para agregar fotos</strong><br />
                 <small>Máximo 6 fotos</small>
@@ -196,7 +197,7 @@ export default function PublicarCuarto() {
                   <div className="photo-item" key={index}>
                     <img src={photo} alt={`Foto ${index + 1}`} />
                     <button className="remove-photo" onClick={() => removePhoto(index)}>
-                      ×
+                      <AppIcon name="xmark" />
                     </button>
                   </div>
                 ))}
@@ -207,7 +208,7 @@ export default function PublicarCuarto() {
           {/* Título */}
           <div className="section">
             <div className="section-title">
-              <span className="section-icon">📝</span>
+              <span className="section-icon"><AppIcon name="fileLines" /></span>
               Título del Anuncio
             </div>
             <div className="input-group">
@@ -223,7 +224,7 @@ export default function PublicarCuarto() {
           {/* Tipo */}
           <div className="section">
             <div className="section-title">
-              <span className="section-icon">🚪</span>
+              <span className="section-icon"><AppIcon name="doorOpen" /></span>
               Tipo de Habitación
             </div>
             <div className="options-group">
@@ -247,7 +248,7 @@ export default function PublicarCuarto() {
           {/* Capacidad */}
           <div className="section">
             <div className="section-title">
-              <span className="section-icon">👥</span>
+              <span className="section-icon"><AppIcon name="userGroup" /></span>
               Capacidad
             </div>
             <div className="input-group">
@@ -266,7 +267,7 @@ export default function PublicarCuarto() {
           {/* Ubicación */}
           <div className="section">
             <div className="section-title">
-              <span className="section-icon">📍</span>
+              <span className="section-icon"><AppIcon name="building" /></span>
               Ubicación
             </div>
             <div className="input-group">
@@ -294,20 +295,20 @@ export default function PublicarCuarto() {
           {/* Servicios */}
           <div className="section">
             <div className="section-title">
-              <span className="section-icon">✨</span>
+              <span className="section-icon"><AppIcon name="listCheck" /></span>
               Servicios Incluidos
             </div>
             <div className="services-grid">
               {[
-                ['wifi', '📶 WiFi'],
-                ['agua', '💧 Agua'],
-                ['luz', '💡 Luz'],
-                ['gas', '🔥 Gas'],
-                ['muebles', '🛋️ Amoblado'],
-                ['cocina', '🍳 Cocina'],
-                ['lavanderia', '🧺 Lavandería'],
-                ['parking', '🚗 Parking'],
-              ].map(([value, label]) => (
+                ['wifi', 'WiFi', 'wifi'],
+                ['agua', 'Agua', 'droplet'],
+                ['luz', 'Luz', 'lightbulb'],
+                ['gas', 'Gas', 'fire'],
+                ['muebles', 'Amoblado', 'couch'],
+                ['cocina', 'Cocina', 'utensils'],
+                ['lavanderia', 'Lavandería', 'umbrellaBeach'],
+                ['parking', 'Parking', 'building'],
+              ].map(([value, label, icon]) => (
                 <label
                   key={value}
                   className={`service-item ${servicios.includes(value) ? 'selected' : ''}`}
@@ -317,7 +318,7 @@ export default function PublicarCuarto() {
                     checked={servicios.includes(value)}
                     onChange={() => toggleService(servicios, setServicios, value)}
                   />
-                  <span className="service-label">{label}</span>
+                  <span className="service-label"><AppIcon name={icon as any} /> {label}</span>
                 </label>
               ))}
             </div>
@@ -326,17 +327,17 @@ export default function PublicarCuarto() {
           {/* Cerca de */}
           <div className="section">
             <div className="section-title">
-              <span className="section-icon">📍</span>
+              <span className="section-icon"><AppIcon name="building" /></span>
               Cerca de..
             </div>
             <div className="services-grid">
               {[
-                ['universidad', '🏫 Universidad'],
-                ['transporte', '🚌 Transporte público'],
-                ['mercados', '🛒 Mercados/tiendas'],
-                ['hospital', '⚕️ Hospital/centros de salud'],
-                ['farmacias', '💊 Farmacias'],
-              ].map(([value, label]) => (
+                ['universidad', 'Universidad', 'building'],
+                ['transporte', 'Transporte público', 'arrowRight'],
+                ['mercados', 'Mercados/tiendas', 'building'],
+                ['hospital', 'Hospital/centros de salud', 'kitMedical'],
+                ['farmacias', 'Farmacias', 'kitMedical'],
+              ].map(([value, label, icon]) => (
                 <label
                   key={value}
                   className={`service-item ${cercaDe.includes(value) ? 'selected' : ''}`}
@@ -346,7 +347,7 @@ export default function PublicarCuarto() {
                     checked={cercaDe.includes(value)}
                     onChange={() => toggleCercaDe(value)}
                   />
-                  <span className="service-label">{label}</span>
+                  <span className="service-label"><AppIcon name={icon as any} /> {label}</span>
                 </label>
               ))}
             </div>
@@ -363,7 +364,7 @@ export default function PublicarCuarto() {
                     <optgroup label={group.group} key={group.group}>
                       {group.options.map((u) => (
                         <option value={u} key={u}>
-                          🎓 {u}
+                          {u}
                         </option>
                       ))}
                     </optgroup>
@@ -376,7 +377,7 @@ export default function PublicarCuarto() {
           {/* Precio */}
           <div className="section">
             <div className="section-title">
-              <span className="section-icon">💰</span>
+              <span className="section-icon"><AppIcon name="moneyBill" /></span>
               Precio
             </div>
             <div className="input-group">
@@ -397,7 +398,7 @@ export default function PublicarCuarto() {
           {/* Reglas */}
           <div className="section">
             <div className="section-title">
-              <span className="section-icon">📋</span>
+              <span className="section-icon"><AppIcon name="fileLines" /></span>
               Reglas de la Casa
             </div>
             <div className="input-group">
@@ -413,7 +414,7 @@ export default function PublicarCuarto() {
           {/* Disponibilidad */}
           <div className="section">
             <div className="section-title">
-              <span className="section-icon">📅</span>
+              <span className="section-icon"><AppIcon name="clock" /></span>
               Disponibilidad
             </div>
             <div className="options-group">

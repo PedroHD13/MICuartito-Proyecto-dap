@@ -1,11 +1,12 @@
 'use client';
 
 import { usePathname, useRouter } from 'next/navigation';
+import AppIcon, { AppIconName } from './AppIcon';
 
 export type DashboardRole = 'propietario' | 'inquilino';
 
 export interface NavItem {
-  icon: string;
+  icon: AppIconName;
   label: string;
   path: string;
 }
@@ -15,22 +16,22 @@ export interface NavItem {
 // barra inferior móvil (ambos leen esta misma lista).
 export const NAV_ITEMS: Record<DashboardRole, NavItem[]> = {
   propietario: [
-    { icon: '🏠', label: 'Inicio', path: '/propietario' },
-    { icon: '➕', label: 'Publicar', path: '/propietario/publicar' },
-    { icon: '🏘️', label: 'Mis Cuartos', path: '/propietario/mis-cuartos' },
-    { icon: '👤', label: 'Perfil', path: '/propietario/perfil' },
+    { icon: 'house', label: 'Inicio', path: '/propietario' },
+    { icon: 'plus', label: 'Publicar', path: '/propietario/publicar' },
+    { icon: 'building', label: 'Mis Cuartos', path: '/propietario/mis-cuartos' },
+    { icon: 'user', label: 'Perfil', path: '/propietario/perfil' },
   ],
   inquilino: [
-    { icon: '🏠', label: 'Inicio', path: '/inquilino' },
-    { icon: '🔍', label: 'Buscar', path: '/inquilino/buscar' },
-    { icon: '❤️', label: 'Favoritos', path: '/inquilino/favoritos' },
-    { icon: '👤', label: 'Perfil', path: '/inquilino/perfil' },
+    { icon: 'house', label: 'Inicio', path: '/inquilino' },
+    { icon: 'magnifyingGlass', label: 'Buscar', path: '/inquilino/buscar' },
+    { icon: 'heart', label: 'Favoritos', path: '/inquilino/favoritos' },
+    { icon: 'user', label: 'Perfil', path: '/inquilino/perfil' },
   ],
 };
 
 const ROLE_LABEL: Record<DashboardRole, string> = {
-  propietario: '🏠 Propietario',
-  inquilino: '🔍 Inquilino',
+  propietario: 'Propietario',
+  inquilino: 'Inquilino',
 };
 
 interface SidebarProps {
@@ -60,7 +61,7 @@ export default function Sidebar({ role, userName, onLogout }: SidebarProps) {
               className={`sidebar-nav-item${active ? ' active' : ''}`}
               onClick={() => router.push(item.path)}
             >
-              <span className="sidebar-nav-icon">{item.icon}</span>
+              <span className="sidebar-nav-icon"><AppIcon name={item.icon} /></span>
               <span className="sidebar-nav-label">{item.label}</span>
             </button>
           );
@@ -76,7 +77,7 @@ export default function Sidebar({ role, userName, onLogout }: SidebarProps) {
           </div>
         </div>
         <button className="sidebar-logout" onClick={onLogout} title="Cerrar sesión">
-          🚪
+          <AppIcon name="rightFromBracket" />
         </button>
       </div>
     </aside>

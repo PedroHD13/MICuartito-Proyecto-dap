@@ -6,6 +6,7 @@ import { useRequireAuth } from '../../useSession';
 import { useRooms } from '../hooks/useRooms';
 import DashboardShell from '../components/DashboardShell';
 import '../styles/dashboard-styles.css';
+import AppIcon from '../components/AppIcon';
 
 export default function PropietarioDashboard() {
   const router = useRouter();
@@ -74,18 +75,18 @@ export default function PropietarioDashboard() {
         <div className="dashboard-page-header">
           <span className="greeting">{greeting}</span>
           <h1>{session.name}</h1>
-          <span className="user-role">🏠 Propietario</span>
+          <span className="user-role"><AppIcon name="house" /> Propietario</span>
         </div>
 
         {/* Stats Cards */}
         <div className="stats-grid">
           <div className="stat-card">
-            <span className="stat-icon">🏘️</span>
+            <span className="stat-icon"><AppIcon name="building" /></span>
             <span className="stat-value">{stats.myRoomsCount}</span>
             <span className="stat-label">Mis Cuartos</span>
           </div>
           <div className="stat-card">
-            <span className="stat-icon">👁️</span>
+            <span className="stat-icon"><AppIcon name="eye" /></span>
             <span className="stat-value">{stats.totalViews}</span>
             <span className="stat-label">Vistas Totales</span>
           </div>
@@ -126,7 +127,7 @@ export default function PropietarioDashboard() {
                   />
                   <div className="recent-room-info">
                     <h4>{room.title}</h4>
-                    <p className="location">📍 {room.location}</p>
+                    <p className="location"><AppIcon name="building" /> {room.location}</p>
                     <p className="price">Bs. {room.price}/mes</p>
                   </div>
                 </div>
