@@ -1,6 +1,7 @@
 'use client';
 
 import { Room } from '../types';
+import AppIcon from './AppIcon';
 
 interface RoomCardProps {
   room: Room;
@@ -34,17 +35,17 @@ export default function RoomCard({
             onToggleFavorite(room.id);
           }}
         >
-          {isFavorite ? '❤️' : '🤍'}
+          <AppIcon name="heart" />
         </button>
         <span className="room-badge">{room.type}</span>
       </div>
       <div className="room-info">
         <div className="room-title">{room.title}</div>
-        <div className="room-location">📍 {room.location}</div>
+        <div className="room-location"><AppIcon name="building" /> {room.location}</div>
         <div className="room-features">
-          <span className="feature">👥 {room.capacity} {room.capacity > 1 ? 'personas' : 'persona'}</span>
-          <span className="feature">🚿 {room.bathroom === 'privado' ? 'Baño privado' : 'Baño compartido'}</span>
-          {room.furnished && <span className="feature">🛋️ Amoblado</span>}
+          <span className="feature"><AppIcon name="userGroup" /> {room.capacity} {room.capacity > 1 ? 'personas' : 'persona'}</span>
+          <span className="feature"><AppIcon name="shower" /> {room.bathroom === 'privado' ? 'Baño privado' : 'Baño compartido'}</span>
+          {room.furnished && <span className="feature"><AppIcon name="building" /> Amoblado</span>}
         </div>
         <div className="room-footer">
           <div className="room-price">

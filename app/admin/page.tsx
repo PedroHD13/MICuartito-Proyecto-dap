@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import { useRequireAuth } from '../../useSession';
 import { useRouter } from 'next/navigation';
 import '../styles/admin-styles.css';
+import AppIcon from '../components/AppIcon';
 
 interface StoredUser {
   id: number;
@@ -60,7 +61,7 @@ export default function AdminDashboardPage() {
             <p>Bienvenido, {session.username}</p>
           </div>
           <button className="admin-logout-btn" onClick={handleLogout}>
-            🚪
+            <AppIcon name="rightFromBracket" />
           </button>
         </div>
       </div>
@@ -68,22 +69,22 @@ export default function AdminDashboardPage() {
       {/* Stats Grid */}
       <div className="admin-stats-grid">
         <div className="admin-stat-card">
-          <span className="admin-stat-icon">👥</span>
+          <span className="admin-stat-icon"><AppIcon name="userGroup" /></span>
           <span className="admin-stat-value">{totalUsuarios}</span>
           <span className="admin-stat-label">Usuarios totales</span>
         </div>
         <div className="admin-stat-card">
-          <span className="admin-stat-icon">🔍</span>
+          <span className="admin-stat-icon"><AppIcon name="magnifyingGlass" /></span>
           <span className="admin-stat-value">{totalInquilinos}</span>
           <span className="admin-stat-label">Inquilinos</span>
         </div>
         <div className="admin-stat-card">
-          <span className="admin-stat-icon">🏠</span>
+          <span className="admin-stat-icon"><AppIcon name="house" /></span>
           <span className="admin-stat-value">{totalPropietarios}</span>
           <span className="admin-stat-label">Propietarios</span>
         </div>
         <div className="admin-stat-card">
-          <span className="admin-stat-icon">🛏️</span>
+          <span className="admin-stat-icon"><AppIcon name="bed" /></span>
           <span className="admin-stat-value">{totalCuartos}</span>
           <span className="admin-stat-label">Cuartos publicados</span>
         </div>
@@ -96,7 +97,7 @@ export default function AdminDashboardPage() {
           className="admin-action-card"
           onClick={() => router.push('/admin/usuarios')}
         >
-          <span className="admin-action-icon">⚙️</span>
+          <span className="admin-action-icon"><AppIcon name="gear" /></span>
           <div className="admin-action-info">
             <h3>Gestionar Usuarios</h3>
             <p>Ver, editar o eliminar cuentas registradas</p>

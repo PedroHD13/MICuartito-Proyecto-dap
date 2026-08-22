@@ -11,6 +11,7 @@ import DashboardShell from '../../components/DashboardShell';
 import { Room, RoomFilters } from '../../types';
 import '../../styles/buscar-styles.css';
 import '../../styles/filter-modal.css'; // ✅ Importar estilos del modal
+import AppIcon from '../../components/AppIcon';
 
 export default function BuscarPage() {
   const router = useRouter();
@@ -60,14 +61,14 @@ export default function BuscarPage() {
   };
 
   const handleViewDetail = (room: Room) => {
-    alert(`📋 Detalles del Cuarto:\n\n` +
+    alert(`Detalles del Cuarto:\n\n` +
       `${room.title}\n` +
       `${room.location}\n\n` +
       `Precio: Bs. ${room.price}/mes\n` +
       `Tipo: ${room.type}\n` +
       `Capacidad: ${room.capacity} persona(s)\n` +
       `Baño: ${room.bathroom === 'privado' ? 'Privado' : 'Compartido'}\n` +
-      `${room.furnished ? '✓ Amoblado\n' : ''}\n` +
+      `${room.furnished ? 'Amoblado\n' : ''}\n` +
       `Servicios: ${room.services.join(', ')}\n\n` +
       `(Próximamente: pantalla de detalles completa)`
     );
@@ -113,7 +114,7 @@ export default function BuscarPage() {
 
         <div className="search-toolbar">
           <div className="search-bar">
-            <span className="search-icon">🔍</span>
+            <span className="search-icon"><AppIcon name="magnifyingGlass" /></span>
             <input
               type="text"
               placeholder="Buscar por zona, barrio..."
@@ -124,14 +125,14 @@ export default function BuscarPage() {
 
           <div className="filter-section">
             <button className="filter-btn primary" onClick={handleOpenModal}>
-              🎛️ Filtros
+              <AppIcon name="sliders" /> Filtros
               {activeFiltersCount > 0 && (
                 <span className="filter-badge">{activeFiltersCount}</span>
               )}
             </button>
             {activeFiltersCount > 0 && (
               <button className="filter-btn clear-filter-btn" onClick={handleClearFilters}>
-                ✕ Limpiar
+                <AppIcon name="xmark" /> Limpiar
               </button>
             )}
           </div>
@@ -142,7 +143,7 @@ export default function BuscarPage() {
             <strong>{rooms.length}</strong> cuartos disponibles
           </div>
           <button className="sort-btn" onClick={handleSort}>
-            <span>{sortBy === 'price-asc' ? '⬆️' : '⬇️'}</span>
+                <span><AppIcon name={sortBy === 'price-asc' ? 'arrowUp' : 'arrowDown'} /></span>
             <span>{sortBy === 'price-asc' ? 'Menor precio' : 'Mayor precio'}</span>
           </button>
         </div>

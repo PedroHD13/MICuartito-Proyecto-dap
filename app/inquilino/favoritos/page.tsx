@@ -8,6 +8,7 @@ import { useFavorites, FavoriteWithDate } from '../../hooks/useFavorites';
 import DashboardShell from '../../components/DashboardShell';
 import { Room } from '../../types';
 import '../../styles/favoritos-styles.css';
+import AppIcon, { AppIconName } from '../../components/AppIcon';
 
 export default function FavoritosPage() {
   const router = useRouter();
@@ -118,11 +119,11 @@ export default function FavoritosPage() {
     }
   };
 
-  const getSortIcon = () => {
+  const getSortIcon = (): AppIconName => {
     switch (sortBy) {
-      case 'price-asc': return '⬆️';
-      case 'price-desc': return '⬇️';
-      default: return '🕒';
+      case 'price-asc': return 'arrowUp';
+      case 'price-desc': return 'arrowDown';
+      default: return 'clock';
     }
   };
 
@@ -144,14 +145,14 @@ export default function FavoritosPage() {
 
   // Vista de detalle
   const handleViewDetail = (room: Room) => {
-    alert(`📋 Detalles del Cuarto:\n\n` +
+    alert(`Detalles del Cuarto:\n\n` +
       `${room.title}\n` +
       `${room.location}\n\n` +
       `Precio: Bs. ${room.price}/mes\n` +
       `Tipo: ${room.type}\n` +
       `Capacidad: ${room.capacity} persona(s)\n` +
       `Baño: ${room.bathroom === 'privado' ? 'Privado' : 'Compartido'}\n` +
-      `${room.furnished ? '✓ Amoblado\n' : ''}\n` +
+      `${room.furnished ? 'Amoblado\n' : ''}\n` +
       `Servicios: ${room.services.join(', ')}`
     );
   };
@@ -177,33 +178,33 @@ export default function FavoritosPage() {
 
     const rows = [
       {
-        label: '💰 Precio/mes',
+        label: 'Precio/mes',
         values: selectedRooms.map(r => 
           `<td class="${r.price === minPrice ? 'highlight-best' : ''}">Bs. ${r.price}</td>`
         )
       },
       {
-        label: '📍 Ubicación',
+        label: 'Ubicación',
         values: selectedRooms.map(r => `<td>${r.location}</td>`)
       },
       {
-        label: '🚿 Baño',
+        label: 'Baño',
         values: selectedRooms.map(r => 
-          `<td>${r.bathroom === 'privado' ? '✅ Privado' : '🔄 Compartido'}</td>`
+          `<td>${r.bathroom === 'privado' ? 'Privado' : 'Compartido'}</td>`
         )
       },
       {
-        label: '🛋️ Amoblado',
+        label: 'Amoblado',
         values: selectedRooms.map(r => 
-          `<td>${r.furnished ? '✅ Sí' : '❌ No'}</td>`
+          `<td>${r.furnished ? 'Sí' : 'No'}</td>`
         )
       },
       {
-        label: '👥 Capacidad',
+        label: 'Capacidad',
         values: selectedRooms.map(r => `<td>${r.capacity} persona(s)</td>`)
       },
       {
-        label: '✨ Servicios',
+        label: 'Servicios',
         values: selectedRooms.map(r => `<td>${r.services.length} incluidos</td>`)
       }
     ];
@@ -214,7 +215,7 @@ export default function FavoritosPage() {
 
     return `
       <h3 style="text-align:center; color:#333; margin-bottom:15px; font-size:1em;">
-        📊 Comparación lado a lado
+        Comparación lado a lado
       </h3>
       <div style="overflow-x:auto;">
         <table class="compare-table">
@@ -228,7 +229,7 @@ export default function FavoritosPage() {
         </table>
       </div>
       <p style="text-align:center; font-size:0.8em; color:#999; margin-top:10px;">
-        💡 Precio en <span style="color:#2563a8; font-weight:700;">azul</span> = más económico
+        Precio en <span style="color:#2563a8; font-weight:700;">azul</span> = más económico
       </p>
     `;
   };
@@ -251,21 +252,21 @@ export default function FavoritosPage() {
       {/* Stats Section */}
       <div className="stats-section">
         <div className="stat-card">
-          <div className="stat-icon">❤️</div>
+          <div className="stat-icon"><AppIcon name="heart" /></div>
           <div className="stat-info">
             <div className="stat-number">{totalFavorites}</div>
             <div className="stat-label">Favoritos</div>
           </div>
         </div>
         <div className="stat-card">
-          <div className="stat-icon">💰</div>
+          <div className="stat-icon"><AppIcon name="moneyBill" /></div>
           <div className="stat-info">
             <div className="stat-number">Bs. {avgPrice}</div>
             <div className="stat-label">Precio Promedio</div>
           </div>
         </div>
         <div className="stat-card">
-          <div className="stat-icon">📊</div>
+          <div className="stat-icon"><AppIcon name="listCheck" /></div>
           <div className="stat-info">
             <div className="stat-number">{totalFavorites > 0 ? `${minPrice}-${maxPrice}` : '-'}</div>
             <div className="stat-label">Rango</div>
@@ -279,13 +280,13 @@ export default function FavoritosPage() {
           className="sort-btn" 
           onClick={() => setSortMenuOpen(!sortMenuOpen)}
         >
-          <span>{getSortIcon()}</span>
+          <span><AppIcon name={getSortIcon()} /></span>
           <span>{getSortLabel()}</span>
-          <span>▼</span>
+          <span><AppIcon name="chevronDown" /></span>
         </button>
         {totalFavorites > 0 && (
           <button className="clear-all-btn" onClick={handleClearAll}>
-            🗑️ Limpiar Todo
+            <AppIcon name="trash" /> Limpiar Todo
           </button>
         )}
       </div>
@@ -297,19 +298,19 @@ export default function FavoritosPage() {
             className="sort-option" 
             onClick={() => handleSortChange('recent')}
           >
-            🕒 Agregados Recientemente
+            <AppIcon name="clock" /> Agregados Recientemente
           </button>
           <button 
             className="sort-option" 
             onClick={() => handleSortChange('price-asc')}
           >
-            💰 Precio: Menor a Mayor
+            <AppIcon name="moneyBill" /> Precio: Menor a Mayor
           </button>
           <button 
             className="sort-option" 
             onClick={() => handleSortChange('price-desc')}
           >
-            💰 Precio: Mayor a Menor
+            <AppIcon name="moneyBill" /> Precio: Mayor a Menor
           </button>
         </div>
       )}
@@ -318,11 +319,11 @@ export default function FavoritosPage() {
       <div className="favorites-container">
         {totalFavorites === 0 ? (
           <div className="empty-state">
-            <div className="empty-icon">💔</div>
+            <div className="empty-icon"><AppIcon name="heart" /></div>
             <h3>No tienes favoritos</h3>
             <p>Empieza a guardar cuartos que te interesen para compararlos después</p>
             <button className="btn-primary" onClick={goToSearch}>
-              🔍 Buscar Cuartos
+              <AppIcon name="magnifyingGlass" /> Buscar Cuartos
             </button>
           </div>
         ) : (
@@ -358,18 +359,18 @@ export default function FavoritosPage() {
                       onClick={() => handleRemoveFavorite(room.id)}
                       title="Quitar de favoritos"
                     >
-                      ❤️
+                      <AppIcon name="heart" />
                     </button>
                     <span className="favorite-badge">{room.type}</span>
                     <span className="added-date">Agregado: {formattedDate}</span>
                   </div>
                   <div className="favorite-card-body">
                     <div className="favorite-card-title">{room.title}</div>
-                    <div className="favorite-card-location">📍 {room.location}</div>
+                    <div className="favorite-card-location"><AppIcon name="building" /> {room.location}</div>
                     <div className="favorite-card-features">
-                      <div className="feature-item">👥 {room.capacity} persona(s)</div>
-                      <div className="feature-item">🚿 {room.bathroom === 'privado' ? 'Baño privado' : 'Baño compartido'}</div>
-                      {room.furnished && <div className="feature-item">🛋️ Amoblado</div>}
+                      <div className="feature-item"><AppIcon name="userGroup" /> {room.capacity} persona(s)</div>
+                      <div className="feature-item"><AppIcon name="shower" /> {room.bathroom === 'privado' ? 'Baño privado' : 'Baño compartido'}</div>
+                      {room.furnished && <div className="feature-item"><AppIcon name="couch" /> Amoblado</div>}
                     </div>
                     <div className="favorite-card-footer">
                       <div className="favorite-card-price">
@@ -377,10 +378,10 @@ export default function FavoritosPage() {
                       </div>
                       <div className="favorite-actions">
                         <button className="action-btn btn-view" onClick={() => handleViewDetail(room)}>
-                          👁️ Ver
+                          <AppIcon name="eye" /> Ver
                         </button>
                         <button className="action-btn btn-contact" onClick={() => handleContact(room)}>
-                          💬 Contactar
+                          <AppIcon name="envelope" /> Contactar
                         </button>
                       </div>
                     </div>
@@ -398,7 +399,7 @@ export default function FavoritosPage() {
           className="compare-floating-btn" 
           onClick={handleCompare}
         >
-          📊
+          <AppIcon name="listCheck" />
           <span className="compare-btn-text">Comparar</span>
           {selectedForCompare.length > 0 && (
             <span className="compare-badge">{selectedForCompare.length}</span>
@@ -411,8 +412,8 @@ export default function FavoritosPage() {
         <div className="modal active" onClick={() => setShowCompareModal(false)}>
           <div className="modal-content modal-large" onClick={(e) => e.stopPropagation()}>
             <div className="modal-header">
-              <h2>📊 Comparar Cuartos</h2>
-              <button className="close-modal" onClick={() => setShowCompareModal(false)}>×</button>
+              <h2><AppIcon name="listCheck" /> Comparar Cuartos</h2>
+              <button className="close-modal" onClick={() => setShowCompareModal(false)} aria-label="Cerrar"><AppIcon name="xmark" /></button>
             </div>
             <div className="modal-body">
               <div className="compare-grid">
@@ -432,7 +433,7 @@ export default function FavoritosPage() {
                       <div style={{ fontWeight: '700', color: '#333', marginBottom: '4px' }}>
                         {room.title.length > 30 ? room.title.substring(0, 30) + '...' : room.title}
                       </div>
-                      <div style={{ fontSize: '0.85em', color: '#666' }}>📍 {room.location}</div>
+                      <div style={{ fontSize: '0.85em', color: '#666' }}><AppIcon name="building" /> {room.location}</div>
                       <div style={{ fontSize: '1em', fontWeight: '700', color: '#8A7554', marginTop: '4px' }}>
                         Bs. {room.price}/mes
                       </div>
@@ -446,7 +447,7 @@ export default function FavoritosPage() {
                   className="btn-do-compare"
                   onClick={handleShowComparison}
                 >
-                  📊 Comparar seleccionados
+                  <AppIcon name="listCheck" /> Comparar seleccionados
                 </button>
               )}
 

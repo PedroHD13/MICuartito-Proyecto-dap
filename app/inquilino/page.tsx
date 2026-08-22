@@ -7,6 +7,7 @@ import { useRooms } from '../hooks/useRooms';
 import { useFavorites } from '../hooks/useFavorites';
 import DashboardShell from '../components/DashboardShell';
 import '../styles/dashboard-styles.css';
+import AppIcon from '../components/AppIcon';
 
 export default function InquilinoDashboard() {
   const router = useRouter();
@@ -75,23 +76,23 @@ export default function InquilinoDashboard() {
         <div className="dashboard-page-header">
           <span className="greeting">{greeting}</span>
           <h1>{session.name}</h1>
-          <span className="user-role">🔍 Inquilino</span>
+          <span className="user-role"><AppIcon name="magnifyingGlass" /> Inquilino</span>
         </div>
 
         {/* Stats Cards */}
         <div className="stats-grid">
           <div className="stat-card">
-            <span className="stat-icon">❤️</span>
+            <span className="stat-icon"><AppIcon name="heart" /></span>
             <span className="stat-value">{stats.favorites}</span>
             <span className="stat-label">Favoritos</span>
           </div>
           <div className="stat-card">
-            <span className="stat-icon">🏠</span>
+            <span className="stat-icon"><AppIcon name="house" /></span>
             <span className="stat-value">{stats.availableRooms}</span>
             <span className="stat-label">Cuartos Disponibles</span>
           </div>
           <div className="stat-card">
-            <span className="stat-icon">🔍</span>
+            <span className="stat-icon"><AppIcon name="magnifyingGlass" /></span>
             <span className="stat-value">{stats.savedSearches}</span>
             <span className="stat-label">Búsquedas Guardadas</span>
           </div>
@@ -100,7 +101,7 @@ export default function InquilinoDashboard() {
         {/* Quick Actions */}
         <div className="quick-actions">
           <button className="action-card primary" onClick={() => navigateTo('buscar')}>
-            <span className="action-icon">🔍</span>
+            <span className="action-icon"><AppIcon name="magnifyingGlass" /></span>
             <div className="action-info">
               <h3>Buscar Cuartos</h3>
               <p>Encuentra tu espacio ideal</p>
@@ -108,7 +109,7 @@ export default function InquilinoDashboard() {
           </button>
 
           <button className="action-card" onClick={() => navigateTo('favoritos')}>
-            <span className="action-icon">❤️</span>
+            <span className="action-icon"><AppIcon name="heart" /></span>
             <div className="action-info">
               <h3>Mis Favoritos</h3>
               <p>{stats.favorites} cuartos guardados</p>
@@ -116,7 +117,7 @@ export default function InquilinoDashboard() {
           </button>
 
           <button className="action-card" onClick={() => navigateTo('perfil')}>
-            <span className="action-icon">👤</span>
+            <span className="action-icon"><AppIcon name="user" /></span>
             <div className="action-info">
               <h3>Mi Perfil</h3>
               <p>Edita tu información</p>
@@ -154,7 +155,7 @@ export default function InquilinoDashboard() {
                   />
                   <div className="recent-room-info">
                     <h4>{room.title}</h4>
-                    <p className="location">📍 {room.location}</p>
+                    <p className="location"><AppIcon name="building" /> {room.location}</p>
                     <p className="price">Bs. {room.price}/mes</p>
                   </div>
                 </div>

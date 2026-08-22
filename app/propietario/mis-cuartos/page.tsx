@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import { useRequireAuth } from '../../../useSession';
 import DashboardShell from '../../components/DashboardShell';
 import '../../styles/mis-cuartos-styles.css';
+import AppIcon from '../../components/AppIcon';
 
 interface MyRoom {
   titulo?: string;
@@ -114,7 +115,7 @@ export default function MisCuartos() {
     };
     saveRooms(updated);
     closeEditModal();
-    alert('✅ Cuarto actualizado exitosamente');
+    alert('Cuarto actualizado exitosamente');
   };
 
   // --- Activar / Pausar ---
@@ -122,7 +123,7 @@ export default function MisCuartos() {
     const updated = [...myRooms];
     updated[index] = { ...updated[index], active: !updated[index].active };
     saveRooms(updated);
-    alert(`✅ Cuarto ${updated[index].active ? 'activado' : 'pausado'} exitosamente`);
+    alert(`Cuarto ${updated[index].active ? 'activado' : 'pausado'} exitosamente`);
   };
 
   // --- Eliminar ---
@@ -141,7 +142,7 @@ export default function MisCuartos() {
     const updated = myRooms.filter((_, i) => i !== deletingIndex);
     saveRooms(updated);
     closeDeleteModal();
-    alert('✅ Cuarto eliminado exitosamente');
+    alert('Cuarto eliminado exitosamente');
   };
 
   return (
@@ -156,17 +157,17 @@ export default function MisCuartos() {
         {/* Stats */}
         <div className="stats-section">
           <div className="stat-card">
-            <div className="stat-icon">🏠</div>
+            <div className="stat-icon"><AppIcon name="house" /></div>
             <div className="stat-number">{totalRooms}</div>
             <div className="stat-label">Total Publicados</div>
           </div>
           <div className="stat-card">
-            <div className="stat-icon">✅</div>
+            <div className="stat-icon"><AppIcon name="check" /></div>
             <div className="stat-number">{activeRooms}</div>
             <div className="stat-label">Activos</div>
           </div>
           <div className="stat-card">
-            <div className="stat-icon">👁️</div>
+            <div className="stat-icon"><AppIcon name="eye" /></div>
             <div className="stat-number">{totalViews}</div>
             <div className="stat-label">Visualizaciones</div>
           </div>
@@ -197,14 +198,14 @@ export default function MisCuartos() {
         {/* Botón Publicar Nuevo */}
         <div className="action-buttons">
           <button className="btn-new-room" onClick={goToPublish}>
-            ➕ Publicar Nuevo Cuarto
+            <AppIcon name="plus" /> Publicar Nuevo Cuarto
           </button>
         </div>
 
         {/* Lista de cuartos */}
         {myRooms.length === 0 ? (
           <div className="empty-state">
-            <div className="empty-icon">🏠</div>
+            <div className="empty-icon"><AppIcon name="house" /></div>
             <h3>No tienes cuartos publicados</h3>
             <p>Comienza publicando tu primer cuarto para atraer inquilinos</p>
             <button className="btn-primary" onClick={goToPublish}>
@@ -213,7 +214,7 @@ export default function MisCuartos() {
           </div>
         ) : filteredRooms.length === 0 ? (
           <div style={{ textAlign: 'center', padding: '40px 20px', color: '#666' }}>
-            <div style={{ fontSize: '3em', marginBottom: '15px' }}>📭</div>
+            <div style={{ fontSize: '3em', marginBottom: '15px' }}><AppIcon name="envelope" /></div>
             <h3 style={{ marginBottom: '10px' }}>No hay cuartos en esta categoría</h3>
             <p>Cambia el filtro para ver más publicaciones</p>
           </div>
@@ -238,22 +239,22 @@ export default function MisCuartos() {
                       }}
                     />
                     <span className={`room-status-badge ${room.active ? 'active' : 'inactive'}`}>
-                      {room.active ? '✓ Activo' : '⏸ Pausado'}
+                      {room.active ? <><AppIcon name="check" /> Activo</> : <><AppIcon name="pause" /> Pausado</>}
                     </span>
-                    <span className="room-views">👁️ {room.views || 0} vistas</span>
+                    <span className="room-views"><AppIcon name="eye" /> {room.views || 0} vistas</span>
                   </div>
                   <div className="room-card-body">
                     <div className="room-card-title">
                       {room.titulo || `Cuarto ${room.tipo} - ${room.capacidad} persona(s)`}
                     </div>
                     <div className="room-card-info">
-                      <div className="info-item"><span>🚪</span> {room.tipo}</div>
+                      <div className="info-item"><span><AppIcon name="doorOpen" /></span> {room.tipo}</div>
                       <div className="info-item">
-                        <span>👥</span> {room.capacidad}{' '}
+                        <span><AppIcon name="userGroup" /></span> {room.capacidad}{' '}
                         {parseInt(room.capacidad) > 1 ? 'personas' : 'persona'}
                       </div>
                       {room.servicios && room.servicios.length > 0 && (
-                        <div className="info-item"><span>✨</span> {room.servicios.length} servicios</div>
+                        <div className="info-item"><span><AppIcon name="listCheck" /></span> {room.servicios.length} servicios</div>
                       )}
                     </div>
                     <div className="room-card-price">
@@ -261,16 +262,16 @@ export default function MisCuartos() {
                     </div>
                     <div className="room-card-actions">
                       <button className="action-btn btn-edit" onClick={() => openEditModal(realIndex)}>
-                        ✏️ Editar
+                        <AppIcon name="pencil" /> Editar
                       </button>
                       <button
                         className={`action-btn btn-toggle ${room.active ? 'active' : ''}`}
                         onClick={() => toggleRoomStatus(realIndex)}
                       >
-                        {room.active ? '⏸️ Pausar' : '▶️ Activar'}
+                        {room.active ? <><AppIcon name="pause" /> Pausar</> : <><AppIcon name="circlePlay" /> Activar</>}
                       </button>
                       <button className="action-btn btn-delete" onClick={() => openDeleteModal(realIndex)}>
-                        🗑️ Eliminar
+                        <AppIcon name="trash" /> Eliminar
                       </button>
                     </div>
                   </div>
@@ -289,8 +290,8 @@ export default function MisCuartos() {
         >
           <div className="modal-content">
             <div className="modal-header">
-              <h2>✏️ Editar Cuarto</h2>
-              <button className="close-modal" onClick={closeEditModal}>×</button>
+              <h2><AppIcon name="pencil" /> Editar Cuarto</h2>
+              <button className="close-modal" onClick={closeEditModal} aria-label="Cerrar"><AppIcon name="xmark" /></button>
             </div>
             <div className="modal-body">
               <form onSubmit={handleEditSubmit}>

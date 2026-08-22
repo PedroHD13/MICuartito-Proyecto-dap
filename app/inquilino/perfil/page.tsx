@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { useRequireAuth } from "../../../useSession";
 import DashboardShell from "../../components/DashboardShell";
 import "../../styles/perfil-styles.css";
+import AppIcon from "../../components/AppIcon";
 
 interface ProfileData {
   name: string;
@@ -40,7 +41,7 @@ const NOTIF_DEFAULTS: NotificationPrefs = {
   promos: false,
 };
 
-const AVATAR_OPTIONS = ["M", "A", "👩", "👩‍🎓", "🧑", "👤", "😊"];
+const AVATAR_OPTIONS = ["M", "A", "U", "E", "P", "I", "O"];
 
 const ZONE_OPTIONS = [
   { value: "norte", label: "Zona Norte" },
@@ -137,7 +138,7 @@ export default function PerfilInquilino() {
     setOriginalProfileData(profileData);
     setIsEditMode(false);
 
-    alert("✅ Perfil actualizado exitosamente");
+    alert("Perfil actualizado exitosamente");
   };
 
   const changeAvatar = () => {
@@ -181,7 +182,7 @@ export default function PerfilInquilino() {
             <p>Gestiona tu información</p>
           </div>
           <button className="edit-btn-header" onClick={toggleEditMode}>
-            {isEditMode ? "✕" : "✏️"}
+            <AppIcon name={isEditMode ? "xmark" : "pencil"} />
           </button>
         </div>
 
@@ -190,18 +191,18 @@ export default function PerfilInquilino() {
         <div className="profile-avatar-container">
           <div className="profile-avatar">{profileData.avatar}</div>
           <button className="change-avatar-btn" onClick={changeAvatar}>
-            📷
+            <AppIcon name="camera" />
           </button>
         </div>
         <h2 className="profile-name">{profileData.name}</h2>
-        <div className="profile-type-badge inquilino">🔍 Inquilino</div>
+        <div className="profile-type-badge inquilino"><AppIcon name="magnifyingGlass" /> Inquilino</div>
         <div className="profile-stats">
           <div className="stat-item">
             <div className="stat-value">{favoritesCount}</div>
             <div className="stat-label">Favoritos</div>
           </div>
           <div className="stat-item">
-            <div className="stat-value">⭐ 4.8</div>
+            <div className="stat-value"><AppIcon name="star" /> 4.8</div>
             <div className="stat-label">Calificación</div>
           </div>
           <div className="stat-item">
@@ -216,7 +217,7 @@ export default function PerfilInquilino() {
         {/* Información Personal */}
         <div className="profile-section">
           <div className="section-header">
-            <h3>👤 Información Personal</h3>
+            <h3><AppIcon name="user" /> Información Personal</h3>
           </div>
           <div className="info-group">
             <label>Nombre Completo</label>
@@ -265,7 +266,7 @@ export default function PerfilInquilino() {
         {/* Sobre Mí */}
         <div className="profile-section">
           <div className="section-header">
-            <h3>📝 Sobre Mí</h3>
+            <h3><AppIcon name="fileLines" /> Sobre Mí</h3>
           </div>
           <div className="info-group">
             <label>Descripción</label>
@@ -335,10 +336,10 @@ export default function PerfilInquilino() {
           <div className="info-group">
             <label>Servicios Requeridos</label>
             <div className="chips-container">
-              <span className="chip">📶 WiFi</span>
-              <span className="chip">💧 Agua</span>
-              <span className="chip">💡 Luz</span>
-              <span className="chip">🛋️ Amoblado</span>
+              <span className="chip"><AppIcon name="wifi" /> WiFi</span>
+              <span className="chip"><AppIcon name="droplet" /> Agua</span>
+              <span className="chip"><AppIcon name="lightbulb" /> Luz</span>
+              <span className="chip"><AppIcon name="couch" /> Amoblado</span>
             </div>
           </div>
         </div>
@@ -346,15 +347,15 @@ export default function PerfilInquilino() {
         {/* Verificación */}
         <div className="profile-section">
           <div className="section-header">
-            <h3>✅ Verificación</h3>
+            <h3><AppIcon name="check" /> Verificación</h3>
           </div>
           <div className="verification-list">
             <div className="verification-item verified">
-              <span className="verification-icon">✓</span>
+              <span className="verification-icon"><AppIcon name="check" /></span>
               <span className="verification-text">Correo verificado</span>
             </div>
             <div className="verification-item verified">
-              <span className="verification-icon">✓</span>
+              <span className="verification-icon"><AppIcon name="check" /></span>
               <span className="verification-text">Teléfono verificado</span>
             </div>
             <div className="verification-item">
@@ -389,11 +390,11 @@ export default function PerfilInquilino() {
         {/* Calificaciones y Reseñas */}
         <div className="profile-section">
           <div className="section-header">
-            <h3>⭐ Calificaciones y Reseñas</h3>
+            <h3><AppIcon name="star" /> Calificaciones y Reseñas</h3>
             <span className="reviews-count">(0 reseñas)</span>
           </div>
           <div className="rating-summary">
-            <div className="rating-stars">⭐⭐⭐⭐⭐</div>
+            <div className="rating-stars"><AppIcon name="star" /><AppIcon name="star" /><AppIcon name="star" /><AppIcon name="star" /><AppIcon name="star" /></div>
             <div className="rating-text">Aún no tienes reseñas</div>
             <p className="rating-description">
               Las reseñas de propietarios aparecerán aquí
@@ -404,7 +405,7 @@ export default function PerfilInquilino() {
         {/* Notificaciones */}
         <div className="profile-section">
           <div className="section-header">
-            <h3>🔔 Notificaciones</h3>
+            <h3><AppIcon name="bell" /> Notificaciones</h3>
           </div>
           <div className="toggle-list">
             <div className="toggle-item">
@@ -461,7 +462,7 @@ export default function PerfilInquilino() {
         {/* Cuenta */}
         <div className="profile-section">
           <div className="section-header">
-            <h3>🔐 Cuenta y Seguridad</h3>
+            <h3><AppIcon name="shield" /> Cuenta y Seguridad</h3>
           </div>
           <div className="action-list">
             <button
@@ -472,17 +473,17 @@ export default function PerfilInquilino() {
             >
               <span className="action-icon">🔑</span>
               <span className="action-text">Cambiar Contraseña</span>
-              <span className="action-arrow">›</span>
+              <span className="action-arrow"><AppIcon name="chevronRight" /></span>
             </button>
             <button
               className="action-item"
               onClick={() =>
-                alert("🔒 Configuración de Privacidad\n\n(Próximamente)")
+                alert("Configuración de Privacidad\n\n(Próximamente)")
               }
             >
-              <span className="action-icon">🔒</span>
+              <span className="action-icon"><AppIcon name="shield" /></span>
               <span className="action-text">Privacidad</span>
-              <span className="action-arrow">›</span>
+              <span className="action-arrow"><AppIcon name="chevronRight" /></span>
             </button>
           </div>
         </div>
@@ -501,15 +502,15 @@ export default function PerfilInquilino() {
             >
               <span className="action-icon">📚</span>
               <span className="action-text">Centro de Ayuda</span>
-              <span className="action-arrow">›</span>
+              <span className="action-arrow"><AppIcon name="chevronRight" /></span>
             </button>
             <button
               className="action-item"
               onClick={() => router.push("/contacto-whatsapp")}
             >
-              <span className="action-icon">💬</span>
+              <span className="action-icon"><AppIcon name="envelope" /></span>
               <span className="action-text">Contactar Soporte</span>
-              <span className="action-arrow">›</span>
+              <span className="action-arrow"><AppIcon name="chevronRight" /></span>
             </button>
             <button
               className="action-item"
@@ -519,7 +520,7 @@ export default function PerfilInquilino() {
             >
               <span className="action-icon">📄</span>
               <span className="action-text">Términos y Condiciones</span>
-              <span className="action-arrow">›</span>
+              <span className="action-arrow"><AppIcon name="chevronRight" /></span>
             </button>
           </div>
         </div>
@@ -527,7 +528,7 @@ export default function PerfilInquilino() {
         {/* Cerrar Sesión */}
         <div className="profile-section">
           <button className="btn-logout" onClick={confirmLogout}>
-            🚪 Cerrar Sesión
+            <AppIcon name="rightFromBracket" /> Cerrar Sesión
           </button>
         </div>
 
@@ -535,10 +536,10 @@ export default function PerfilInquilino() {
         {isEditMode && (
           <div className="save-section">
             <button className="btn-save" onClick={saveProfile}>
-              ✓ Guardar Cambios
+              <AppIcon name="check" /> Guardar Cambios
             </button>
             <button className="btn-cancel" onClick={cancelEdit}>
-              ✕ Cancelar
+              <AppIcon name="xmark" /> Cancelar
             </button>
           </div>
         )}

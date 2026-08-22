@@ -6,6 +6,7 @@ import { useRequireAuth } from '../../../useSession';
 import DashboardShell from '../../components/DashboardShell';
 import '../../styles/dashboard-styles.css';
 import '../../styles/perfil-styles.css';
+import AppIcon from '../../components/AppIcon';
 
 interface ProfileData {
   name: string;
@@ -35,7 +36,7 @@ const NOTIF_DEFAULTS: NotificationPrefs = {
   promos: false,
 };
 
-const AVATAR_OPTIONS = ['P', 'C', '🧑‍💼', '👨', '👩‍💼', '👤', '🏠'];
+const AVATAR_OPTIONS = ['P', 'C', 'D', 'H', 'M', 'U', 'C'];
 
 export default function PerfilPropietario() {
   const router = useRouter();
@@ -46,18 +47,9 @@ export default function PerfilPropietario() {
   const [notifPrefs, setNotifPrefs] = useState<NotificationPrefs>(NOTIF_DEFAULTS);
   const [isEditMode, setIsEditMode] = useState(false);
   const [myRoomsCount, setMyRoomsCount] = useState(0);
-  const [greeting, setGreeting] = useState('');
 
   const profileKey = session ? `profileData_${session.username}` : '';
   const notifKey = session ? `notifPrefs_${session.username}` : '';
-
-  // Configurar saludo según la hora
-  useEffect(() => {
-    const hour = new Date().getHours();
-    if (hour < 12) setGreeting('🌅 Buenos días');
-    else if (hour < 18) setGreeting('☀️ Buenas tardes');
-    else setGreeting('🌙 Buenas noches');
-  }, []);
 
   useEffect(() => {
     if (!session) return;
@@ -114,7 +106,7 @@ export default function PerfilPropietario() {
     if (!profileData) return;
 
     if (!profileData.name || !profileData.email) {
-      alert('⚠️ El nombre y el correo son obligatorios');
+      alert('El nombre y el correo son obligatorios');
       return;
     }
 
@@ -123,7 +115,7 @@ export default function PerfilPropietario() {
     setIsEditMode(false);
     document.body.classList.remove('edit-mode');
 
-    alert('✅ Perfil actualizado exitosamente');
+    alert('Perfil actualizado exitosamente');
   };
 
   const changeAvatar = () => {
@@ -168,17 +160,15 @@ export default function PerfilPropietario() {
 
   return (
     <DashboardShell role="propietario" userName={session.name} onLogout={handleLogout}>
-      <div className="dashboard-content perfil-content">
-        {/* Encabezado de bienvenida */}
-        <div className="dashboard-page-header">
-          <span className="greeting">{greeting}</span>
-          <h1>Mi Perfil</h1>
-          <div style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
-            <span className="user-role">🏠 Propietario</span>
-            <button className="edit-btn-header" onClick={toggleEditMode}>
-              {isEditMode ? '✕' : '✏️'}
-            </button>
+      <div className="page-content perfil-page">
+        <div className="page-header page-header-with-action">
+          <div>
+            <h1>Mi Perfil</h1>
+            <p>Gestiona tu información</p>
           </div>
+          <button className="edit-btn-header" onClick={toggleEditMode}>
+            <AppIcon name={isEditMode ? 'xmark' : 'pencil'} />
+          </button>
         </div>
 
         {/* Profile Header Card */}
@@ -186,18 +176,18 @@ export default function PerfilPropietario() {
           <div className="profile-avatar-container">
             <div className="profile-avatar">{profileData.avatar}</div>
             <button className="change-avatar-btn" onClick={changeAvatar}>
-              📷
+              <AppIcon name="camera" />
             </button>
           </div>
           <h2 className="profile-name">{profileData.name}</h2>
-          <div className="profile-type-badge propietario">🏠 Propietario</div>
+          <div className="profile-type-badge propietario"><AppIcon name="house" /> Propietario</div>
           <div className="profile-stats">
             <div className="stat-item">
               <div className="stat-value">{myRoomsCount}</div>
               <div className="stat-label">Cuartos</div>
             </div>
             <div className="stat-item">
-              <div className="stat-value">⭐ 4.5</div>
+              <div className="stat-value"><AppIcon name="star" /> 4.5</div>
               <div className="stat-label">Calificación</div>
             </div>
             <div className="stat-item">
@@ -213,7 +203,7 @@ export default function PerfilPropietario() {
             className="action-card primary" 
             onClick={() => navigateTo('/propietario/mis-cuartos')}
           >
-            <span className="action-icon">🏘️</span>
+            <span className="action-icon"><AppIcon name="building" /></span>
             <div className="action-info">
               <h3>Mis Cuartos</h3>
               <p>{myRoomsCount} publicados</p>
@@ -224,7 +214,7 @@ export default function PerfilPropietario() {
             className="action-card" 
             onClick={() => navigateTo('/propietario/publicar')}
           >
-            <span className="action-icon">➕</span>
+            <span className="action-icon"><AppIcon name="plus" /></span>
             <div className="action-info">
               <h3>Publicar</h3>
               <p>Nuevo cuarto</p>
@@ -233,9 +223,9 @@ export default function PerfilPropietario() {
 
           <button 
             className="action-card" 
-            onClick={() => navigateTo('/propietario/dashboard')}
+            onClick={() => navigateTo('/dashboard')}
           >
-            <span className="action-icon">📊</span>
+            <span className="action-icon"><AppIcon name="listCheck" /></span>
             <div className="action-info">
               <h3>Dashboard</h3>
               <p>Ver estadísticas</p>
@@ -243,10 +233,11 @@ export default function PerfilPropietario() {
           </button>
         </div>
 
-        {/* Información Personal */}
-        <div className="profile-section">
+        <div className="profile-content">
+          {/* Información Personal */}
+          <div className="profile-section">
           <div className="section-header">
-            <h3>👤 Información Personal</h3>
+            <h3><AppIcon name="user" /> Información Personal</h3>
           </div>
           <div className="info-group">
             <label>Nombre Completo</label>
@@ -288,12 +279,12 @@ export default function PerfilPropietario() {
               onChange={(e) => handleFieldChange('birthdate', e.target.value)}
             />
           </div>
-        </div>
+          </div>
 
-        {/* Sobre Mí */}
-        <div className="profile-section">
+          {/* Sobre Mí */}
+          <div className="profile-section">
           <div className="section-header">
-            <h3>📝 Sobre Mí</h3>
+            <h3><AppIcon name="fileLines" /> Sobre Mí</h3>
           </div>
           <div className="info-group">
             <label>Descripción</label>
@@ -305,27 +296,27 @@ export default function PerfilPropietario() {
               onChange={(e) => handleFieldChange('bio', e.target.value)}
             />
           </div>
-        </div>
+          </div>
 
-        {/* Calificaciones y Reseñas */}
-        <div className="profile-section">
+          {/* Calificaciones y Reseñas */}
+          <div className="profile-section">
           <div className="section-header">
-            <h3>⭐ Calificaciones y Reseñas</h3>
+            <h3><AppIcon name="star" /> Calificaciones y Reseñas</h3>
             <span className="reviews-count">(0 reseñas)</span>
           </div>
           <div className="rating-summary">
-            <div className="rating-stars">⭐⭐⭐⭐⭐</div>
+            <div className="rating-stars"><AppIcon name="star" /><AppIcon name="star" /><AppIcon name="star" /><AppIcon name="star" /><AppIcon name="star" /></div>
             <div className="rating-text">Aún no tienes reseñas</div>
             <p className="rating-description">
               Las reseñas de tus inquilinos aparecerán aquí
             </p>
           </div>
-        </div>
+          </div>
 
-        {/* Notificaciones */}
-        <div className="profile-section">
+          {/* Notificaciones */}
+          <div className="profile-section">
           <div className="section-header">
-            <h3>🔔 Notificaciones</h3>
+            <h3><AppIcon name="bell" /> Notificaciones</h3>
           </div>
           <div className="toggle-list">
             <div className="toggle-item">
@@ -377,62 +368,69 @@ export default function PerfilPropietario() {
               </label>
             </div>
           </div>
-        </div>
+          </div>
 
-        {/* Cuenta y Seguridad */}
-        <div className="profile-section">
+          {/* Cuenta y Seguridad */}
+          <div className="profile-section">
           <div className="section-header">
-            <h3>🔐 Cuenta y Seguridad</h3>
+            <h3><AppIcon name="shield" /> Cuenta y Seguridad</h3>
           </div>
           <div className="action-list">
-            <button className="action-item" onClick={() => alert('🔑 Cambiar Contraseña\n\n(Próximamente)')}>
-              <span className="action-icon">🔑</span>
+            <button className="action-item" onClick={() => alert('Cambiar Contraseña\n\n(Próximamente)')}>
+              <span className="action-icon"><AppIcon name="key" /></span>
               <span className="action-text">Cambiar Contraseña</span>
-              <span className="action-arrow">›</span>
+              <span className="action-arrow"><AppIcon name="chevronRight" /></span>
             </button>
-            <button className="action-item" onClick={() => alert('🔒 Configuración de Privacidad\n\n(Próximamente)')}>
-              <span className="action-icon">🔒</span>
+            <button className="action-item" onClick={() => alert('Configuración de Privacidad\n\n(Próximamente)')}>
+              <span className="action-icon"><AppIcon name="shield" /></span>
               <span className="action-text">Privacidad</span>
-              <span className="action-arrow">›</span>
+              <span className="action-arrow"><AppIcon name="chevronRight" /></span>
             </button>
           </div>
-        </div>
+          </div>
 
-        {/* Ayuda y Soporte */}
-        <div className="profile-section">
+          {/* Ayuda y Soporte */}
+          <div className="profile-section">
           <div className="section-header">
-            <h3>❓ Ayuda y Soporte</h3>
+            <h3><AppIcon name="info" /> Ayuda y Soporte</h3>
           </div>
           <div className="action-list">
-            <button className="action-item" onClick={() => alert('📚 Centro de Ayuda\n\n(Próximamente)')}>
-              <span className="action-icon">📚</span>
+            <button className="action-item" onClick={() => alert('Centro de Ayuda\n\n(Próximamente)')}>
+              <span className="action-icon"><AppIcon name="bookOpen" /></span>
               <span className="action-text">Centro de Ayuda</span>
-              <span className="action-arrow">›</span>
+              <span className="action-arrow"><AppIcon name="chevronRight" /></span>
             </button>
             <button className="action-item" onClick={() => router.push('/contacto-whatsapp')}>
-              <span className="action-icon">💬</span>
+              <span className="action-icon"><AppIcon name="envelope" /></span>
               <span className="action-text">Contactar Soporte</span>
-              <span className="action-arrow">›</span>
+              <span className="action-arrow"><AppIcon name="chevronRight" /></span>
             </button>
-            <button className="action-item" onClick={() => alert('📄 Términos y Condiciones\n\n(Próximamente)')}>
-              <span className="action-icon">📄</span>
+            <button className="action-item" onClick={() => alert('Términos y Condiciones\n\n(Próximamente)')}>
+              <span className="action-icon"><AppIcon name="fileLines" /></span>
               <span className="action-text">Términos y Condiciones</span>
-              <span className="action-arrow">›</span>
+              <span className="action-arrow"><AppIcon name="chevronRight" /></span>
             </button>
           </div>
-        </div>
+          </div>
+
+          <div className="profile-section">
+            <button className="btn-logout" onClick={handleLogout}>
+              <AppIcon name="rightFromBracket" /> Cerrar Sesión
+            </button>
+          </div>
 
         {/* Botones de Guardar/Cancelar */}
         {isEditMode && (
           <div className="save-section">
             <button className="btn-save" onClick={saveProfile}>
-              ✓ Guardar Cambios
+              <AppIcon name="check" /> Guardar Cambios
             </button>
             <button className="btn-cancel" onClick={cancelEdit}>
-              ✕ Cancelar
+              <AppIcon name="xmark" /> Cancelar
             </button>
           </div>
         )}
+        </div>
       </div>
     </DashboardShell>
   );

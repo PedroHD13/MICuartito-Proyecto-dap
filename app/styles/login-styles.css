@@ -59,17 +59,17 @@ body {
 
 .login-header {
   background: #1A3B5D;
-  padding: 30px 20px;
+  padding: 0;
   text-align: center;
   color: white;
+  line-height: 0;
 }
 
 .logo {
-  max-width: 100%;
-  width: 85%;
+  width: 100%;
+  max-width: none;
   height: auto;
   display: block;
-  margin: 0 auto;
 }
 
 .tabs {

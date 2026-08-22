@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import { useRequireAuth } from '../../../useSession';
 import EditUserModal, { StoredUser } from '../../components/EditUserModal';
 import '../../styles/admin-usuarios-styles.css';
+import AppIcon from '../../components/AppIcon';
 
 type RoleFilter = 'todos' | 'inquilino' | 'propietario' | 'admin';
 
@@ -66,7 +67,7 @@ export default function AdminUsuariosPage() {
       {/* Header */}
       <div className="admin-usuarios-header">
         <button className="admin-usuarios-back-btn" onClick={() => router.push('/admin')}>
-          ←
+          <AppIcon name="arrowLeft" />
         </button>
         <div>
           <h1>Gestión de Usuarios</h1>

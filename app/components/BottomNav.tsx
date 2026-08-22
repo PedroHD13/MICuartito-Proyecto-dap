@@ -2,6 +2,7 @@
 
 import { usePathname, useRouter } from 'next/navigation';
 import { NAV_ITEMS, DashboardRole } from './Sidebar';
+import AppIcon from './AppIcon';
 
 interface BottomNavProps {
   role: DashboardRole;
@@ -22,7 +23,7 @@ export default function BottomNav({ role }: BottomNavProps) {
             className={`app-nav-item${active ? ' active' : ''}`}
             onClick={() => router.push(item.path)}
           >
-            <span className="app-nav-icon">{item.icon}</span>
+            <span className="app-nav-icon"><AppIcon name={item.icon} /></span>
             <span className="app-nav-label">{item.label}</span>
           </button>
         );
