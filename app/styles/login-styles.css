@@ -4,16 +4,6 @@
   box-sizing: border-box;
 }
 
-body {
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  background: #1A3B5D;
-  min-height: 100vh;
-  /* ❌ ELIMINAR max-width: 480px */
-  /* ✅ Ahora el body ocupa todo el ancho */
-  width: 100%;
-  position: relative;
-}
-
 /* ============================================
    CONTENEDOR PRINCIPAL RESPONSIVE
    ============================================ */
@@ -23,7 +13,7 @@ body {
   max-width: 1200px;
   margin: 0 auto;
   padding: 0 20px;
-  background: #F2EBE1;
+  background: var(--color-cream);
   min-height: 100vh;
 }
 
@@ -37,28 +27,25 @@ body {
 }
 
 /* ============================================
-   PANTALLA DE LOGIN (actualizada)
+   PANTALLA DE LOGIN (ajustada para vivir dentro
+   de .home-left, no como página completa)
    ============================================ */
 
 #login-screen {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  min-height: 100vh;
-  padding: 20px;
+  width: 100%;
+  max-width: 560px;
 }
 
 .login-container {
   background: white;
   border-radius: 20px;
-  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
   width: 100%;
-  max-width: 420px; /* ✅ Un poco más ancho en desktop */
   overflow: hidden;
 }
 
 .login-header {
-  background: #1A3B5D;
+  background: var(--color-navy);
   padding: 0;
   text-align: center;
   color: white;
@@ -74,7 +61,7 @@ body {
 
 .tabs {
   display: flex;
-  background: #F2EBE1;
+  background: var(--color-cream);
 }
 
 .tab {
@@ -86,18 +73,18 @@ body {
   background: transparent;
   font-size: 1em;
   font-weight: 600;
-  color: #666;
+  color: var(--color-steel);
   transition: all 0.3s;
 }
 
 .tab.active {
   background: white;
-  color: #8A7554;
-  border-bottom: 3px solid #D8C7A6;
+  color: var(--color-navy);
+  border-bottom: 3px solid var(--color-peach);
 }
 
 .form-container {
-  padding: 30px;
+  padding: 36px 40px;
 }
 
 .form-section {
@@ -127,7 +114,7 @@ body {
 label {
   display: block;
   margin-bottom: 8px;
-  color: #3A3D40;
+  color: var(--color-navy);
   font-weight: 500;
   font-size: 0.9em;
 }
@@ -136,7 +123,7 @@ input,
 select {
   width: 100%;
   padding: 12px 15px;
-  border: 2px solid #e0e0e0;
+  border: 2px solid var(--color-slate);
   border-radius: 10px;
   font-size: 1em;
   transition: border-color 0.3s;
@@ -145,7 +132,7 @@ select {
 input:focus,
 select:focus {
   outline: none;
-  border-color: #D8C7A6;
+  border-color: var(--color-peach);
 }
 
 .btn {
@@ -161,32 +148,32 @@ select:focus {
 }
 
 .btn-primary {
-  background: #D8C7A6;
-  color: #1A3B5D;
+  background: var(--color-peach);
+  color: var(--color-navy);
 }
 
 .btn-primary:hover {
   transform: translateY(-2px);
-  box-shadow: 0 5px 20px rgba(217, 118, 74, 0.4);
+  box-shadow: 0 5px 20px rgba(253, 199, 162, 0.5);
 }
 
 .demo-info {
-  background: #F7E9E1;
-  border-left: 4px solid #D8C7A6;
+  background: var(--color-cream);
+  border-left: 4px solid var(--color-peach);
   padding: 15px;
   margin-top: 20px;
   border-radius: 8px;
 }
 
 .demo-info h4 {
-  color: #8A7554;
+  color: var(--color-steel);
   margin-bottom: 10px;
   font-size: 0.9em;
 }
 
 .demo-info p {
   font-size: 0.85em;
-  color: #666;
+  color: var(--color-steel);
   margin-bottom: 5px;
 }
 
@@ -244,19 +231,7 @@ select:focus {
    RESPONSIVE: TABLET Y DESKTOP
    ============================================ */
 
-/* ✅ Tablet (768px - 1024px) */
 @media (min-width: 768px) {
-  body {
-    background: #F2EBE1;
-    padding: 20px;
-  }
-
-  /* El login se ve igual pero más centrado */
-  .login-container {
-    max-width: 450px;
-  }
-
-  /* Los contenedores de dashboard se expanden */
   .dashboard-container,
   .main-content {
     max-width: 1000px;
@@ -266,13 +241,11 @@ select:focus {
     overflow: hidden;
   }
 
-  /* Grid de estadísticas en 3 columnas */
   .stats-grid {
     grid-template-columns: repeat(3, 1fr);
     gap: 15px;
   }
 
-  /* Grid de acciones rápidas en 2 columnas */
   .quick-actions {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
@@ -283,7 +256,6 @@ select:focus {
     grid-column: span 2;
   }
 
-  /* Grid de cuartos recientes en 3 columnas */
   .recent-rooms {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
@@ -304,7 +276,6 @@ select:focus {
     padding: 12px;
   }
 
-  /* Navegación inferior se transforma en horizontal */
   .bottom-nav {
     position: relative;
     bottom: auto;
@@ -332,18 +303,12 @@ select:focus {
   }
 }
 
-/* ✅ Desktop (1024px+) */
 @media (min-width: 1024px) {
-  body {
-    padding: 30px 40px;
-  }
-
   .dashboard-container,
   .main-content {
     max-width: 1200px;
   }
 
-  /* Más espacio y tamaños más grandes */
   .dashboard-header {
     padding: 30px 40px;
   }
@@ -375,12 +340,10 @@ select:focus {
     font-size: 1.2em;
   }
 
-  /* Grid de cuartos recientes en 4 columnas */
   .recent-rooms {
     grid-template-columns: repeat(4, 1fr);
   }
 
-  /* Cards de búsqueda en grid */
   .rooms-container {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
@@ -391,7 +354,6 @@ select:focus {
     margin-bottom: 0;
   }
 
-  /* Favoritos en grid */
   .favorites-container {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
@@ -403,7 +365,6 @@ select:focus {
   }
 }
 
-/* ✅ Desktop grande (1400px+) */
 @media (min-width: 1400px) {
   .dashboard-container,
   .main-content {
