@@ -6,7 +6,7 @@
    ============================================ */
 
 .header {
-    background: #1A3B5D;
+    background: var(--color-navy);
     padding: 40px 30px;
     color: white;
     display: flex;
@@ -85,15 +85,15 @@
 
 .nav-label {
     font-size: 0.7em;
-    color: #666;
+    color: var(--color-steel);
     font-weight: 500;
 }
 
 .nav-item.active .nav-icon {
-    filter: drop-shadow(0 0 8px #D8C7A6);
+    filter: drop-shadow(0 0 8px var(--color-peach));
 }
 
 .nav-item.active .nav-label {
-    color: #1A3B5D;
+    color: var(--color-navy);
     font-weight: 600;
 }
