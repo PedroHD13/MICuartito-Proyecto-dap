@@ -15,6 +15,7 @@ export async function GET(request: Request) {
   try {
     const { searchParams } = new URL(request.url);
     const ownerUsername = searchParams.get('owner');
+    const all = searchParams.get('all') === 'true';
 
     let query = `
       SELECT c.*, u.username AS owner_username
@@ -27,7 +28,7 @@ export async function GET(request: Request) {
       // "Mis Cuartos": todos los del propietario, activos o pausados
       query += ' WHERE u.username = $1';
       params.push(ownerUsername);
-    } else {
+    } else if (!all) {
       // "Buscar": solo los activos
       query += ' WHERE c.activo = true';
     }

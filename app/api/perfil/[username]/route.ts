@@ -10,7 +10,9 @@ export async function GET(
 
     const result = await pool.query(
       `SELECT u.nombre, p.email, p.telefono, p.fecha_nacimiento, p.bio, p.avatar,
-              p.notif_nuevos_interesados, p.notif_mensajes, p.notif_ofertas
+              p.ocupacion, p.presupuesto, p.zonas_preferidas,
+              p.notif_nuevos_interesados, p.notif_mensajes, p.notif_ofertas,
+              p.notif_nuevos_cuartos, p.notif_cambios_precio
        FROM usuarios u
        JOIN perfiles p ON p.usuario_id = u.id
        WHERE u.username = $1`,
@@ -30,14 +32,19 @@ export async function GET(
         phone: row.telefono || '+591 71234567',
         birthdate: row.fecha_nacimiento
           ? row.fecha_nacimiento.toISOString().split('T')[0]
-          : '1990-01-01',
-        bio: row.bio || 'Propietario con experiencia en alquiler de cuartos. Busco inquilinos responsables y respetuosos.',
+          : '1995-06-15',
+        bio: row.bio || 'Estudiante universitario, responsable y ordenado. Busco un cuarto tranquilo cerca de la universidad.',
         avatar: row.avatar || row.nombre.charAt(0).toUpperCase(),
+        occupation: row.ocupacion || 'Estudiante',
+        budget: row.presupuesto ? Number(row.presupuesto) : 800,
+        zones: row.zonas_preferidas && row.zonas_preferidas.length > 0 ? row.zonas_preferidas : ['norte'],
       },
       notifPrefs: {
         newInterested: row.notif_nuevos_interesados,
         messages: row.notif_mensajes,
         promos: row.notif_ofertas,
+        newRooms: row.notif_nuevos_cuartos,
+        priceDrops: row.notif_cambios_precio,
       },
     });
   } catch (error) {
@@ -65,7 +72,6 @@ export async function PATCH(
 
     const usuarioId = userResult.rows[0].id;
 
-    // El nombre vive en "usuarios", no en "perfiles"
     if (body.name !== undefined) {
       await pool.query('UPDATE usuarios SET nombre = $1 WHERE id = $2', [body.name, usuarioId]);
     }
@@ -76,9 +82,14 @@ export async function PATCH(
       birthdate: 'fecha_nacimiento',
       bio: 'bio',
       avatar: 'avatar',
+      occupation: 'ocupacion',
+      budget: 'presupuesto',
+      zones: 'zonas_preferidas',
       newInterested: 'notif_nuevos_interesados',
       messages: 'notif_mensajes',
       promos: 'notif_ofertas',
+      newRooms: 'notif_nuevos_cuartos',
+      priceDrops: 'notif_cambios_precio',
     };
 
     const setClauses: string[] = [];

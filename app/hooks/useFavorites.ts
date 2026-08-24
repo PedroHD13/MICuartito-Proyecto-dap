@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
+import { useSession } from '../../useSession';
 import { Room } from '../types';
 
 export interface FavoriteWithDate extends Room {
@@ -6,90 +7,103 @@ export interface FavoriteWithDate extends Room {
 }
 
 export function useFavorites() {
+  const { session } = useSession();
   const [favoriteIds, setFavoriteIds] = useState<number[]>([]);
   const [favoriteRoomsWithDate, setFavoriteRoomsWithDate] = useState<FavoriteWithDate[]>([]);
+  const [loading, setLoading] = useState(true);
 
-  // Cargar favoritos al iniciar
+  const loadFavorites = useCallback(async () => {
+    if (!session) {
+      setFavoriteIds([]);
+      setFavoriteRoomsWithDate([]);
+      setLoading(false);
+      return;
+    }
+    try {
+      const response = await fetch(`/api/favoritos?username=${session.username}`);
+      const data = await response.json();
+      setFavoriteIds(data.favoriteIds || []);
+      setFavoriteRoomsWithDate(data.rooms || []);
+    } catch (error) {
+      console.error('Error cargando favoritos:', error);
+    } finally {
+      setLoading(false);
+    }
+  }, [session]);
+
   useEffect(() => {
-    const saved = JSON.parse(localStorage.getItem('favoriteRooms') || '[]');
-    setFavoriteIds(saved);
-  }, []);
+    loadFavorites();
+  }, [loadFavorites]);
 
-  const toggleFavorite = useCallback((roomId: number) => {
-    setFavoriteIds(prev => {
-      let newIds;
-      if (prev.includes(roomId)) {
-        newIds = prev.filter(id => id !== roomId);
+  const toggleFavorite = useCallback(async (roomId: number) => {
+    if (!session) return;
+    const isCurrentlyFavorite = favoriteIds.includes(roomId);
+
+    // Actualización optimista para que se sienta instantáneo
+    setFavoriteIds(prev =>
+      isCurrentlyFavorite ? prev.filter(id => id !== roomId) : [...prev, roomId]
+    );
+
+    try {
+      if (isCurrentlyFavorite) {
+        await fetch(`/api/favoritos?username=${session.username}&cuartoId=${roomId}`, {
+          method: 'DELETE',
+        });
       } else {
-        newIds = [...prev, roomId];
+        await fetch('/api/favoritos', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ username: session.username, cuartoId: roomId }),
+        });
       }
-      
-      localStorage.setItem('favoriteRooms', JSON.stringify(newIds));
-      return newIds;
-    });
-  }, []);
+      await loadFavorites();
+    } catch (error) {
+      console.error('Error actualizando favorito:', error);
+    }
+  }, [session, favoriteIds, loadFavorites]);
 
-  const isFavorite = useCallback((roomId: number) => {
-    return favoriteIds.includes(roomId);
-  }, [favoriteIds]);
+  const isFavorite = useCallback(
+    (roomId: number) => favoriteIds.includes(roomId),
+    [favoriteIds]
+  );
 
-  const getFavoriteRooms = useCallback((allRooms: Room[]): FavoriteWithDate[] => {
-    // Obtener fecha de agregado del localStorage
-    const favoritesWithDate = JSON.parse(localStorage.getItem('favoritesWithDate') || '{}');
-    
-    return allRooms
-      .filter(room => favoriteIds.includes(room.id))
-      .map(room => ({
-        ...room,
-        addedDate: favoritesWithDate[room.id] || new Date().toISOString()
-      }));
-  }, [favoriteIds]);
+  const removeFavorite = useCallback(async (roomId: number) => {
+    if (!session) return;
+    setFavoriteIds(prev => prev.filter(id => id !== roomId));
+    setFavoriteRoomsWithDate(prev => prev.filter(r => r.id !== roomId));
+    try {
+      await fetch(`/api/favoritos?username=${session.username}&cuartoId=${roomId}`, {
+        method: 'DELETE',
+      });
+    } catch (error) {
+      console.error('Error eliminando favorito:', error);
+    }
+  }, [session]);
 
-  const removeFavorite = useCallback((roomId: number) => {
-    setFavoriteIds(prev => {
-      const newIds = prev.filter(id => id !== roomId);
-      localStorage.setItem('favoriteRooms', JSON.stringify(newIds));
-      
-      // También eliminar la fecha
-      const favoritesWithDate = JSON.parse(localStorage.getItem('favoritesWithDate') || '{}');
-      delete favoritesWithDate[roomId];
-      localStorage.setItem('favoritesWithDate', JSON.stringify(favoritesWithDate));
-      
-      return newIds;
-    });
-  }, []);
-
-  const clearFavorites = useCallback(() => {
+  const clearFavorites = useCallback(async () => {
+    if (!session) return;
+    const idsToRemove = [...favoriteIds];
     setFavoriteIds([]);
-    localStorage.setItem('favoriteRooms', JSON.stringify([]));
-    localStorage.setItem('favoritesWithDate', JSON.stringify({}));
-  }, []);
-
-  // Actualizar fecha cuando se agrega un favorito
-  const addFavoriteWithDate = useCallback((roomId: number) => {
-    setFavoriteIds(prev => {
-      if (prev.includes(roomId)) return prev;
-      
-      const newIds = [...prev, roomId];
-      localStorage.setItem('favoriteRooms', JSON.stringify(newIds));
-      
-      // Guardar fecha de agregado
-      const favoritesWithDate = JSON.parse(localStorage.getItem('favoritesWithDate') || '{}');
-      favoritesWithDate[roomId] = new Date().toISOString();
-      localStorage.setItem('favoritesWithDate', JSON.stringify(favoritesWithDate));
-      
-      return newIds;
-    });
-  }, []);
+    setFavoriteRoomsWithDate([]);
+    try {
+      await Promise.all(
+        idsToRemove.map(id =>
+          fetch(`/api/favoritos?username=${session.username}&cuartoId=${id}`, { method: 'DELETE' })
+        )
+      );
+    } catch (error) {
+      console.error('Error limpiando favoritos:', error);
+    }
+  }, [session, favoriteIds]);
 
   return {
     favoriteIds,
     favoriteRoomsWithDate,
+    loading,
     toggleFavorite,
     isFavorite,
-    getFavoriteRooms,
     removeFavorite,
     clearFavorites,
-    addFavoriteWithDate
+    refreshFavorites: loadFavorites,
   };
 }
