@@ -8,17 +8,20 @@ import '../../styles/mis-cuartos-styles.css';
 import AppIcon from '../../components/AppIcon';
 
 interface MyRoom {
-  titulo?: string;
-  fotos?: string[];
-  tipo: string;
-  capacidad: string;
-  precio: string;
-  reglas?: string;
-  servicios?: string[];
+  id: number;
+  title: string;
+  image: string;
+  images: string[];
+  type: 'Privada' | 'Compartida';
+  tipoRaw: string;
+  capacity: number;
+  capacidadRaw: string;
+  price: number;
+  reglas: string;
+  services: string[];
   active: boolean;
   views: number;
   createdAt: string;
-  [key: string]: any;
 }
 
 type FilterType = 'all' | 'active' | 'inactive';
@@ -31,34 +34,30 @@ export default function MisCuartos() {
   const [filter, setFilter] = useState<FilterType>('all');
 
   const [editModalOpen, setEditModalOpen] = useState(false);
-  const [editingIndex, setEditingIndex] = useState<number | null>(null);
+  const [editingId, setEditingId] = useState<number | null>(null);
   const [editTipo, setEditTipo] = useState('privada');
   const [editCapacidad, setEditCapacidad] = useState('1');
   const [editPrecio, setEditPrecio] = useState('');
   const [editReglas, setEditReglas] = useState('');
 
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
-  const [deletingIndex, setDeletingIndex] = useState<number | null>(null);
+  const [deletingId, setDeletingId] = useState<number | null>(null);
 
-  const loadMyRooms = useCallback(() => {
-    const storedRooms = JSON.parse(localStorage.getItem('cuartos') || '[]');
-    const normalized: MyRoom[] = storedRooms.map((room: any) => ({
-      ...room,
-      active: room.active !== undefined ? room.active : true,
-      views: room.views || 0,
-      createdAt: room.createdAt || new Date().toISOString(),
-    }));
-    setMyRooms(normalized);
-  }, []);
+  const loadMyRooms = useCallback(async () => {
+    if (!session) return;
+    try {
+      const response = await fetch(`/api/cuartos?owner=${session.username}`);
+      const data = await response.json();
+      setMyRooms(data.rooms || []);
+    } catch (error) {
+      console.error('Error cargando mis cuartos:', error);
+      setMyRooms([]);
+    }
+  }, [session]);
 
   useEffect(() => {
     loadMyRooms();
   }, [loadMyRooms]);
-
-  const saveRooms = (rooms: MyRoom[]) => {
-    setMyRooms(rooms);
-    localStorage.setItem('cuartos', JSON.stringify(rooms));
-  };
 
   if (loading || !session) {
     return null;
@@ -86,63 +85,104 @@ export default function MisCuartos() {
   };
 
   // --- Editar ---
-  const openEditModal = (index: number) => {
-    const room = myRooms[index];
-    setEditingIndex(index);
-    setEditTipo(room.tipo || 'privada');
-    setEditCapacidad(room.capacidad || '1');
-    setEditPrecio(room.precio || '');
+  const openEditModal = (room: MyRoom) => {
+    setEditingId(room.id);
+    setEditTipo(room.tipoRaw || 'privada');
+    setEditCapacidad(room.capacidadRaw || '1');
+    setEditPrecio(String(room.price ?? ''));
     setEditReglas(room.reglas || '');
     setEditModalOpen(true);
   };
 
   const closeEditModal = () => {
     setEditModalOpen(false);
-    setEditingIndex(null);
+    setEditingId(null);
   };
 
-  const handleEditSubmit = (e: React.FormEvent) => {
+  const handleEditSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (editingIndex === null) return;
+    if (editingId === null) return;
 
-    const updated = [...myRooms];
-    updated[editingIndex] = {
-      ...updated[editingIndex],
-      tipo: editTipo,
-      capacidad: editCapacidad,
-      precio: editPrecio,
-      reglas: editReglas,
-    };
-    saveRooms(updated);
-    closeEditModal();
-    alert('Cuarto actualizado exitosamente');
+    try {
+      const response = await fetch(`/api/cuartos/${editingId}`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          tipo: editTipo,
+          capacidad: editCapacidad,
+          precio: editPrecio,
+          reglas: editReglas,
+        }),
+      });
+
+      if (!response.ok) {
+        const result = await response.json();
+        alert(result.error || 'No se pudo actualizar el cuarto.');
+        return;
+      }
+
+      await loadMyRooms();
+      closeEditModal();
+      alert('Cuarto actualizado exitosamente');
+    } catch (error) {
+      console.error(error);
+      alert('Error de conexión con el servidor.');
+    }
   };
 
   // --- Activar / Pausar ---
-  const toggleRoomStatus = (index: number) => {
-    const updated = [...myRooms];
-    updated[index] = { ...updated[index], active: !updated[index].active };
-    saveRooms(updated);
-    alert(`Cuarto ${updated[index].active ? 'activado' : 'pausado'} exitosamente`);
+  const toggleRoomStatus = async (room: MyRoom) => {
+    try {
+      const response = await fetch(`/api/cuartos/${room.id}`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ activo: !room.active }),
+      });
+
+      if (!response.ok) {
+        alert('No se pudo actualizar el estado del cuarto.');
+        return;
+      }
+
+      await loadMyRooms();
+      alert(`Cuarto ${!room.active ? 'activado' : 'pausado'} exitosamente`);
+    } catch (error) {
+      console.error(error);
+      alert('Error de conexión con el servidor.');
+    }
   };
 
   // --- Eliminar ---
-  const openDeleteModal = (index: number) => {
-    setDeletingIndex(index);
+  const openDeleteModal = (id: number) => {
+    setDeletingId(id);
     setDeleteModalOpen(true);
   };
 
   const closeDeleteModal = () => {
     setDeleteModalOpen(false);
-    setDeletingIndex(null);
+    setDeletingId(null);
   };
 
-  const confirmDelete = () => {
-    if (deletingIndex === null) return;
-    const updated = myRooms.filter((_, i) => i !== deletingIndex);
-    saveRooms(updated);
-    closeDeleteModal();
-    alert('Cuarto eliminado exitosamente');
+  const confirmDelete = async () => {
+    if (deletingId === null) return;
+
+    try {
+      const response = await fetch(`/api/cuartos/${deletingId}`, {
+        method: 'DELETE',
+      });
+
+      if (!response.ok) {
+        alert('No se pudo eliminar el cuarto.');
+        return;
+      }
+
+      await loadMyRooms();
+      closeDeleteModal();
+      alert('Cuarto eliminado exitosamente');
+    } catch (error) {
+      console.error(error);
+      alert('Error de conexión con el servidor.');
+    }
   };
 
   return (
@@ -220,64 +260,54 @@ export default function MisCuartos() {
           </div>
         ) : (
           <div className="my-rooms-container">
-            {filteredRooms.map((room) => {
-              const realIndex = myRooms.indexOf(room);
-              const firstImage =
-                room.fotos && room.fotos.length > 0
-                  ? room.fotos[0]
-                  : 'https://via.placeholder.com/400x300/1A3B5D/ffffff?text=Cuarto';
-
-              return (
-                <div className={`my-room-card ${!room.active ? 'inactive' : ''}`} key={realIndex}>
-                  <div className="room-card-header">
-                    <img
-                      src={firstImage}
-                      alt="Cuarto"
-                      onError={(e) => {
-                        (e.target as HTMLImageElement).src =
-                          'https://via.placeholder.com/400x300/1A3B5D/ffffff?text=Cuarto';
-                      }}
-                    />
-                    <span className={`room-status-badge ${room.active ? 'active' : 'inactive'}`}>
-                      {room.active ? <><AppIcon name="check" /> Activo</> : <><AppIcon name="pause" /> Pausado</>}
-                    </span>
-                    <span className="room-views"><AppIcon name="eye" /> {room.views || 0} vistas</span>
+            {filteredRooms.map((room) => (
+              <div className={`my-room-card ${!room.active ? 'inactive' : ''}`} key={room.id}>
+                <div className="room-card-header">
+                  <img
+                    src={room.image}
+                    alt="Cuarto"
+                    onError={(e) => {
+                      (e.target as HTMLImageElement).src =
+                        'https://via.placeholder.com/400x300/1A3B5D/ffffff?text=Cuarto';
+                    }}
+                  />
+                  <span className={`room-status-badge ${room.active ? 'active' : 'inactive'}`}>
+                    {room.active ? <><AppIcon name="check" /> Activo</> : <><AppIcon name="pause" /> Pausado</>}
+                  </span>
+                  <span className="room-views"><AppIcon name="eye" /> {room.views || 0} vistas</span>
+                </div>
+                <div className="room-card-body">
+                  <div className="room-card-title">{room.title}</div>
+                  <div className="room-card-info">
+                    <div className="info-item"><span><AppIcon name="doorOpen" /></span> {room.tipoRaw}</div>
+                    <div className="info-item">
+                      <span><AppIcon name="userGroup" /></span> {room.capacidadRaw}{' '}
+                      {room.capacity > 1 ? 'personas' : 'persona'}
+                    </div>
+                    {room.services && room.services.length > 0 && (
+                      <div className="info-item"><span><AppIcon name="listCheck" /></span> {room.services.length} servicios</div>
+                    )}
                   </div>
-                  <div className="room-card-body">
-                    <div className="room-card-title">
-                      {room.titulo || `Cuarto ${room.tipo} - ${room.capacidad} persona(s)`}
-                    </div>
-                    <div className="room-card-info">
-                      <div className="info-item"><span><AppIcon name="doorOpen" /></span> {room.tipo}</div>
-                      <div className="info-item">
-                        <span><AppIcon name="userGroup" /></span> {room.capacidad}{' '}
-                        {parseInt(room.capacidad) > 1 ? 'personas' : 'persona'}
-                      </div>
-                      {room.servicios && room.servicios.length > 0 && (
-                        <div className="info-item"><span><AppIcon name="listCheck" /></span> {room.servicios.length} servicios</div>
-                      )}
-                    </div>
-                    <div className="room-card-price">
-                      Bs. {room.precio} <span>/mes</span>
-                    </div>
-                    <div className="room-card-actions">
-                      <button className="action-btn btn-edit" onClick={() => openEditModal(realIndex)}>
-                        <AppIcon name="pencil" /> Editar
-                      </button>
-                      <button
-                        className={`action-btn btn-toggle ${room.active ? 'active' : ''}`}
-                        onClick={() => toggleRoomStatus(realIndex)}
-                      >
-                        {room.active ? <><AppIcon name="pause" /> Pausar</> : <><AppIcon name="circlePlay" /> Activar</>}
-                      </button>
-                      <button className="action-btn btn-delete" onClick={() => openDeleteModal(realIndex)}>
-                        <AppIcon name="trash" /> Eliminar
-                      </button>
-                    </div>
+                  <div className="room-card-price">
+                    Bs. {room.price} <span>/mes</span>
+                  </div>
+                  <div className="room-card-actions">
+                    <button className="action-btn btn-edit" onClick={() => openEditModal(room)}>
+                      <AppIcon name="pencil" /> Editar
+                    </button>
+                    <button
+                      className={`action-btn btn-toggle ${room.active ? 'active' : ''}`}
+                      onClick={() => toggleRoomStatus(room)}
+                    >
+                      {room.active ? <><AppIcon name="pause" /> Pausar</> : <><AppIcon name="circlePlay" /> Activar</>}
+                    </button>
+                    <button className="action-btn btn-delete" onClick={() => openDeleteModal(room.id)}>
+                      <AppIcon name="trash" /> Eliminar
+                    </button>
                   </div>
                 </div>
-              );
-            })}
+              </div>
+            ))}
           </div>
         )}
 

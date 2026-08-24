@@ -1,24 +1,32 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
 import { useRequireAuth } from '../../useSession';
-import { useRooms } from '../hooks/useRooms';
 import DashboardShell from '../components/DashboardShell';
 import '../styles/dashboard-styles.css';
 import AppIcon from '../components/AppIcon';
 
+interface DashboardRoom {
+  id: number;
+  title: string;
+  location: string;
+  price: number;
+  image: string;
+  views: number;
+  active: boolean;
+}
+
 export default function PropietarioDashboard() {
   const router = useRouter();
   const { session, loading, logout } = useRequireAuth('propietario');
-  const { allRooms, refreshRooms } = useRooms();
 
   const [greeting, setGreeting] = useState('');
-  const [myRooms, setMyRooms] = useState<any[]>([]);
+  const [myRooms, setMyRooms] = useState<DashboardRoom[]>([]);
   const [stats, setStats] = useState({
     myRoomsCount: 0,
     totalViews: 0,
-    pendingRequests: 0
+    pendingRequests: 0,
   });
 
   // Configurar saludo según la hora
@@ -29,29 +37,29 @@ export default function PropietarioDashboard() {
     else setGreeting('🌙 Buenas noches');
   }, []);
 
-  // Cargar datos
+  const loadMyRooms = useCallback(async () => {
+    if (!session) return;
+    try {
+      const response = await fetch(`/api/cuartos?owner=${session.username}`);
+      const data = await response.json();
+      const rooms: DashboardRoom[] = data.rooms || [];
+
+      // Ya vienen ordenados por más reciente desde la API
+      setMyRooms(rooms.slice(0, 3));
+
+      setStats({
+        myRoomsCount: rooms.length,
+        totalViews: rooms.reduce((sum, r) => sum + (r.views || 0), 0),
+        pendingRequests: 0, // TODO: conectar cuando exista el sistema de solicitudes
+      });
+    } catch (error) {
+      console.error('Error cargando dashboard del propietario:', error);
+    }
+  }, [session]);
+
   useEffect(() => {
-    refreshRooms();
-  }, [refreshRooms]);
-
-  // Filtrar solo los cuartos publicados por el propietario (id >= 100, ver useRooms.ts)
-  // y calcular estadísticas
-  useEffect(() => {
-    const published = allRooms.filter(room => room.id >= 100);
-    const sorted = [...published].sort((a, b) => {
-      const dateA = a.createdAt ? new Date(a.createdAt).getTime() : 0;
-      const dateB = b.createdAt ? new Date(b.createdAt).getTime() : 0;
-      return dateB - dateA;
-    });
-
-    setMyRooms(sorted.slice(0, 3));
-
-    setStats({
-      myRoomsCount: published.length,
-      totalViews: published.reduce((sum, room) => sum + (room.views || 0), 0),
-      pendingRequests: 0 // TODO: conectar cuando exista el sistema de solicitudes
-    });
-  }, [allRooms]);
+    loadMyRooms();
+  }, [loadMyRooms]);
 
   if (loading || !session) {
     return null;

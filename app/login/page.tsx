@@ -47,47 +47,41 @@ export default function LoginPage() {
     }));
   };
 
-  const handleRegister = (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
+      const handleRegister = async (event: React.FormEvent<HTMLFormElement>) => {
+      event.preventDefault();
 
-    const users = JSON.parse(
-      localStorage.getItem("micuartito-users") || "[]"
-    );
+      try {
+        const response = await fetch("/api/auth/register", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            name: registerData.name,
+            username: registerData.username,
+            password: registerData.password,
+            role: registerData.role,
+          }),
+        });
 
-    const existingUser = users.find(
-      (user: { username: string }) =>
-        user.username === registerData.username
-    );
+        const data = await response.json();
 
-    if (existingUser) {
-      setRegisterMessage("El usuario ya está registrado.");
-      return;
-    }
+        if (!response.ok) {
+          setRegisterMessage(data.error || "No se pudo crear la cuenta.");
+          return;
+        }
 
-    const newUser = {
-      id: Date.now(),
-      name: registerData.name,
-      username: registerData.username,
-      password: registerData.password,
-      role: registerData.role,
+        setRegisterMessage("¡Cuenta creada correctamente!");
+
+        setRegisterData({
+          name: "",
+          username: "",
+          password: "",
+          role: "inquilino",
+        });
+      } catch (error) {
+        console.error(error);
+        setRegisterMessage("Error de conexión con el servidor.");
+      }
     };
-
-    users.push(newUser);
-
-    localStorage.setItem(
-      "micuartito-users",
-      JSON.stringify(users)
-    );
-
-    setRegisterMessage("¡Cuenta creada correctamente!");
-
-    setRegisterData({
-      name: "",
-      username: "",
-      password: "",
-      role: "inquilino",
-    });
-  };
 
   // =========================
   // LOGIN (CON REDIRECCIÓN)
@@ -104,43 +98,49 @@ export default function LoginPage() {
     }));
   };
 
-    const handleLogin = (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
+    const handleLogin = async (event: React.FormEvent<HTMLFormElement>) => {
+      event.preventDefault();
 
-    const users = JSON.parse(
-      localStorage.getItem("micuartito-users") || "[]"
-    );
+      try {
+        const response = await fetch("/api/auth/login", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            username: loginData.username,
+            password: loginData.password,
+          }),
+        });
 
-    const foundUser = users.find(
-      (user: { username: string; password: string }) =>
-        user.username === loginData.username &&
-        user.password === loginData.password
-    );
+        const data = await response.json();
 
-    if (!foundUser) {
-      setLoginMessage("Usuario o contraseña incorrectos.");
-      return;
-    }
+        if (!response.ok) {
+          setLoginMessage(data.error || "Usuario o contraseña incorrectos.");
+          return;
+        }
 
-    // ✅ Guardar sesión
-    login({
-      username: foundUser.username,
-      name: foundUser.name,
-      role: foundUser.role,
-    });
+        // ✅ Guardar sesión (igual que antes)
+        login({
+          username: data.user.username,
+          name: data.user.name,
+          role: data.user.role,
+        });
 
-    setLoginMessage("");
-    setLoginData({ username: "", password: "" });
+        setLoginMessage("");
+        setLoginData({ username: "", password: "" });
 
-    // ✅ Redirigir según el rol
-    const roleRoutes: Record<string, string> = {
-      inquilino: "/inquilino",
-      propietario: "/propietario",
-      admin: "/admin",
+        // ✅ Redirigir según el rol
+        const roleRoutes: Record<string, string> = {
+          inquilino: "/inquilino",
+          propietario: "/propietario",
+          admin: "/admin",
+        };
+
+        router.push(roleRoutes[data.user.role] || "/");
+      } catch (error) {
+        console.error(error);
+        setLoginMessage("Error de conexión con el servidor.");
+      }
     };
-
-    router.push(roleRoutes[foundUser.role] || "/");
-  };
 
   const handleLogout = () => {
     logout();
