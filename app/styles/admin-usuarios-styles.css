@@ -1,0 +1,359 @@
+/* ============================================
+   ADMIN - GESTIÓN DE USUARIOS
+   ============================================ */
+
+.admin-usuarios-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  min-height: 100vh;
+  background: #F2EBE1;
+  padding-bottom: 30px;
+}
+
+.admin-usuarios-header {
+  background: #1A3B5D;
+  padding: 30px;
+  color: white;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.admin-usuarios-back-btn {
+  background: rgba(255, 255, 255, 0.2);
+  border: none;
+  color: white;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  cursor: pointer;
+  font-size: 1.4em;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s;
+  flex-shrink: 0;
+}
+
+.admin-usuarios-back-btn:hover {
+  background: rgba(255, 255, 255, 0.3);
+}
+
+.admin-usuarios-header h1 {
+  font-size: 1.4em;
+  font-weight: 700;
+}
+
+.admin-usuarios-header p {
+  font-size: 0.85em;
+  opacity: 0.9;
+}
+
+/* Filtro por rol */
+.admin-usuarios-filters {
+  display: flex;
+  gap: 10px;
+  padding: 20px 30px 10px;
+  flex-wrap: wrap;
+}
+
+.admin-role-filter-btn {
+  background: white;
+  border: 2px solid #e5e7eb;
+  padding: 8px 18px;
+  border-radius: 50px;
+  font-size: 0.9em;
+  cursor: pointer;
+  transition: all 0.3s;
+  font-weight: 500;
+  color: #4b5563;
+}
+
+.admin-role-filter-btn:hover {
+  border-color: #D8C7A6;
+  color: #8A7554;
+}
+
+.admin-role-filter-btn.active {
+  background: #1A3B5D;
+  color: white;
+  border-color: transparent;
+}
+
+/* Tabla */
+.admin-users-table-wrapper {
+  padding: 15px 30px 30px;
+  overflow-x: auto;
+}
+
+.admin-users-table {
+  width: 100%;
+  border-collapse: collapse;
+  background: white;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+}
+
+.admin-users-table thead {
+  background: #F2EBE1;
+}
+
+.admin-users-table th {
+  text-align: left;
+  padding: 14px 18px;
+  font-size: 0.85em;
+  color: #666;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+.admin-users-table td {
+  padding: 14px 18px;
+  border-top: 1px solid #E8DFD0;
+  font-size: 0.95em;
+  color: #3A3D40;
+}
+
+.admin-users-table tr:hover td {
+  background: #fafafa;
+}
+
+.admin-role-badge {
+  display: inline-block;
+  padding: 4px 14px;
+  border-radius: 20px;
+  font-size: 0.8em;
+  font-weight: 600;
+}
+
+.admin-role-badge.inquilino {
+  background: #E3E9EF;
+  color: #1A3B5D;
+}
+
+.admin-role-badge.propietario {
+  background: #1A3B5D;
+  color: white;
+}
+
+.admin-role-badge.admin {
+  background: #3A3D40;
+  color: white;
+}
+
+.admin-users-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.admin-btn-edit,
+.admin-btn-delete {
+  border: none;
+  padding: 7px 14px;
+  border-radius: 8px;
+  font-size: 0.85em;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.admin-btn-edit {
+  background: #E3E9EF;
+  color: #1A3B5D;
+}
+
+.admin-btn-edit:hover {
+  background: #1A3B5D;
+  color: white;
+}
+
+.admin-btn-delete {
+  background: #fee2e2;
+  color: #dc2626;
+}
+
+.admin-btn-delete:hover {
+  background: #dc2626;
+  color: white;
+}
+
+.admin-users-empty {
+  text-align: center;
+  padding: 50px 20px;
+  color: #999;
+}
+
+/* ============================================
+   MODAL DE EDICIÓN
+   ============================================ */
+
+.edit-user-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.55);
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  animation: fadeInOverlay 0.25s ease;
+}
+
+.edit-user-panel {
+  background: white;
+  width: 100%;
+  max-width: 420px;
+  border-radius: 20px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.25);
+  animation: scaleInPanel 0.25s ease;
+  overflow: hidden;
+}
+
+.edit-user-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 24px;
+  border-bottom: 2px solid #E8DFD0;
+}
+
+.edit-user-header h2 {
+  font-size: 1.2em;
+  color: #1f2937;
+  font-weight: 700;
+}
+
+.edit-user-close {
+  background: none;
+  border: none;
+  font-size: 1.6em;
+  cursor: pointer;
+  color: #9ca3af;
+  line-height: 1;
+  transition: all 0.2s;
+}
+
+.edit-user-close:hover {
+  color: #1f2937;
+}
+
+.edit-user-body {
+  padding: 20px 24px;
+}
+
+.edit-user-field {
+  margin-bottom: 18px;
+}
+
+.edit-user-field:last-child {
+  margin-bottom: 0;
+}
+
+.edit-user-field label {
+  display: block;
+  margin-bottom: 8px;
+  font-size: 0.9em;
+  font-weight: 600;
+  color: #555;
+}
+
+.edit-user-field input,
+.edit-user-field select {
+  width: 100%;
+  padding: 11px 14px;
+  border: 2px solid #e5e7eb;
+  border-radius: 10px;
+  font-size: 0.95em;
+  transition: all 0.2s;
+  outline: none;
+  background: #fafafa;
+}
+
+.edit-user-field input:focus,
+.edit-user-field select:focus {
+  border-color: #D8C7A6;
+  background: white;
+}
+
+.edit-user-footer {
+  display: flex;
+  gap: 10px;
+  padding: 16px 24px 22px;
+}
+
+.edit-user-btn-cancel,
+.edit-user-btn-save {
+  flex: 1;
+  padding: 13px;
+  border: none;
+  border-radius: 12px;
+  font-size: 0.95em;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.edit-user-btn-cancel {
+  background: #e5e7eb;
+  color: #3A3D40;
+}
+
+.edit-user-btn-cancel:hover {
+  background: #d1d5db;
+}
+
+.edit-user-btn-save {
+  background: #1A3B5D;
+  color: white;
+}
+
+.edit-user-btn-save:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 18px rgba(217, 118, 74, 0.35);
+}
+
+@keyframes fadeInOverlay {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes scaleInPanel {
+  from { transform: scale(0.92); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
+}
+
+/* ============================================
+   RESPONSIVE
+   ============================================ */
+
+@media (max-width: 768px) {
+  .admin-usuarios-header {
+    padding: 22px 20px;
+  }
+
+  .admin-usuarios-filters {
+    padding: 16px 20px 8px;
+  }
+
+  .admin-users-table-wrapper {
+    padding: 12px 20px 24px;
+  }
+
+  .admin-users-table th,
+  .admin-users-table td {
+    padding: 10px 12px;
+    font-size: 0.85em;
+  }
+}
+
+@media (max-width: 480px) {
+  .admin-users-table th:nth-child(2),
+  .admin-users-table td:nth-child(2) {
+    display: none; /* ocultar columna "usuario" en móvil chico, queda nombre/rol/acciones */
+  }
+}

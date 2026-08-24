@@ -1,0 +1,756 @@
+/* ============================================
+   ESTILOS PARA PERFIL (PROPIETARIO E INQUILINO)
+   ============================================ */
+
+body {
+    background: #F2EBE1;
+    padding-bottom: 80px;
+}
+
+/* Header */
+.perfil-header {
+    padding: 15px 20px;
+    display: block;
+}
+
+.header-top {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.edit-btn {
+    background: rgba(255, 255, 255, 0.2);
+    border: none;
+    color: white;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    cursor: pointer;
+    font-size: 1.2em;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s;
+}
+
+.edit-btn:active {
+    transform: scale(0.95);
+    background: rgba(255, 255, 255, 0.3);
+}
+
+/* Profile Header Card */
+.profile-header-card {
+    background: white;
+    margin: -30px 20px 20px;
+    border-radius: 20px;
+    padding: 30px 20px 20px;
+    text-align: center;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    position: relative;
+}
+
+.profile-avatar-container {
+    position: relative;
+    display: inline-block;
+    margin-bottom: 15px;
+}
+
+.profile-avatar {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    background: #1A3B5D;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 3em;
+    font-weight: bold;
+    margin: 0 auto;
+}
+
+.change-avatar-btn {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    background: white;
+    border: 3px solid #F2EBE1;
+    width: 35px;
+    height: 35px;
+    border-radius: 50%;
+    cursor: pointer;
+    font-size: 1.2em;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+    transition: all 0.3s;
+}
+
+.change-avatar-btn:active {
+    transform: scale(0.9);
+}
+
+.profile-name {
+    font-size: 1.5em;
+    color: #3A3D40;
+    margin-bottom: 8px;
+}
+
+.profile-type-badge {
+    display: inline-block;
+    padding: 6px 20px;
+    border-radius: 20px;
+    font-size: 0.9em;
+    font-weight: 600;
+    margin-bottom: 20px;
+}
+
+.profile-type-badge.propietario {
+    background: #1A3B5D;
+    color: white;
+}
+
+.profile-type-badge.inquilino {
+    background: linear-gradient(135deg, #4CAF50 0%, #8BC34A 100%);
+    color: white;
+}
+
+.profile-stats {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 15px;
+    padding-top: 20px;
+    border-top: 1px solid #E8DFD0;
+}
+
+.stat-item {
+    text-align: center;
+}
+
+.stat-value {
+    font-size: 1.3em;
+    font-weight: 700;
+    color: #8A7554;
+    margin-bottom: 5px;
+}
+
+.stat-label {
+    font-size: 0.85em;
+    color: #666;
+}
+
+/* Profile Content */
+.profile-content {
+    padding: 0 20px 20px;
+}
+
+/* Profile Section */
+.profile-section {
+    background: white;
+    border-radius: 15px;
+    padding: 20px;
+    margin-bottom: 15px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.section-header h3 {
+    font-size: 1.1em;
+    color: #3A3D40;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.reviews-count {
+    font-size: 0.85em;
+    color: #666;
+}
+
+/* Info Groups */
+.info-group {
+    margin-bottom: 20px;
+}
+
+.info-group:last-child {
+    margin-bottom: 0;
+}
+
+.info-group label {
+    display: block;
+    margin-bottom: 8px;
+    color: #666;
+    font-size: 0.9em;
+    font-weight: 600;
+}
+
+.info-input {
+    width: 100%;
+    padding: 12px 15px;
+    border: 2px solid #e0e0e0;
+    border-radius: 10px;
+    font-size: 1em;
+    transition: all 0.3s;
+    background: #F2EBE1;
+}
+
+.info-input:disabled {
+    background: #F2EBE1;
+    color: #666;
+    cursor: not-allowed;
+}
+
+.info-input:not(:disabled) {
+    background: white;
+    border-color: #D8C7A6;
+}
+
+.info-input:focus {
+    outline: none;
+    border-color: #1A3B5D;
+}
+
+.info-textarea {
+    width: 100%;
+    padding: 12px 15px;
+    border: 2px solid #e0e0e0;
+    border-radius: 10px;
+    font-size: 1em;
+    transition: all 0.3s;
+    font-family: inherit;
+    resize: vertical;
+    min-height: 100px;
+    background: #F2EBE1;
+}
+
+.info-textarea:disabled {
+    background: #F2EBE1;
+    color: #666;
+    cursor: not-allowed;
+}
+
+.info-textarea:not(:disabled) {
+    background: white;
+    border-color: #D8C7A6;
+}
+
+.info-textarea:focus {
+    outline: none;
+    border-color: #1A3B5D;
+}
+
+/* Chips */
+.chips-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.chip {
+    background: #E3E9EF;
+    color: #1A3B5D;
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 0.85em;
+    font-weight: 600;
+}
+
+/* Verification List */
+.verification-list {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.verification-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px;
+    background: #F2EBE1;
+    border-radius: 10px;
+}
+
+.verification-item.verified {
+    background: #e8f5e9;
+}
+
+.verification-icon {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    font-size: 1.1em;
+}
+
+.verification-item.verified .verification-icon {
+    background: #4CAF50;
+    color: white;
+}
+
+.verification-item:not(.verified) .verification-icon {
+    background: #e0e0e0;
+    color: #999;
+}
+
+.verification-text {
+    flex: 1;
+    font-size: 0.95em;
+    color: #3A3D40;
+}
+
+.verify-btn {
+    background: #1A3B5D;
+    color: white;
+    border: none;
+    padding: 6px 16px;
+    border-radius: 8px;
+    font-size: 0.85em;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.verify-btn:active {
+    transform: scale(0.95);
+}
+
+/* Rating Summary */
+.rating-summary {
+    text-align: center;
+    padding: 30px 20px;
+}
+
+.rating-stars {
+    font-size: 2em;
+    margin-bottom: 10px;
+}
+
+.rating-text {
+    font-size: 1.2em;
+    font-weight: 600;
+    color: #3A3D40;
+    margin-bottom: 8px;
+}
+
+.rating-description {
+    font-size: 0.9em;
+    color: #666;
+}
+
+/* Toggle List */
+.toggle-list {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.toggle-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 15px;
+}
+
+.toggle-info {
+    flex: 1;
+}
+
+.toggle-title {
+    font-size: 0.95em;
+    font-weight: 600;
+    color: #3A3D40;
+    margin-bottom: 4px;
+}
+
+.toggle-description {
+    font-size: 0.85em;
+    color: #666;
+}
+
+/* Toggle Switch */
+.toggle-switch {
+    position: relative;
+    display: inline-block;
+    width: 50px;
+    height: 28px;
+}
+
+.toggle-switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.toggle-slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #ccc;
+    transition: 0.3s;
+    border-radius: 28px;
+}
+
+.toggle-slider:before {
+    position: absolute;
+    content: "";
+    height: 20px;
+    width: 20px;
+    left: 4px;
+    bottom: 4px;
+    background-color: white;
+    transition: 0.3s;
+    border-radius: 50%;
+}
+
+input:checked + .toggle-slider {
+    background-color: #4CAF50;
+}
+
+input:checked + .toggle-slider:before {
+    transform: translateX(22px);
+}
+
+/* Action List */
+.action-list {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.action-item {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    padding: 15px 12px;
+    background: white;
+    border: none;
+    cursor: pointer;
+    transition: all 0.3s;
+    text-align: left;
+    font-size: 1em;
+    border-radius: 8px;
+}
+
+.action-item:hover {
+    background: #F2EBE1;
+}
+
+.action-item:active {
+    transform: scale(0.98);
+    background: #E8DFD0;
+}
+
+.action-icon {
+    font-size: 1.3em;
+}
+
+.action-text {
+    flex: 1;
+    color: #3A3D40;
+    font-weight: 500;
+}
+
+.action-arrow {
+    font-size: 1.5em;
+    color: #999;
+}
+
+/* Logout Button */
+.btn-logout {
+    width: 100%;
+    padding: 15px;
+    background: #f44336;
+    color: white;
+    border: none;
+    border-radius: 12px;
+    font-size: 1em;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.btn-logout:active {
+    transform: scale(0.98);
+}
+
+/* Save Section */
+.save-section {
+    position: fixed;
+    bottom: 70px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100%;
+    max-width: 480px;
+    padding: 15px 20px;
+    background: white;
+    box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
+    z-index: 99;
+    display: flex;
+    gap: 10px;
+}
+
+.btn-save {
+    flex: 2;
+    padding: 15px;
+    background: #1A3B5D;
+    color: white;
+    border: none;
+    border-radius: 12px;
+    font-size: 1em;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.btn-save:active {
+    transform: scale(0.98);
+}
+
+.btn-cancel {
+    flex: 1;
+    padding: 15px;
+    background: #e0e0e0;
+    color: #3A3D40;
+    border: none;
+    border-radius: 12px;
+    font-size: 1em;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.btn-cancel:active {
+    transform: scale(0.98);
+}
+
+/* Edit Mode Styles */
+body.edit-mode {
+    padding-bottom: 160px;
+}
+
+body.edit-mode .edit-btn {
+    background: rgba(255, 255, 255, 0.4);
+}
+
+/* ============================================
+   INTEGRACIÓN CON DASHBOARD
+   ============================================ */
+
+/* Ajustes para cuando el perfil usa DashboardShell */
+.perfil-content {
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+/* Botón de editar en el header */
+.edit-btn-header {
+  background: rgba(26, 59, 93, 0.1);
+  border: none;
+  color: #1A3B5D;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  cursor: pointer;
+  font-size: 1.2em;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s;
+}
+
+.edit-btn-header:hover {
+  background: rgba(26, 59, 93, 0.2);
+}
+
+.edit-btn-header:active {
+  transform: scale(0.95);
+}
+
+/* Quick Actions dentro del perfil */
+.perfil-content .quick-actions {
+  margin-bottom: 24px;
+}
+
+/* Ajustes de espaciado para el perfil dentro del dashboard */
+.perfil-content .profile-section:last-child {
+  margin-bottom: 0;
+}
+
+/* Ajuste del save-section cuando está dentro del dashboard */
+.save-section {
+  position: relative;
+  bottom: auto;
+  left: auto;
+  transform: none;
+  width: 100%;
+  max-width: 100%;
+  padding: 16px 0;
+  background: transparent;
+  box-shadow: none;
+  z-index: auto;
+  display: flex;
+  gap: 12px;
+  margin-top: 8px;
+}
+
+.save-section .btn-save,
+.save-section .btn-cancel {
+  flex: 1;
+  padding: 12px 20px;
+  border-radius: 10px;
+  font-weight: 600;
+}
+
+.save-section .btn-save {
+  background: #1A3B5D;
+  color: white;
+}
+
+.save-section .btn-save:hover {
+  background: #0F2A45;
+}
+
+.save-section .btn-cancel {
+  background: #f5f5f5;
+  color: #666;
+}
+
+.save-section .btn-cancel:hover {
+  background: #e8e8e8;
+}
+
+/* Responsive para integración */
+@media (max-width: 600px) {
+  .perfil-content .profile-header-card {
+    margin: 0 0 20px 0;
+    padding: 20px 16px;
+  }
+
+  .perfil-content .profile-section {
+    padding: 16px;
+  }
+
+  .edit-btn-header {
+    width: 36px;
+    height: 36px;
+    font-size: 1em;
+  }
+
+  .save-section {
+    flex-direction: column;
+  }
+}
+
+/* Eliminar el padding-bottom del body cuando usa DashboardShell */
+body.perfil-dashboard {
+  padding-bottom: 0;
+}
+
+/* Acciones del perfil propietario con el mismo lenguaje del perfil inquilino */
+.perfil-content .dashboard-page-header {
+    margin-bottom: 18px;
+}
+
+.perfil-content .dashboard-page-header h1 {
+    font-size: 1.6em;
+    margin: 0 0 4px;
+}
+
+.perfil-content .quick-actions {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 14px;
+    margin-bottom: 20px;
+}
+
+.perfil-content .action-card {
+    min-height: 92px;
+    padding: 16px;
+    border: 1px solid #E8DFD0;
+    border-radius: 15px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+}
+
+.perfil-content .action-card:hover {
+    border-color: #D8C7A6;
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.1);
+}
+
+.perfil-content .action-card.primary {
+    background: #1A3B5D;
+    border-color: #1A3B5D;
+}
+
+.perfil-content .action-icon {
+    width: 38px;
+    font-size: 1.7em;
+}
+
+.perfil-content .action-info h3 {
+    font-size: 0.98em;
+    margin-bottom: 3px;
+}
+
+.perfil-content .action-info p {
+    font-size: 0.8em;
+}
+
+@media (max-width: 700px) {
+    .perfil-content .quick-actions {
+        grid-template-columns: 1fr;
+    }
+
+    .perfil-content .action-card {
+        min-height: 76px;
+    }
+}
+
+/* Perfil dentro del shell compartido */
+.perfil-page {
+    max-width: 900px;
+}
+
+.perfil-page .page-header {
+    margin-bottom: 18px;
+}
+
+.perfil-page .profile-header-card {
+    margin: 0 0 20px;
+    border-radius: 15px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+}
+
+.perfil-page .profile-content {
+    padding: 0;
+}
+
+.perfil-page .profile-section {
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+}
+
+.perfil-page .profile-type-badge.inquilino {
+    background: #1A3B5D;
+}
+
+.perfil-page .save-section {
+    padding: 16px 0 0;
+}
+
+@media (max-width: 600px) {
+    .perfil-page .profile-header-card,
+    .perfil-page .profile-section {
+        margin-left: 0;
+        margin-right: 0;
+    }
+}

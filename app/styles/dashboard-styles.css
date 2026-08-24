@@ -1,0 +1,335 @@
+/* ============================================
+   CONTENIDO DEL DASHBOARD
+   (vive dentro de <DashboardShell>, no define
+   navegación — eso lo maneja app-shell.css)
+   ============================================ */
+
+.dashboard-content {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 28px 24px 40px;
+}
+
+/* Para el perfil - ancho más reducido */
+.dashboard-content.perfil-content {
+  max-width: 820px !important;
+}
+
+/* Encabezado de bienvenida (dentro del contenido, no del sidebar) */
+.dashboard-page-header {
+  margin-bottom: 24px;
+}
+
+.dashboard-page-header .greeting {
+  font-size: 0.9em;
+  color: #666;
+}
+
+.dashboard-page-header h1 {
+  font-size: 1.7em;
+  color: #3A3D40;
+  margin: 2px 0 8px;
+  font-weight: 700;
+}
+
+.dashboard-page-header .user-role {
+  font-size: 0.8em;
+  background: #FFFFFF;
+  color: #1A3B5D;
+  padding: 4px 16px;
+  border-radius: 20px;
+  display: inline-block;
+  font-weight: 600;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+}
+
+/* Stats Grid */
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 18px;
+  margin-bottom: 24px;
+}
+
+.stat-card {
+  background: #FFFFFF;
+  border-radius: 16px;
+  padding: 22px 18px;
+  text-align: center;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+  transition: all 0.3s;
+}
+
+.stat-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.12);
+}
+
+.stat-icon {
+  display: block;
+  font-size: 1.8em;
+  margin-bottom: 6px;
+}
+
+.stat-value {
+  display: block;
+  font-size: 1.9em;
+  font-weight: 700;
+  color: #8A7554;
+}
+
+.stat-label {
+  display: block;
+  font-size: 0.85em;
+  color: #666;
+  margin-top: 4px;
+  font-weight: 500;
+}
+
+/* Quick Actions */
+.quick-actions {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 18px;
+  margin-bottom: 30px;
+}
+
+.action-card {
+  background: #FFFFFF;
+  border: none;
+  border-radius: 16px;
+  padding: 22px 22px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  cursor: pointer;
+  transition: all 0.3s;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.06);
+  width: 100%;
+  text-align: left;
+}
+
+.action-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
+}
+
+.action-card:active {
+  transform: scale(0.98);
+}
+
+.action-card.primary {
+  background: #1A3B5D;
+  color: #FFFFFF;
+}
+
+.action-card.primary .action-info h3 {
+  color: #FFFFFF;
+}
+
+.action-card.primary .action-info p {
+  color: rgba(255, 255, 255, 0.85);
+}
+
+.action-icon {
+  font-size: 2em;
+  width: 50px;
+  text-align: center;
+  flex-shrink: 0;
+}
+
+.action-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.action-info h3 {
+  font-size: 1.05em;
+  margin-bottom: 4px;
+  color: #3A3D40;
+}
+
+.action-info p {
+  font-size: 0.85em;
+  color: #666;
+  margin: 0;
+}
+
+/* Recent Section */
+.recent-section {
+  margin-top: 4px;
+}
+
+.section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.section-header h3 {
+  font-size: 1.2em;
+  color: #3A3D40;
+}
+
+.view-all {
+  background: none;
+  border: none;
+  color: #1A3B5D;
+  font-weight: 600;
+  font-size: 0.9em;
+  cursor: pointer;
+  transition: all 0.3s;
+  padding: 8px 16px;
+  border-radius: 8px;
+}
+
+.view-all:hover {
+  background: rgba(26, 59, 93, 0.08);
+}
+
+.empty-recent {
+  text-align: center;
+  padding: 40px 20px;
+  background: #FFFFFF;
+  border-radius: 16px;
+  color: #999;
+}
+
+/* Recent Rooms */
+.recent-rooms {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 18px;
+}
+
+.recent-room-card {
+  background: #FFFFFF;
+  border-radius: 14px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.06);
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.recent-room-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.12);
+}
+
+.recent-room-card:active {
+  transform: scale(0.98);
+}
+
+.recent-room-card img {
+  width: 100%;
+  height: 150px;
+  object-fit: cover;
+  flex-shrink: 0;
+}
+
+.recent-room-info {
+  padding: 14px 16px;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.recent-room-info h4 {
+  font-size: 0.95em;
+  color: #3A3D40;
+  margin-bottom: 4px;
+  font-weight: 600;
+  flex: 1;
+}
+
+.recent-room-info .location {
+  font-size: 0.8em;
+  color: #666;
+  margin-bottom: 6px;
+}
+
+.recent-room-info .price {
+  font-size: 1.1em;
+  font-weight: 700;
+  color: #8A7554;
+  margin-top: auto;
+}
+
+/* ============================================
+   RESPONSIVE
+   ============================================ */
+
+/* Tablet */
+@media (max-width: 900px) {
+  .dashboard-content {
+    padding: 22px 20px 30px;
+  }
+
+  .quick-actions {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .quick-actions .action-card:first-child {
+    grid-column: span 2;
+  }
+}
+
+/* Móvil */
+@media (max-width: 600px) {
+  .dashboard-page-header h1 {
+    font-size: 1.4em;
+  }
+
+  .stats-grid {
+    gap: 10px;
+  }
+
+  .stat-card {
+    padding: 14px 8px;
+  }
+
+  .stat-value {
+    font-size: 1.4em;
+  }
+
+  .quick-actions {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+
+  .quick-actions .action-card:first-child {
+    grid-column: span 1;
+  }
+
+  .action-card {
+    padding: 16px 18px;
+  }
+
+  .recent-rooms {
+    grid-template-columns: 1fr;
+  }
+
+  .recent-room-card {
+    flex-direction: row;
+  }
+
+  .recent-room-card img {
+    width: 90px;
+    height: 90px;
+  }
+}
+
+/* Desktop grande: más aire */
+@media (min-width: 1300px) {
+  .dashboard-content {
+    padding: 36px 40px 50px;
+  }
+
+  .stats-grid,
+  .quick-actions {
+    gap: 22px;
+  }
+}

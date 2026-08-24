@@ -1,0 +1,224 @@
+/* ============================================
+   ADMIN DASHBOARD - ESTADÍSTICAS
+   ============================================ */
+
+.admin-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  min-height: 100vh;
+  background: #F2EBE1;
+}
+
+.admin-header {
+  background: #1A3B5D;
+  padding: 30px;
+  color: white;
+}
+
+.admin-header-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 4px;
+}
+
+.admin-header h1 {
+  font-size: 1.6em;
+  font-weight: 700;
+}
+
+.admin-header p {
+  font-size: 0.9em;
+  opacity: 0.9;
+}
+
+.admin-logout-btn {
+  background: rgba(255, 255, 255, 0.15);
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  color: white;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  font-size: 1.2em;
+  cursor: pointer;
+  transition: all 0.3s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.admin-logout-btn:hover {
+  background: rgba(255, 255, 255, 0.25);
+  transform: scale(1.05);
+}
+
+/* Stats grid */
+.admin-stats-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20px;
+  padding: 25px 30px;
+}
+
+.admin-stat-card {
+  background: white;
+  border-radius: 16px;
+  padding: 24px 18px;
+  text-align: center;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+  transition: all 0.3s;
+}
+
+.admin-stat-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.12);
+}
+
+.admin-stat-icon {
+  display: block;
+  font-size: 2em;
+  margin-bottom: 8px;
+}
+
+.admin-stat-value {
+  display: block;
+  font-size: 2em;
+  font-weight: 700;
+  color: #8A7554;
+}
+
+.admin-stat-label {
+  display: block;
+  font-size: 0.85em;
+  color: #666;
+  margin-top: 6px;
+  font-weight: 500;
+}
+
+/* Sección secundaria: desglose por rol / info extra */
+.admin-section {
+  padding: 10px 30px 30px;
+}
+
+.admin-section-title {
+  font-size: 1.15em;
+  color: #3A3D40;
+  margin-bottom: 16px;
+  font-weight: 700;
+}
+
+.admin-breakdown-card {
+  background: white;
+  border-radius: 16px;
+  padding: 20px 24px;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+  margin-bottom: 20px;
+}
+
+.admin-breakdown-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 0;
+  border-bottom: 1px solid #E8DFD0;
+}
+
+.admin-breakdown-row:last-child {
+  border-bottom: none;
+}
+
+.admin-breakdown-label {
+  color: #555;
+  font-weight: 500;
+}
+
+.admin-breakdown-value {
+  font-weight: 700;
+  color: #1A3B5D;
+}
+
+/* Acción rápida hacia gestión de usuarios */
+.admin-action-card {
+  background: white;
+  border: none;
+  border-radius: 16px;
+  padding: 20px 24px;
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  cursor: pointer;
+  transition: all 0.3s;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.06);
+  width: 100%;
+  text-align: left;
+}
+
+.admin-action-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
+}
+
+.admin-action-icon {
+  font-size: 2.2em;
+  width: 55px;
+  text-align: center;
+  flex-shrink: 0;
+}
+
+.admin-action-info h3 {
+  font-size: 1.1em;
+  margin-bottom: 4px;
+  color: #3A3D40;
+}
+
+.admin-action-info p {
+  font-size: 0.85em;
+  color: #666;
+  margin: 0;
+}
+
+/* ============================================
+   RESPONSIVE
+   ============================================ */
+
+@media (max-width: 768px) {
+  .admin-stats-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 14px;
+    padding: 20px;
+  }
+
+  .admin-section {
+    padding: 10px 20px 20px;
+  }
+
+  .admin-header {
+    padding: 24px 20px;
+  }
+}
+
+@media (max-width: 480px) {
+  .admin-stats-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+    padding: 16px;
+  }
+
+  .admin-stat-card {
+    padding: 16px 10px;
+  }
+
+  .admin-stat-value {
+    font-size: 1.5em;
+  }
+}
+
+@media (min-width: 1200px) {
+  .admin-stats-grid {
+    padding: 30px 40px;
+  }
+
+  .admin-section {
+    padding: 10px 40px 35px;
+  }
+}

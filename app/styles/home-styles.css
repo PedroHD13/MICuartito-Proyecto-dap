@@ -1,0 +1,185 @@
+/* ============================================
+   HOME / LANDING - SPLIT SCREEN
+   ============================================ */
+
+.home-container {
+  display: flex;
+  min-height: 100vh;
+  width: 100%;
+  overflow: hidden;
+}
+
+/* ---------- LADO IZQUIERDO (mensaje) ---------- */
+.home-left {
+  flex: 1;
+  max-width: 50%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  padding: 60px 80px;
+  background: white;
+  position: relative;
+}
+
+.home-logo {
+  position: absolute;
+  top: 40px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 320px;
+  margin-bottom: 0;
+}
+
+.home-title {
+  font-size: 2.8em;
+  font-weight: 800;
+  line-height: 1.1;
+  margin-bottom: 18px;
+  background: #1A3B5D;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.home-slogan {
+  font-size: 1.15em;
+  color: #555;
+  line-height: 1.5;
+  margin-bottom: 36px;
+  max-width: 440px;
+}
+
+.home-cta {
+  padding: 16px 40px;
+  background: #1A3B5D;
+  color: white;
+  border: none;
+  border-radius: 14px;
+  font-size: 1.1em;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.3s;
+  box-shadow: 0 8px 24px rgba(217, 118, 74, 0.35);
+}
+
+.home-cta:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 12px 30px rgba(217, 118, 74, 0.45);
+}
+
+.home-cta:active {
+  transform: scale(0.97);
+}
+
+.home-demo-info {
+  margin-top: 40px;
+  font-size: 0.85em;
+  color: #999;
+}
+
+.home-demo-info p {
+  margin: 3px 0;
+}
+
+/* ---------- LADO DERECHO (carrusel) ---------- */
+.home-right {
+  flex: 1;
+  max-width: 50%;
+  position: relative;
+  background: #1A3B5D;
+  overflow: hidden;
+}
+
+.carousel-slide {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  transition: opacity 1.2s ease-in-out;
+}
+
+.carousel-slide.active {
+  opacity: 1;
+}
+
+.carousel-slide img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Overlay sutil para que se lea bien si ponemos algo encima a futuro */
+.carousel-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, rgba(0,0,0,0.35), transparent 40%);
+}
+
+.carousel-dots {
+  position: absolute;
+  bottom: 30px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 10px;
+  z-index: 2;
+}
+
+.carousel-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.5);
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  transition: all 0.3s;
+}
+
+.carousel-dot.active {
+  background: white;
+  width: 28px;
+  border-radius: 5px;
+}
+
+/* ---------- LOADING ---------- */
+.home-loading {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  font-size: 1.2em;
+  color: #666;
+}
+
+/* ============================================
+   RESPONSIVE
+   ============================================ */
+@media (max-width: 900px) {
+  .home-container {
+    flex-direction: column;
+  }
+
+  .home-left,
+  .home-right {
+    max-width: 100%;
+  }
+
+  .home-right {
+    height: 40vh;
+    order: -1;
+  }
+
+  .home-left {
+    padding: 40px 30px;
+    align-items: center;
+    text-align: center;
+  }
+
+  .home-title {
+    font-size: 2em;
+  }
+
+  .home-slogan {
+    max-width: 100%;
+  }
+}
