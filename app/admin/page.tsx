@@ -6,19 +6,6 @@ import { useRouter } from 'next/navigation';
 import '../styles/admin-styles.css';
 import AppIcon from '../components/AppIcon';
 
-interface StoredUser {
-  id: number;
-  name: string;
-  username: string;
-  password: string;
-  role: 'inquilino' | 'propietario' | 'admin';
-}
-
-interface Room {
-  id: number;
-  [key: string]: any;
-}
-
 export default function AdminDashboardPage() {
   const router = useRouter();
   const { session, loading, logout } = useRequireAuth('admin');
@@ -29,17 +16,25 @@ export default function AdminDashboardPage() {
   const [totalCuartos, setTotalCuartos] = useState(0);
 
   useEffect(() => {
-    try {
-      const users: StoredUser[] = JSON.parse(localStorage.getItem('micuartito-users') || '[]');
-      setTotalUsuarios(users.length);
-      setTotalInquilinos(users.filter(u => u.role === 'inquilino').length);
-      setTotalPropietarios(users.filter(u => u.role === 'propietario').length);
+    const loadStats = async () => {
+      try {
+        const usersResponse = await fetch('/api/admin/usuarios');
+        const usersData = await usersResponse.json();
+        const users = usersData.users || [];
 
-      const cuartos: Room[] = JSON.parse(localStorage.getItem('cuartos') || '[]');
-      setTotalCuartos(cuartos.length);
-    } catch (error) {
-      console.error('Error leyendo datos para el dashboard admin:', error);
-    }
+        setTotalUsuarios(users.length);
+        setTotalInquilinos(users.filter((u: any) => u.role === 'inquilino').length);
+        setTotalPropietarios(users.filter((u: any) => u.role === 'propietario').length);
+
+        const cuartosResponse = await fetch('/api/cuartos?all=true');
+        const cuartosData = await cuartosResponse.json();
+        setTotalCuartos((cuartosData.rooms || []).length);
+      } catch (error) {
+        console.error('Error leyendo datos para el dashboard admin:', error);
+      }
+    };
+
+    loadStats();
   }, []);
 
   if (loading || !session) {
@@ -53,7 +48,6 @@ export default function AdminDashboardPage() {
 
   return (
     <div className="admin-container">
-      {/* Header */}
       <div className="admin-header">
         <div className="admin-header-top">
           <div>
@@ -66,7 +60,6 @@ export default function AdminDashboardPage() {
         </div>
       </div>
 
-      {/* Stats Grid */}
       <div className="admin-stats-grid">
         <div className="admin-stat-card">
           <span className="admin-stat-icon"><AppIcon name="userGroup" /></span>
@@ -90,7 +83,6 @@ export default function AdminDashboardPage() {
         </div>
       </div>
 
-      {/* Acceso rápido a gestión de usuarios */}
       <div className="admin-section">
         <div className="admin-section-title">Gestión</div>
         <button

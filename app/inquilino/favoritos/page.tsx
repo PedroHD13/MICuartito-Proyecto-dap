@@ -3,7 +3,6 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
 import { useRouter } from 'next/navigation';
 import { useRequireAuth } from '../../../useSession';
-import { useRooms } from '../../hooks/useRooms';
 import { useFavorites, FavoriteWithDate } from '../../hooks/useFavorites';
 import DashboardShell from '../../components/DashboardShell';
 import { Room } from '../../types';
@@ -13,12 +12,10 @@ import AppIcon, { AppIconName } from '../../components/AppIcon';
 export default function FavoritosPage() {
   const router = useRouter();
   const { session, loading, logout } = useRequireAuth('inquilino');
-  const { allRooms, refreshRooms } = useRooms();
-  const { 
-    favoriteIds, 
-    removeFavorite, 
+  const {
+    favoriteRoomsWithDate,
+    removeFavorite,
     clearFavorites,
-    getFavoriteRooms 
   } = useFavorites();
 
   const [favoriteRooms, setFavoriteRooms] = useState<FavoriteWithDate[]>([]);
@@ -26,8 +23,7 @@ export default function FavoritosPage() {
   const [selectedForCompare, setSelectedForCompare] = useState<number[]>([]);
   const [showCompareModal, setShowCompareModal] = useState(false);
   const [sortMenuOpen, setSortMenuOpen] = useState(false);
-  
-  // 🔧 Usar useRef para el elemento del DOM
+
   const compareResultRef = useRef<HTMLDivElement>(null);
 
   const sortFavorites = useCallback((sortType: 'recent' | 'price-asc' | 'price-desc') => {
@@ -48,16 +44,10 @@ export default function FavoritosPage() {
     });
   }, []);
 
-  // Cargar cuartos y favoritos
+  // Sincronizar cuando cambian los favoritos que vienen de la API
   useEffect(() => {
-    refreshRooms();
-  }, [refreshRooms]);
-
-  // Actualizar lista de favoritos cuando cambian los cuartos o los favoritos
-  useEffect(() => {
-    const rooms = getFavoriteRooms(allRooms);
-    setFavoriteRooms(rooms);
-  }, [allRooms, favoriteIds, getFavoriteRooms]);
+    setFavoriteRooms(favoriteRoomsWithDate);
+  }, [favoriteRoomsWithDate]);
 
   // Ordenar favoritos cuando cambia el criterio
   useEffect(() => {

@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
 import { useRequireAuth } from '../../../useSession';
 import EditUserModal, { StoredUser } from '../../components/EditUserModal';
@@ -17,18 +17,19 @@ export default function AdminUsuariosPage() {
   const [roleFilter, setRoleFilter] = useState<RoleFilter>('todos');
   const [editingUser, setEditingUser] = useState<StoredUser | null>(null);
 
-  const loadUsers = () => {
+  const loadUsers = useCallback(async () => {
     try {
-      const stored: StoredUser[] = JSON.parse(localStorage.getItem('micuartito-users') || '[]');
-      setUsers(stored);
+      const response = await fetch('/api/admin/usuarios');
+      const data = await response.json();
+      setUsers(data.users || []);
     } catch (error) {
       console.error('Error cargando usuarios:', error);
     }
-  };
+  }, []);
 
   useEffect(() => {
     loadUsers();
-  }, []);
+  }, [loadUsers]);
 
   if (loading || !session) {
     return null;
@@ -38,22 +39,54 @@ export default function AdminUsuariosPage() {
     ? users
     : users.filter(u => u.role === roleFilter);
 
-  const handleDelete = (userToDelete: StoredUser) => {
+  const handleDelete = async (userToDelete: StoredUser) => {
     const confirmed = window.confirm(
       `¿Seguro que querés eliminar a "${userToDelete.name}" (${userToDelete.username})? Esta acción no se puede deshacer.`
     );
     if (!confirmed) return;
 
-    const updated = users.filter(u => u.id !== userToDelete.id);
-    setUsers(updated);
-    localStorage.setItem('micuartito-users', JSON.stringify(updated));
+    try {
+      const response = await fetch(`/api/admin/usuarios/${userToDelete.id}`, {
+        method: 'DELETE',
+      });
+
+      if (!response.ok) {
+        alert('No se pudo eliminar el usuario.');
+        return;
+      }
+
+      await loadUsers();
+    } catch (error) {
+      console.error(error);
+      alert('Error de conexión con el servidor.');
+    }
   };
 
-  const handleSaveEdit = (updatedUser: StoredUser) => {
-    const updated = users.map(u => (u.id === updatedUser.id ? updatedUser : u));
-    setUsers(updated);
-    localStorage.setItem('micuartito-users', JSON.stringify(updated));
-    setEditingUser(null);
+  const handleSaveEdit = async (updatedUser: StoredUser) => {
+    try {
+      const response = await fetch(`/api/admin/usuarios/${updatedUser.id}`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          name: updatedUser.name,
+          username: updatedUser.username,
+          role: updatedUser.role,
+        }),
+      });
+
+      const result = await response.json();
+
+      if (!response.ok) {
+        alert(result.error || 'No se pudo actualizar el usuario.');
+        return;
+      }
+
+      await loadUsers();
+      setEditingUser(null);
+    } catch (error) {
+      console.error(error);
+      alert('Error de conexión con el servidor.');
+    }
   };
 
   const roleLabel = (role: string) => {
@@ -64,7 +97,6 @@ export default function AdminUsuariosPage() {
 
   return (
     <div className="admin-usuarios-container">
-      {/* Header */}
       <div className="admin-usuarios-header">
         <button className="admin-usuarios-back-btn" onClick={() => router.push('/admin')}>
           <AppIcon name="arrowLeft" />
@@ -75,7 +107,6 @@ export default function AdminUsuariosPage() {
         </div>
       </div>
 
-      {/* Filtro por rol */}
       <div className="admin-usuarios-filters">
         {(['todos', 'inquilino', 'propietario', 'admin'] as RoleFilter[]).map((r) => (
           <button
@@ -88,7 +119,6 @@ export default function AdminUsuariosPage() {
         ))}
       </div>
 
-      {/* Tabla */}
       <div className="admin-users-table-wrapper">
         {filteredUsers.length === 0 ? (
           <div className="admin-users-empty">No hay usuarios en esta categoría.</div>

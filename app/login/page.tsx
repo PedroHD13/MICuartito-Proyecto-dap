@@ -41,6 +41,171 @@ export default function LoginPage() {
 
   if (loading) {
     return <div className="home-loading">Cargando...</div>;
+  const { session, login, logout } = useSession();
+
+  const [activeTab, setActiveTab] = useState<"login" | "register">("login");
+  const [showRegisterPassword, setShowRegisterPassword] = useState(false);
+  const [showLoginPassword, setShowLoginPassword] = useState(false);
+
+  // Datos del registro
+  const [registerData, setRegisterData] = useState({
+    name: "",
+    username: "",
+    password: "",
+    role: "inquilino",
+  });
+
+  // Datos del login
+  const [loginData, setLoginData] = useState({
+    username: "",
+    password: "",
+  });
+
+  const [registerMessage, setRegisterMessage] = useState("");
+  const [loginMessage, setLoginMessage] = useState("");
+
+  // =========================
+  // REGISTRO
+  // =========================
+
+  const handleRegisterChange = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    const { name, value } = event.target;
+
+    setRegisterData((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+  };
+
+      const handleRegister = async (event: React.FormEvent<HTMLFormElement>) => {
+      event.preventDefault();
+
+      try {
+        const response = await fetch("/api/auth/register", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            name: registerData.name,
+            username: registerData.username,
+            password: registerData.password,
+            role: registerData.role,
+          }),
+        });
+
+        const data = await response.json();
+
+        if (!response.ok) {
+          setRegisterMessage(data.error || "No se pudo crear la cuenta.");
+          return;
+        }
+
+        setRegisterMessage("¡Cuenta creada correctamente!");
+
+        setRegisterData({
+          name: "",
+          username: "",
+          password: "",
+          role: "inquilino",
+        });
+      } catch (error) {
+        console.error(error);
+        setRegisterMessage("Error de conexión con el servidor.");
+      }
+    };
+
+  // =========================
+  // LOGIN (CON REDIRECCIÓN)
+  // =========================
+
+  const handleLoginChange = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    const { name, value } = event.target;
+
+    setLoginData((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+  };
+
+    const handleLogin = async (event: React.FormEvent<HTMLFormElement>) => {
+      event.preventDefault();
+
+      try {
+        const response = await fetch("/api/auth/login", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            username: loginData.username,
+            password: loginData.password,
+          }),
+        });
+
+        const data = await response.json();
+
+        if (!response.ok) {
+          setLoginMessage(data.error || "Usuario o contraseña incorrectos.");
+          return;
+        }
+
+        // ✅ Guardar sesión (igual que antes)
+        login({
+          username: data.user.username,
+          name: data.user.name,
+          role: data.user.role,
+        });
+
+        setLoginMessage("");
+        setLoginData({ username: "", password: "" });
+
+        // ✅ Redirigir según el rol
+        const roleRoutes: Record<string, string> = {
+          inquilino: "/inquilino",
+          propietario: "/propietario",
+          admin: "/admin",
+        };
+
+        router.push(roleRoutes[data.user.role] || "/");
+      } catch (error) {
+        console.error(error);
+        setLoginMessage("Error de conexión con el servidor.");
+      }
+    };
+
+  const handleLogout = () => {
+    logout();
+  };
+
+  const roleMessages: Record<string, string> = {
+    inquilino: "Has ingresado al perfil de Inquilino",
+    propietario: "Has ingresado al perfil de Propietario",
+    admin: "Has ingresado como Administrador",
+  };
+
+  // =========================
+  // PANTALLA PROVISIONAL (sesión activa)
+  // =========================
+
+  if (session) {
+    return (
+      <main>
+        <div id="session-screen">
+          <div className="login-container">
+            <h2>{roleMessages[session.role] || "Sesión iniciada"}</h2>
+            <p>Usuario: {session.username}</p>
+
+            <button
+              className="btn btn-primary"
+              onClick={handleLogout}
+            >
+              Cerrar sesión
+            </button>
+          </div>
+        </div>
+      </main>
+    );
   }
 
   return (

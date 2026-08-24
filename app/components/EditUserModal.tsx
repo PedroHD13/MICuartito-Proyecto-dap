@@ -7,7 +7,6 @@ export interface StoredUser {
   id: number;
   name: string;
   username: string;
-  password: string;
   role: 'inquilino' | 'propietario' | 'admin';
 }
 

@@ -1,81 +1,6 @@
 import { useState, useEffect, useCallback } from 'react';
 import { Room, RoomFilters } from '../types';
 
-// Cuartos de ejemplo (para demo)
-const SAMPLE_ROOMS: Room[] = [
-  {
-    id: 1,
-    title: "Cuarto amplio cerca UAGRM",
-    location: "Zona Norte, 3er Anillo",
-    price: 600,
-    type: "Privada",
-    bathroom: "privado",
-    furnished: true,
-    capacity: 1,
-    services: ["wifi", "agua", "luz"],
-    image: "https://via.placeholder.com/400x300/2563a8/ffffff?text=Cuarto+1"
-  },
-  {
-    id: 2,
-    title: "Habitación económica estudiantes",
-    location: "Centro, Equipetrol",
-    price: 400,
-    type: "Compartida",
-    bathroom: "compartido",
-    furnished: true,
-    capacity: 2,
-    services: ["agua", "luz", "gas"],
-    image: "https://via.placeholder.com/400x300/1A3B5D/ffffff?text=Cuarto+2"
-  },
-  {
-    id: 3,
-    title: "Cuarto con baño privado",
-    location: "Zona Este, Av. Alemana",
-    price: 750,
-    type: "Privada",
-    bathroom: "privado",
-    furnished: true,
-    capacity: 1,
-    services: ["wifi", "agua", "luz", "gas"],
-    image: "https://via.placeholder.com/400x300/2563a8/ffffff?text=Cuarto+3"
-  },
-  {
-    id: 4,
-    title: "Habitación amoblada centro",
-    location: "Centro, Plaza 24 de Septiembre",
-    price: 500,
-    type: "Privada",
-    bathroom: "compartido",
-    furnished: true,
-    capacity: 1,
-    services: ["wifi", "agua", "luz"],
-    image: "https://via.placeholder.com/400x300/1A3B5D/ffffff?text=Cuarto+4"
-  },
-  {
-    id: 5,
-    title: "Cuarto grande para pareja",
-    location: "Zona Sur, Urubó",
-    price: 900,
-    type: "Privada",
-    bathroom: "privado",
-    furnished: true,
-    capacity: 2,
-    services: ["wifi", "agua", "luz", "gas"],
-    image: "https://via.placeholder.com/400x300/2563a8/ffffff?text=Cuarto+5"
-  },
-  {
-    id: 6,
-    title: "Habitación estudiantes UV",
-    location: "Zona Oeste, cerca UV",
-    price: 350,
-    type: "Compartida",
-    bathroom: "compartido",
-    furnished: false,
-    capacity: 3,
-    services: ["agua", "luz"],
-    image: "https://via.placeholder.com/400x300/1A3B5D/ffffff?text=Cuarto+6"
-  }
-];
 
 export function useRooms() {
   const [allRooms, setAllRooms] = useState<Room[]>([]);
@@ -88,33 +13,27 @@ export function useRooms() {
     loadRooms();
   }, []);
 
-  const loadRooms = useCallback(() => {
-    // Cargar cuartos del localStorage
-    const storedRooms = JSON.parse(localStorage.getItem('cuartos') || '[]');
-    
-    // Convertir cuartos almacenados al formato Room
-    const convertedRooms: Room[] = storedRooms.map((room: any, index: number) => ({
-      id: 100 + index,
-      title: room.titulo || `Cuarto ${room.tipo || 'Privado'}`,
-      location: room.ubicacion || room.barrio || 'Ubicación por definir',
-      price: parseInt(room.precio) || 0,
-      type: room.tipo === 'compartida' ? 'Compartida' : 'Privada',
-      bathroom: room.servicios?.includes('baño privado') ? 'privado' : 'compartido',
-      furnished: room.servicios?.includes('muebles') || false,
-      capacity: parseInt(room.capacidad) || 1,
-      services: room.servicios || [],
-      image: room.fotos?.[0] || "https://via.placeholder.com/400x300/2563a8/ffffff?text=Cuarto",
-      active: room.active !== undefined ? room.active : true,
-      views: room.views || 0,
-      createdAt: room.createdAt || new Date().toISOString()
-    }));
+  const loadRooms = useCallback(async () => {
+    setLoading(true);
+    try {
+      const response = await fetch('/api/cuartos');
+      const data = await response.json();
+      const rooms: Room[] = data.rooms || [];
 
-    // Combinar cuartos de ejemplo con los almacenados
-    const all = [...SAMPLE_ROOMS, ...convertedRooms];
-    setAllRooms(all);
-    setFilteredRooms(all);
-    setLoading(false);
+      setAllRooms(rooms);
+      setFilteredRooms(rooms);
+    } catch (error) {
+      console.error('Error cargando cuartos:', error);
+      setAllRooms([]);
+      setFilteredRooms([]);
+    } finally {
+      setLoading(false);
+    }
   }, []);
+
+  useEffect(() => {
+    loadRooms();
+  }, [loadRooms]);
 
   // Aplicar filtros
   const applyFilters = useCallback((newFilters: RoomFilters) => {

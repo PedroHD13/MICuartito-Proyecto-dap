@@ -34,6 +34,7 @@ export default function PublicarCuarto() {
   const [titulo, setTitulo] = useState('');
   const [photos, setPhotos] = useState<string[]>([]);
   const [tipo, setTipo] = useState<'privada' | 'compartida'>('privada');
+  const [bano, setBano] = useState<'privado' | 'compartido'>('privado');
   const [capacidad, setCapacidad] = useState('');
   const [zona, setZona] = useState('');
   const [barrio, setBarrio] = useState('');
@@ -102,7 +103,7 @@ export default function PublicarCuarto() {
     }
   };
 
-  const publicarCuarto = () => {
+    const publicarCuarto = async () => {
     if (photos.length === 0) {
       alert('Debes agregar al menos una foto del cuarto');
       return;
@@ -130,6 +131,7 @@ export default function PublicarCuarto() {
       titulo: titulo || `Cuarto ${tipo === 'privada' ? 'Privado' : 'Compartido'}`,
       fotos: photos,
       tipo,
+      bano,
       capacidad,
       servicios,
       cercaDe,
@@ -138,23 +140,33 @@ export default function PublicarCuarto() {
       reglas,
       zona,
       barrio,
-      ubicacion,
       disponibilidad: disponibilidad === 'fecha' ? fecha : 'inmediata',
-      active: true,
-      views: 0,
-      createdAt: new Date().toISOString(),
       ownerUsername: session.username,
     };
 
-    const cuartos = JSON.parse(localStorage.getItem('cuartos') || '[]');
-    cuartos.push(data);
-    localStorage.setItem('cuartos', JSON.stringify(cuartos));
+    try {
+      const response = await fetch('/api/cuartos', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data),
+      });
 
-    alert(
-      `¡Cuarto publicado exitosamente!\n\nFotos: ${photos.length}\nTipo: ${tipo}\nUbicación: ${ubicacion}\nPrecio: Bs. ${precio}`
-    );
+      const result = await response.json();
 
-    router.push('/propietario');
+      if (!response.ok) {
+        alert(result.error || 'No se pudo publicar el cuarto.');
+        return;
+      }
+
+      alert(
+        `¡Cuarto publicado exitosamente!\n\nFotos: ${photos.length}\nTipo: ${tipo}\nUbicación: ${ubicacion}\nPrecio: Bs. ${precio}`
+      );
+
+      router.push('/propietario');
+    } catch (error) {
+      console.error(error);
+      alert('Error de conexión con el servidor.');
+    }
   };
 
   return (
@@ -261,6 +273,30 @@ export default function PublicarCuarto() {
                 <option value="4">4 personas</option>
                 <option value="5+">5 o más personas</option>
               </select>
+            </div>
+          </div>
+
+          {/* Tipo de Baño */}
+          <div className="section">
+            <div className="section-title">
+              <span className="section-icon"><AppIcon name="shower" /></span>
+              Tipo de Baño
+            </div>
+            <div className="options-group">
+              <button
+                type="button"
+                className={`option-btn ${bano === 'privado' ? 'selected' : ''}`}
+                onClick={() => setBano('privado')}
+              >
+                Privado
+              </button>
+              <button
+                type="button"
+                className={`option-btn ${bano === 'compartido' ? 'selected' : ''}`}
+                onClick={() => setBano('compartido')}
+              >
+                Compartido
+              </button>
             </div>
           </div>
 

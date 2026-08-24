@@ -23,18 +23,6 @@ interface NotificationPrefs {
   promos: boolean;
 }
 
-const PROFILE_DEFAULTS: Omit<ProfileData, 'name' | 'avatar'> = {
-  email: 'correo@ejemplo.com',
-  phone: '+591 71234567',
-  birthdate: '1990-01-01',
-  bio: 'Propietario con experiencia en alquiler de cuartos. Busco inquilinos responsables y respetuosos.',
-};
-
-const NOTIF_DEFAULTS: NotificationPrefs = {
-  newInterested: true,
-  messages: true,
-  promos: false,
-};
 
 const AVATAR_OPTIONS = ['P', 'C', 'D', 'H', 'M', 'U', 'C'];
 
@@ -44,36 +32,45 @@ export default function PerfilPropietario() {
 
   const [profileData, setProfileData] = useState<ProfileData | null>(null);
   const [originalProfileData, setOriginalProfileData] = useState<ProfileData | null>(null);
-  const [notifPrefs, setNotifPrefs] = useState<NotificationPrefs>(NOTIF_DEFAULTS);
+    const [notifPrefs, setNotifPrefs] = useState<NotificationPrefs>({
+    newInterested: true,
+    messages: true,
+    promos: false,
+  });
   const [isEditMode, setIsEditMode] = useState(false);
   const [myRoomsCount, setMyRoomsCount] = useState(0);
 
-  const profileKey = session ? `profileData_${session.username}` : '';
-  const notifKey = session ? `notifPrefs_${session.username}` : '';
-
-  useEffect(() => {
+    useEffect(() => {
     if (!session) return;
 
-    const savedProfile = JSON.parse(localStorage.getItem(profileKey) || '{}');
+    const loadProfile = async () => {
+      try {
+        const response = await fetch(`/api/perfil/${session.username}`);
+        const data = await response.json();
 
-    const loaded: ProfileData = {
-      name: savedProfile.name || session.name,
-      email: savedProfile.email || PROFILE_DEFAULTS.email,
-      phone: savedProfile.phone || PROFILE_DEFAULTS.phone,
-      birthdate: savedProfile.birthdate || PROFILE_DEFAULTS.birthdate,
-      bio: savedProfile.bio || PROFILE_DEFAULTS.bio,
-      avatar: savedProfile.avatar || session.name.charAt(0).toUpperCase(),
+        if (response.ok) {
+          setProfileData(data.profile);
+          setOriginalProfileData(data.profile);
+          setNotifPrefs(data.notifPrefs);
+        }
+      } catch (error) {
+        console.error('Error cargando perfil:', error);
+      }
     };
 
-    setProfileData(loaded);
-    setOriginalProfileData(loaded);
+    loadProfile();
 
-    const savedNotifs = JSON.parse(localStorage.getItem(notifKey) || '{}');
-    setNotifPrefs({ ...NOTIF_DEFAULTS, ...savedNotifs });
+    const loadRoomsCount = async () => {
+      try {
+        const response = await fetch(`/api/cuartos?owner=${session.username}`);
+        const data = await response.json();
+        setMyRoomsCount((data.rooms || []).length);
+      } catch (error) {
+        console.error('Error cargando cantidad de cuartos:', error);
+      }
+    };
 
-    const storedRooms = JSON.parse(localStorage.getItem('cuartos') || '[]');
-    setMyRoomsCount(storedRooms.length);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    loadRoomsCount();
   }, [session]);
 
   if (loading || !session || !profileData) {
@@ -102,7 +99,7 @@ export default function PerfilPropietario() {
     }
   };
 
-  const saveProfile = () => {
+  const saveProfile = async () => {
     if (!profileData) return;
 
     if (!profileData.name || !profileData.email) {
@@ -110,34 +107,58 @@ export default function PerfilPropietario() {
       return;
     }
 
-    localStorage.setItem(profileKey, JSON.stringify(profileData));
-    setOriginalProfileData(profileData);
-    setIsEditMode(false);
-    document.body.classList.remove('edit-mode');
+    try {
+      const response = await fetch(`/api/perfil/${session.username}`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(profileData),
+      });
 
-    alert('Perfil actualizado exitosamente');
+      if (!response.ok) {
+        alert('No se pudo actualizar el perfil.');
+        return;
+      }
+
+      setOriginalProfileData(profileData);
+      setIsEditMode(false);
+      document.body.classList.remove('edit-mode');
+      alert('Perfil actualizado exitosamente');
+    } catch (error) {
+      console.error(error);
+      alert('Error de conexión con el servidor.');
+    }
   };
 
-  const changeAvatar = () => {
+    const changeAvatar = async () => {
     const randomAvatar = AVATAR_OPTIONS[Math.floor(Math.random() * AVATAR_OPTIONS.length)];
 
-    setProfileData((prev) => {
-      if (!prev) return prev;
-      const updated = { ...prev, avatar: randomAvatar };
-      localStorage.setItem(profileKey, JSON.stringify(updated));
-      return updated;
-    });
-    setOriginalProfileData((prev) =>
-      prev ? { ...prev, avatar: randomAvatar } : prev
-    );
+    setProfileData((prev) => (prev ? { ...prev, avatar: randomAvatar } : prev));
+    setOriginalProfileData((prev) => (prev ? { ...prev, avatar: randomAvatar } : prev));
+
+    try {
+      await fetch(`/api/perfil/${session.username}`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ avatar: randomAvatar }),
+      });
+    } catch (error) {
+      console.error('Error guardando avatar:', error);
+    }
   };
 
-  const toggleNotif = (field: keyof NotificationPrefs) => {
-    setNotifPrefs((prev) => {
-      const updated = { ...prev, [field]: !prev[field] };
-      localStorage.setItem(notifKey, JSON.stringify(updated));
-      return updated;
-    });
+    const toggleNotif = async (field: keyof NotificationPrefs) => {
+    const newValue = !notifPrefs[field];
+    setNotifPrefs((prev) => ({ ...prev, [field]: newValue }));
+
+    try {
+      await fetch(`/api/perfil/${session.username}`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ [field]: newValue }),
+      });
+    } catch (error) {
+      console.error('Error guardando notificación:', error);
+    }
   };
 
   const handleLogout = () => {
