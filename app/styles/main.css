@@ -4,15 +4,16 @@
 
 :root {
   /* Paleta MiCuartito */
-  --color-navy: #1A3B5D;
-  --color-cream: #D8C7A6;
-  --color-beige: #F2EBE1;
-  --color-text: #3A3D40;
+  --color-navy: #051A2C;
+  --color-steel: #345063;
+  --color-slate: #ABB7C4;
+  --color-cream: #FDF0D9;
+  --color-peach: #FDC7A2;
   --color-white: #FFFFFF;
 
   /* Alias retrocompatibles usados en el resto de los estilos */
   --primary-blue: var(--color-navy);
-  --primary-accent: #8A7554;
+  --primary-accent: var(--color-peach);
   --gradient-main: var(--color-navy);
   --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.08);
   --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.12);
@@ -32,9 +33,9 @@
 
 body {
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  background: #F2EBE1;
+  background: var(--color-cream);
   min-height: 100vh;
-  color: #3A3D40;
+  color: var(--color-navy);
 }
 
 /* ============================================
@@ -177,7 +178,7 @@ body {
 
 .search-bar .search-icon {
   font-size: 1.2em;
-  color: #999;
+  color: var(--color-steel);
 }
 
 .search-bar input {
@@ -185,12 +186,12 @@ body {
   border: none;
   outline: none;
   font-size: 1em;
-  color: #3A3D40;
+  color: var(--color-navy);
   background: transparent;
 }
 
 .search-bar input::placeholder {
-  color: #aaa;
+  color: var(--color-slate);
 }
 
 /* Filtros */
@@ -203,7 +204,7 @@ body {
 
 .filter-btn {
   background: white;
-  border: 2px solid #e5e7eb;
+  border: 2px solid var(--color-slate);
   padding: 8px 18px;
   border-radius: 50px;
   font-size: 0.9em;
@@ -213,11 +214,11 @@ body {
   align-items: center;
   gap: 6px;
   font-weight: 500;
-  color: #4b5563;
+  color: var(--color-steel);
 }
 
 .filter-btn:hover {
-  border-color: var(--color-cream);
+  border-color: var(--color-peach);
   color: var(--primary-accent);
 }
 
@@ -252,7 +253,7 @@ body {
 
 .results-count {
   font-size: 0.95em;
-  color: #6b7280;
+  color: var(--color-steel);
 }
 
 .results-count strong {
@@ -262,7 +263,7 @@ body {
 
 .sort-btn {
   background: white;
-  border: 2px solid #e5e7eb;
+  border: 2px solid var(--color-slate);
   padding: 6px 14px;
   border-radius: var(--radius-sm);
   font-size: 0.85em;
@@ -306,7 +307,7 @@ body {
 .room-card .room-image {
   position: relative;
   height: 200px;
-  background: #e5e7eb;
+  background: var(--color-slate);
   overflow: hidden;
 }
 
@@ -320,7 +321,7 @@ body {
   position: absolute;
   bottom: 12px;
   left: 12px;
-  background: rgba(0, 0, 0, 0.75);
+  background: rgba(5, 26, 44, 0.75);
   color: white;
   padding: 4px 14px;
   border-radius: 50px;
@@ -352,7 +353,7 @@ body {
 }
 
 .room-card .room-image .favorite-btn.active {
-  background: #fee2e2;
+  background: var(--color-peach);
 }
 
 .room-card .room-info {
@@ -362,7 +363,7 @@ body {
 .room-card .room-info .room-title {
   font-size: 1.05em;
   font-weight: 700;
-  color: #3A3D40;
+  color: var(--color-navy);
   margin-bottom: 4px;
   display: -webkit-box;
   -webkit-line-clamp: 2;
@@ -372,7 +373,7 @@ body {
 
 .room-card .room-info .room-location {
   font-size: 0.85em;
-  color: #6b7280;
+  color: var(--color-steel);
   margin-bottom: 10px;
   display: flex;
   align-items: center;
@@ -387,11 +388,11 @@ body {
 }
 
 .room-card .room-info .room-features .feature {
-  background: #f3f4f6;
+  background: var(--color-cream);
   padding: 4px 12px;
   border-radius: 50px;
   font-size: 0.75em;
-  color: #4b5563;
+  color: var(--color-steel);
   display: flex;
   align-items: center;
   gap: 4px;
@@ -402,7 +403,7 @@ body {
   justify-content: space-between;
   align-items: center;
   padding-top: 12px;
-  border-top: 1px solid #f3f4f6;
+  border-top: 1px solid var(--color-cream);
 }
 
 .room-card .room-info .room-footer .room-price {
@@ -414,7 +415,7 @@ body {
 .room-card .room-info .room-footer .room-price span {
   font-size: 0.6em;
   font-weight: 400;
-  color: #9ca3af;
+  color: var(--color-slate);
 }
 
 .room-card .room-info .room-footer .contact-btn {
@@ -460,7 +461,7 @@ body {
 .favorite-card .favorite-header {
   position: relative;
   height: 180px;
-  background: #e5e7eb;
+  background: var(--color-slate);
   overflow: hidden;
 }
 
@@ -496,7 +497,7 @@ body {
   position: absolute;
   bottom: 10px;
   left: 10px;
-  background: rgba(0, 0, 0, 0.7);
+  background: rgba(5, 26, 44, 0.7);
   color: white;
   padding: 4px 12px;
   border-radius: 50px;
@@ -508,7 +509,7 @@ body {
   position: absolute;
   bottom: 10px;
   right: 10px;
-  background: rgba(0, 0, 0, 0.7);
+  background: rgba(5, 26, 44, 0.7);
   color: white;
   padding: 3px 10px;
   border-radius: 50px;
@@ -522,13 +523,13 @@ body {
 .favorite-card .favorite-body .favorite-title {
   font-size: 1em;
   font-weight: 700;
-  color: #3A3D40;
+  color: var(--color-navy);
   margin-bottom: 4px;
 }
 
 .favorite-card .favorite-body .favorite-location {
   font-size: 0.85em;
-  color: #6b7280;
+  color: var(--color-steel);
   margin-bottom: 10px;
 }
 
@@ -540,11 +541,11 @@ body {
 }
 
 .favorite-card .favorite-body .favorite-features .feature {
-  background: #f3f4f6;
+  background: var(--color-cream);
   padding: 3px 10px;
   border-radius: 50px;
   font-size: 0.75em;
-  color: #4b5563;
+  color: var(--color-steel);
 }
 
 .favorite-card .favorite-body .favorite-footer {
@@ -552,7 +553,7 @@ body {
   justify-content: space-between;
   align-items: center;
   padding-top: 12px;
-  border-top: 1px solid #f3f4f6;
+  border-top: 1px solid var(--color-cream);
 }
 
 .favorite-card .favorite-body .favorite-footer .price {
@@ -564,7 +565,7 @@ body {
 .favorite-card .favorite-body .favorite-footer .price span {
   font-size: 0.6em;
   font-weight: 400;
-  color: #9ca3af;
+  color: var(--color-slate);
 }
 
 .favorite-card .favorite-body .favorite-footer .actions {
@@ -587,8 +588,8 @@ body {
 }
 
 .favorite-card .favorite-body .favorite-footer .actions .btn-view {
-  background: #f3f4f6;
-  color: #4b5563;
+  background: var(--color-cream);
+  color: var(--color-steel);
 }
 
 .favorite-card .favorite-body .favorite-footer .actions .btn-contact {
@@ -636,7 +637,7 @@ body {
 
 .stat-box .stat-label {
   font-size: 0.75em;
-  color: #6b7280;
+  color: var(--color-steel);
   display: block;
   margin-top: 2px;
 }
