@@ -1,6 +1,7 @@
 'use client';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faWhatsapp } from '@fortawesome/free-brands-svg-icons';
 import {
   faArrowDown,
   faArrowLeft,
@@ -113,6 +114,7 @@ const icons = {
   user: faUser,
   userGroup: faUserGroup,
   wifi: faWifi,
+  whatsapp: faWhatsapp,
   xmark: faXmark,
 } satisfies Record<string, IconDefinition>;
 
