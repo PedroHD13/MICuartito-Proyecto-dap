@@ -90,6 +90,8 @@ export async function GET(
       return NextResponse.json({ error: 'Cuarto no encontrado.' }, { status: 404 });
     }
 
+  
+
     const c = result.rows[0];
 
     // Sumar una vista (fire-and-forget, no bloquea la respuesta)
@@ -120,13 +122,14 @@ export async function GET(
         type: c.tipo === 'compartida' ? 'Compartida' : 'Privada',
         bathroom: c.bano,
         capacity: c.capacidad,
+        active: c.activo,
         services: c.servicios || [],
         cercaDe: c.cerca_de || [],
         universidadCercana: c.universidad_cercana,
         reglas: c.reglas,
         disponibilidad: c.disponibilidad === 'fecha' ? c.fecha_disponible : 'Inmediata',
         images: fotos.length > 0 ? fotos : ['https://via.placeholder.com/400x300/2563a8/ffffff?text=Cuarto'],
-        views: c.vistas + 1, // reflejar la vista recién sumada
+        views: c.vistas + 1,
         owner: {
           name: c.owner_name,
           username: c.owner_username,

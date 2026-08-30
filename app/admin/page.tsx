@@ -95,7 +95,18 @@ export default function AdminDashboardPage() {
             <p>Ver, editar o eliminar cuentas registradas</p>
           </div>
         </button>
+        <button
+          className="admin-action-card"
+          onClick={() => router.push('/admin/cuartos')}
+        >
+          <span className="admin-action-icon"><AppIcon name="bed" /></span>
+          <div className="admin-action-info">
+            <h3>Gestionar Cuartos</h3>
+            <p>Ver, editar o eliminar publicaciones</p>
+          </div>
+        </button>
       </div>
+        
     </div>
   );
 }

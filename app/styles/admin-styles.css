@@ -153,6 +153,10 @@
   text-align: left;
 }
 
+.admin-action-card + .admin-action-card {
+  margin-top: 0.5cm;
+}
+
 .admin-action-card:hover {
   transform: translateY(-3px);
   box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
