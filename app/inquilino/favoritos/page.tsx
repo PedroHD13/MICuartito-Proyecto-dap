@@ -20,11 +20,8 @@ export default function FavoritosPage() {
 
   const [favoriteRooms, setFavoriteRooms] = useState<FavoriteWithDate[]>([]);
   const [sortBy, setSortBy] = useState<'recent' | 'price-asc' | 'price-desc'>('recent');
-  const [selectedForCompare, setSelectedForCompare] = useState<number[]>([]);
-  const [showCompareModal, setShowCompareModal] = useState(false);
   const [sortMenuOpen, setSortMenuOpen] = useState(false);
 
-  const compareResultRef = useRef<HTMLDivElement>(null);
 
   const sortFavorites = useCallback((sortType: 'recent' | 'price-asc' | 'price-desc') => {
     setFavoriteRooms(prev => {
@@ -70,30 +67,7 @@ export default function FavoritosPage() {
     if (confirm(`¿Eliminar todos tus ${favoriteRooms.length} favoritos?`)) {
       clearFavorites();
       setFavoriteRooms([]);
-      setSelectedForCompare([]);
     }
-  };
-
-  const handleToggleCompare = (roomId: number) => {
-    setSelectedForCompare(prev => {
-      if (prev.includes(roomId)) {
-        return prev.filter(id => id !== roomId);
-      } else {
-        if (prev.length >= 3) {
-          alert('⚠️ Solo puedes comparar hasta 3 cuartos a la vez');
-          return prev;
-        }
-        return [...prev, roomId];
-      }
-    });
-  };
-
-  const handleCompare = () => {
-    if (selectedForCompare.length < 2) {
-      alert('⚠️ Selecciona al menos 2 cuartos para comparar');
-      return;
-    }
-    setShowCompareModal(true);
   };
 
   const handleSortChange = (newSort: 'recent' | 'price-asc' | 'price-desc') => {
@@ -138,85 +112,9 @@ export default function FavoritosPage() {
     router.push(`/inquilino/cuarto/${room.id}`);
   };
 
-  // 🔧 Función para renderizar la tabla de comparación con return type explícito
-  const renderCompareTable = (): string => {
-    const selectedRooms = favoriteRooms.filter(r => selectedForCompare.includes(r.id));
-    
-    // Si no hay suficientes seleccionados, devolver un mensaje
-    if (selectedRooms.length < 2) {
-      return '<p style="text-align:center; color:#666;">Selecciona al menos 2 cuartos para comparar</p>';
-    }
+ 
 
-    const minPrice = Math.min(...selectedRooms.map(r => r.price));
-    
-    const headers = selectedRooms.map(r => 
-      `<th>${r.title.length > 18 ? r.title.substring(0,18)+'...' : r.title}</th>`
-    ).join('');
 
-    const rows = [
-      {
-        label: 'Precio/mes',
-        values: selectedRooms.map(r => 
-          `<td class="${r.price === minPrice ? 'highlight-best' : ''}">Bs. ${r.price}</td>`
-        )
-      },
-      {
-        label: 'Ubicación',
-        values: selectedRooms.map(r => `<td>${r.location}</td>`)
-      },
-      {
-        label: 'Baño',
-        values: selectedRooms.map(r => 
-          `<td>${r.bathroom === 'privado' ? 'Privado' : 'Compartido'}</td>`
-        )
-      },
-      {
-        label: 'Amoblado',
-        values: selectedRooms.map(r => 
-          `<td>${r.furnished ? 'Sí' : 'No'}</td>`
-        )
-      },
-      {
-        label: 'Capacidad',
-        values: selectedRooms.map(r => `<td>${r.capacity} persona(s)</td>`)
-      },
-      {
-        label: 'Servicios',
-        values: selectedRooms.map(r => `<td>${r.services.length} incluidos</td>`)
-      }
-    ];
-
-    const tableRows = rows.map(row =>
-      `<tr><td>${row.label}</td>${row.values.join('')}</tr>`
-    ).join('');
-
-    return `
-      <h3 style="text-align:center; color:#333; margin-bottom:15px; font-size:1em;">
-        Comparación lado a lado
-      </h3>
-      <div style="overflow-x:auto;">
-        <table class="compare-table">
-          <thead>
-            <tr>
-              <th>Característica</th>
-              ${headers}
-            </tr>
-          </thead>
-          <tbody>${tableRows}</tbody>
-        </table>
-      </div>
-      <p style="text-align:center; font-size:0.8em; color:#999; margin-top:10px;">
-        Precio en <span style="color:#2563a8; font-weight:700;">azul</span> = más económico
-      </p>
-    `;
-  };
-
-  // 🔧 Función para mostrar la comparación usando useRef
-  const handleShowComparison = () => {
-    if (compareResultRef.current) {
-      compareResultRef.current.innerHTML = renderCompareTable();
-    }
-  };
 
   return (
     <DashboardShell role="inquilino" userName={session.name} onLogout={handleLogout}>
@@ -322,15 +220,6 @@ export default function FavoritosPage() {
                         (e.target as HTMLImageElement).src = 'https://via.placeholder.com/400x300/2563a8/ffffff?text=Cuarto';
                       }}
                     />
-                    <div className="compare-select-wrapper">
-                      <input
-                        type="checkbox"
-                        className="compare-checkbox"
-                        checked={selectedForCompare.includes(room.id)}
-                        onChange={() => handleToggleCompare(room.id)}
-                        title="Seleccionar para comparar"
-                      />
-                    </div>
                     <button 
                       className="remove-favorite-btn" 
                       onClick={() => handleRemoveFavorite(room.id)}
@@ -366,72 +255,6 @@ export default function FavoritosPage() {
           </>
         )}
       </div>
-
-      {/* Botón Comparar Flotante */}
-      {totalFavorites >= 2 && (
-        <button 
-          className="compare-floating-btn" 
-          onClick={handleCompare}
-        >
-          <AppIcon name="listCheck" />
-          <span className="compare-btn-text">Comparar</span>
-          {selectedForCompare.length > 0 && (
-            <span className="compare-badge">{selectedForCompare.length}</span>
-          )}
-        </button>
-      )}
-
-      {/* Modal de Comparación */}
-      {showCompareModal && (
-        <div className="modal active" onClick={() => setShowCompareModal(false)}>
-          <div className="modal-content modal-large" onClick={(e) => e.stopPropagation()}>
-            <div className="modal-header">
-              <h2><AppIcon name="listCheck" /> Comparar Cuartos</h2>
-              <button className="close-modal" onClick={() => setShowCompareModal(false)} aria-label="Cerrar"><AppIcon name="xmark" /></button>
-            </div>
-            <div className="modal-body">
-              <div className="compare-grid">
-                {favoriteRooms.map(room => (
-                  <div 
-                    key={room.id} 
-                    className={`compare-item ${selectedForCompare.includes(room.id) ? 'selected' : ''}`}
-                    onClick={() => handleToggleCompare(room.id)}
-                  >
-                    <input
-                      type="checkbox"
-                      checked={selectedForCompare.includes(room.id)}
-                      onChange={() => {}}
-                      style={{ width: '22px', height: '22px', accentColor: '#2563a8' }}
-                    />
-                    <div>
-                      <div style={{ fontWeight: '700', color: '#333', marginBottom: '4px' }}>
-                        {room.title.length > 30 ? room.title.substring(0, 30) + '...' : room.title}
-                      </div>
-                      <div style={{ fontSize: '0.85em', color: '#666' }}><AppIcon name="building" /> {room.location}</div>
-                      <div style={{ fontSize: '1em', fontWeight: '700', color: '#8A7554', marginTop: '4px' }}>
-                        Bs. {room.price}/mes
-                      </div>
-                    </div>
-                  </div>
-                ))}
-              </div>
-
-              {selectedForCompare.length >= 2 && (
-                <button 
-                  className="btn-do-compare"
-                  onClick={handleShowComparison}
-                >
-                  <AppIcon name="listCheck" /> Comparar seleccionados
-                </button>
-              )}
-
-              {/* 🔧 Usar ref en lugar de getElementById */}
-              <div ref={compareResultRef} id="compare-result"></div>
-            </div>
-          </div>
-        </div>
-      )}
-
       </div>
     </DashboardShell>
   );
