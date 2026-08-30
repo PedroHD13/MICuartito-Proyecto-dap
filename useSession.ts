@@ -18,7 +18,7 @@ export function useSession() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const stored = localStorage.getItem(SESSION_KEY);
+    const stored = sessionStorage.getItem(SESSION_KEY);
     if (stored) {
       setSession(JSON.parse(stored));
     }
@@ -26,12 +26,12 @@ export function useSession() {
   }, []);
 
   const login = useCallback((newSession: Session) => {
-    localStorage.setItem(SESSION_KEY, JSON.stringify(newSession));
+    sessionStorage.setItem(SESSION_KEY, JSON.stringify(newSession));
     setSession(newSession);
   }, []);
 
   const logout = useCallback(() => {
-    localStorage.removeItem(SESSION_KEY);
+    sessionStorage.removeItem(SESSION_KEY);
     setSession(null);
   }, []);
 
