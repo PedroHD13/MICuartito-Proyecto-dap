@@ -60,22 +60,12 @@ export default function BuscarPage() {
     applyFilters({ ...filters, sortBy: newSort });
   };
 
-  const handleViewDetail = (room: Room) => {
-    alert(`Detalles del Cuarto:\n\n` +
-      `${room.title}\n` +
-      `${room.location}\n\n` +
-      `Precio: Bs. ${room.price}/mes\n` +
-      `Tipo: ${room.type}\n` +
-      `Capacidad: ${room.capacity} persona(s)\n` +
-      `Baño: ${room.bathroom === 'privado' ? 'Privado' : 'Compartido'}\n` +
-      `${room.furnished ? 'Amoblado\n' : ''}\n` +
-      `Servicios: ${room.services.join(', ')}\n\n` +
-      `(Próximamente: pantalla de detalles completa)`
-    );
+    const handleViewDetail = (room: Room) => {
+    router.push(`/inquilino/cuarto/${room.id}`);
   };
 
-  const handleContact = (room: Room) => {
-    router.push('/contacto-whatsapp');
+    const handleContact = (room: Room) => {
+    router.push(`/inquilino/cuarto/${room.id}`);
   };
 
   const handleApplyFilters = (newFilters: RoomFilters) => {

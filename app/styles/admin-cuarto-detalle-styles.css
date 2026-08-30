@@ -1,0 +1,219 @@
+/* ============================================
+   ADMIN - DETALLE Y EDICIÓN DE CUARTO
+   ============================================ */
+
+.admin-detalle-page {
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 24px 20px;
+}
+
+.admin-detalle-back-btn {
+  background: white;
+  border: 2px solid #e5e7eb;
+  padding: 10px 18px;
+  border-radius: 12px;
+  font-size: 0.9em;
+  font-weight: 600;
+  color: #3A3D40;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 20px;
+  transition: all 0.3s;
+}
+
+.admin-detalle-back-btn:hover {
+  border-color: #1A3B5D;
+  color: #1A3B5D;
+}
+
+.admin-detalle-loading {
+  text-align: center;
+  padding: 60px 20px;
+  color: #666;
+}
+
+.admin-detalle-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+}
+
+/* Columna info */
+.admin-detalle-info {
+  background: white;
+  border-radius: 20px;
+  padding: 24px;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
+}
+
+.admin-detalle-image {
+  width: 100%;
+  height: 220px;
+  object-fit: cover;
+  border-radius: 14px;
+  margin-bottom: 16px;
+}
+
+.admin-detalle-info h1 {
+  font-size: 1.3em;
+  color: #1A3B5D;
+  margin-bottom: 6px;
+}
+
+.admin-detalle-location {
+  color: #666;
+  font-size: 0.9em;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 20px;
+}
+
+.admin-detalle-owner {
+  margin-bottom: 16px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.admin-detalle-owner:last-child {
+  border-bottom: none;
+  margin-bottom: 0;
+  padding-bottom: 0;
+}
+
+.admin-detalle-owner .label {
+  font-size: 0.8em;
+  color: #999;
+  margin-bottom: 4px;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+.admin-detalle-owner .value {
+  color: #3A3D40;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+/* Columna edición */
+.admin-detalle-edit {
+  background: white;
+  border-radius: 20px;
+  padding: 24px;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
+  align-self: start;
+}
+
+.admin-detalle-edit h3 {
+  font-size: 1.1em;
+  color: #1A3B5D;
+  margin-bottom: 20px;
+}
+
+.admin-edit-field {
+  margin-bottom: 18px;
+}
+
+.admin-edit-field label {
+  display: block;
+  margin-bottom: 8px;
+  font-size: 0.9em;
+  font-weight: 600;
+  color: #555;
+}
+
+.admin-edit-field select,
+.admin-edit-field input {
+  width: 100%;
+  padding: 11px 14px;
+  border: 2px solid #e5e7eb;
+  border-radius: 10px;
+  font-size: 0.95em;
+  outline: none;
+  transition: all 0.2s;
+}
+
+.admin-edit-field select:focus,
+.admin-edit-field input:focus {
+  border-color: #B85D3E;
+}
+
+.admin-edit-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.admin-toggle-btn {
+  padding: 8px 20px;
+  border: none;
+  border-radius: 50px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.admin-toggle-btn.activo {
+  background: #d1fae5;
+  color: #059669;
+}
+
+.admin-toggle-btn.pausado {
+  background: #fee2e2;
+  color: #dc2626;
+}
+
+.admin-edit-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 24px;
+}
+
+.admin-btn-save {
+  padding: 14px;
+  background: linear-gradient(135deg, #1A3B5D 0%, #B85D3E 100%);
+  color: white;
+  border: none;
+  border-radius: 12px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.admin-btn-save:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+}
+
+.admin-btn-delete-full {
+  padding: 14px;
+  background: white;
+  color: #dc2626;
+  border: 2px solid #fee2e2;
+  border-radius: 12px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.admin-btn-delete-full:hover {
+  background: #dc2626;
+  color: white;
+  border-color: #dc2626;
+}
+
+/* ============================================
+   RESPONSIVE
+   ============================================ */
+
+@media (max-width: 768px) {
+  .admin-detalle-grid {
+    grid-template-columns: 1fr;
+  }
+}

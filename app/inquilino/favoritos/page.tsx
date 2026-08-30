@@ -133,22 +133,9 @@ export default function FavoritosPage() {
 
   const goToSearch = () => router.push('/inquilino/buscar');
 
-  // Vista de detalle
-  const handleViewDetail = (room: Room) => {
-    alert(`Detalles del Cuarto:\n\n` +
-      `${room.title}\n` +
-      `${room.location}\n\n` +
-      `Precio: Bs. ${room.price}/mes\n` +
-      `Tipo: ${room.type}\n` +
-      `Capacidad: ${room.capacity} persona(s)\n` +
-      `Baño: ${room.bathroom === 'privado' ? 'Privado' : 'Compartido'}\n` +
-      `${room.furnished ? 'Amoblado\n' : ''}\n` +
-      `Servicios: ${room.services.join(', ')}`
-    );
-  };
 
   const handleContact = (room: Room) => {
-    router.push('/contacto-whatsapp');
+    router.push(`/inquilino/cuarto/${room.id}`);
   };
 
   // 🔧 Función para renderizar la tabla de comparación con return type explícito
@@ -367,9 +354,6 @@ export default function FavoritosPage() {
                         Bs. {room.price}<span>/mes</span>
                       </div>
                       <div className="favorite-actions">
-                        <button className="action-btn btn-view" onClick={() => handleViewDetail(room)}>
-                          <AppIcon name="eye" /> Ver
-                        </button>
                         <button className="action-btn btn-contact" onClick={() => handleContact(room)}>
                           <AppIcon name="envelope" /> Contactar
                         </button>

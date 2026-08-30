@@ -68,3 +68,77 @@ export async function DELETE(
     return NextResponse.json({ error: 'Error del servidor.' }, { status: 500 });
   }
 }
+
+export async function GET(
+  request: Request,
+  context: { params: Promise<{ id: string }> }
+) {
+  try {
+    const { id } = await context.params;
+
+    const result = await pool.query(
+      `SELECT c.*, u.nombre AS owner_name, u.username AS owner_username,
+              p.telefono AS owner_phone
+       FROM cuartos c
+       JOIN usuarios u ON u.id = c.propietario_id
+       LEFT JOIN perfiles p ON p.usuario_id = u.id
+       WHERE c.id = $1`,
+      [id]
+    );
+
+    if (result.rows.length === 0) {
+      return NextResponse.json({ error: 'Cuarto no encontrado.' }, { status: 404 });
+    }
+
+  
+
+    const c = result.rows[0];
+
+    // Sumar una vista (fire-and-forget, no bloquea la respuesta)
+    pool.query('UPDATE cuartos SET vistas = vistas + 1 WHERE id = $1', [id]).catch(console.error);
+
+    const imagenesResult = await pool.query(
+      'SELECT url FROM cuarto_imagenes WHERE cuarto_id = $1 ORDER BY orden ASC',
+      [id]
+    );
+    const fotos = imagenesResult.rows.map((row) => row.url);
+
+    const ZONA_LABELS: Record<string, string> = {
+      norte: 'Zona Norte',
+      sur: 'Zona Sur',
+      este: 'Zona Este',
+      oeste: 'Zona Oeste',
+      centro: 'Centro',
+    };
+    const zonaLabel = ZONA_LABELS[c.zona] || c.zona;
+    const location = c.barrio ? `${zonaLabel}, ${c.barrio}` : zonaLabel;
+
+    return NextResponse.json({
+      room: {
+        id: c.id,
+        title: c.titulo,
+        location,
+        price: Number(c.precio),
+        type: c.tipo === 'compartida' ? 'Compartida' : 'Privada',
+        bathroom: c.bano,
+        capacity: c.capacidad,
+        active: c.activo,
+        services: c.servicios || [],
+        cercaDe: c.cerca_de || [],
+        universidadCercana: c.universidad_cercana,
+        reglas: c.reglas,
+        disponibilidad: c.disponibilidad === 'fecha' ? c.fecha_disponible : 'Inmediata',
+        images: fotos.length > 0 ? fotos : ['https://via.placeholder.com/400x300/2563a8/ffffff?text=Cuarto'],
+        views: c.vistas + 1,
+        owner: {
+          name: c.owner_name,
+          username: c.owner_username,
+          phone: c.owner_phone || null,
+        },
+      },
+    });
+  } catch (error) {
+    console.error(error);
+    return NextResponse.json({ error: 'Error del servidor.' }, { status: 500 });
+  }
+}
