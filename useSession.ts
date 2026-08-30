@@ -11,27 +11,48 @@ export interface Session {
   role: Role;
 }
 
+interface StoredSession extends Session {
+  expiresAt: number;
+}
+
 const SESSION_KEY = "micuartito-session";
+const SESSION_DURATION_MS = 2 * 60 * 60 * 1000; // 2 horas
+
+function isExpired(stored: StoredSession): boolean {
+  return Date.now() > stored.expiresAt;
+}
 
 export function useSession() {
   const [session, setSession] = useState<Session | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const stored = sessionStorage.getItem(SESSION_KEY);
+    const stored = localStorage.getItem(SESSION_KEY);
     if (stored) {
-      setSession(JSON.parse(stored));
+      const parsed: StoredSession = JSON.parse(stored);
+
+      if (isExpired(parsed)) {
+        // Sesión vencida: la borramos y no la cargamos
+        localStorage.removeItem(SESSION_KEY);
+        setSession(null);
+      } else {
+        setSession(parsed);
+      }
     }
     setLoading(false);
   }, []);
 
   const login = useCallback((newSession: Session) => {
-    sessionStorage.setItem(SESSION_KEY, JSON.stringify(newSession));
-    setSession(newSession);
+    const sessionWithExpiry: StoredSession = {
+      ...newSession,
+      expiresAt: Date.now() + SESSION_DURATION_MS,
+    };
+    localStorage.setItem(SESSION_KEY, JSON.stringify(sessionWithExpiry));
+    setSession(sessionWithExpiry);
   }, []);
 
   const logout = useCallback(() => {
-    sessionStorage.removeItem(SESSION_KEY);
+    localStorage.removeItem(SESSION_KEY);
     setSession(null);
   }, []);
 
