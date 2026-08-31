@@ -1,12 +1,33 @@
 import { NextResponse } from 'next/server';
 import pool from '../../../../lib/db';
+import { getServerSession } from '../../../../lib/session';
+async function checkCuartoAccess(id: string): Promise<NextResponse | null> {
+  const session = await getServerSession();
+  if (!session) {
+    return NextResponse.json({ error: 'No autenticado.' }, { status: 401 });
+  }
+  if (session.role === 'admin') return null;
 
+  const ownerCheck = await pool.query(
+    `SELECT u.username FROM cuartos c JOIN usuarios u ON u.id = c.propietario_id WHERE c.id = $1`,
+    [id]
+  );
+  if (ownerCheck.rows.length === 0) {
+    return NextResponse.json({ error: 'Cuarto no encontrado.' }, { status: 404 });
+  }
+  if (session.role !== 'propietario' || ownerCheck.rows[0].username !== session.username) {
+    return NextResponse.json({ error: 'No tenés permiso para modificar este cuarto.' }, { status: 403 });
+  }
+  return null;
+}
 export async function PATCH(
   request: Request,
   context: { params: Promise<{ id: string }> }
 ) {
   try {
     const { id } = await context.params; // 👈 el cambio clave
+        const accessError = await checkCuartoAccess(id);
+    if (accessError) return accessError;
     const body = await request.json();
 
     const allowedFields: Record<string, string> = {
@@ -56,6 +77,8 @@ export async function DELETE(
 ) {
   try {
     const { id } = await context.params; // 👈 el cambio clave
+        const accessError = await checkCuartoAccess(id);
+    if (accessError) return accessError;
     const result = await pool.query('DELETE FROM cuartos WHERE id = $1 RETURNING id', [id]);
 
     if (result.rows.length === 0) {

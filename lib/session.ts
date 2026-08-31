@@ -1,3 +1,4 @@
+import { cookies } from "next/headers";
 import crypto from "crypto";
 
 const SESSION_SECRET = process.env.SESSION_SECRET || "dev-secret-cambiar-en-produccion";
@@ -42,4 +43,9 @@ export function verifySessionToken(token: string | undefined): ServerSession | n
   } catch {
     return null;
   }
+}
+export async function getServerSession(): Promise<ServerSession | null> {
+  const store = await cookies();
+  const token = store.get(SESSION_COOKIE)?.value;
+  return verifySessionToken(token);
 }
