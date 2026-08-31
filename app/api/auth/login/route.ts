@@ -1,3 +1,4 @@
+import { createSessionToken, SESSION_COOKIE } from '../../../../lib/session';
 import { NextResponse } from 'next/server';
 import bcrypt from 'bcrypt';
 import pool from '../../../../lib/db';
@@ -22,7 +23,9 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: 'Usuario o contraseña incorrectos.' }, { status: 401 });
     }
 
-    return NextResponse.json({
+        const token = createSessionToken(user.username, user.rol);
+
+    const response = NextResponse.json({
       success: true,
       user: {
         username: user.username,
@@ -30,6 +33,16 @@ export async function POST(request: Request) {
         role: user.rol,
       },
     });
+
+    response.cookies.set(SESSION_COOKIE, token, {
+      httpOnly: true,
+      sameSite: 'lax',
+      secure: process.env.NODE_ENV === 'production',
+      maxAge: 2 * 60 * 60, // 2 horas en segundos
+      path: '/',
+    });
+
+    return response;
   } catch (error) {
     console.error(error);
     return NextResponse.json({ error: 'Error del servidor.' }, { status: 500 });

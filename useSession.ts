@@ -27,13 +27,13 @@ export function useSession() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const stored = localStorage.getItem(SESSION_KEY);
+    const stored = sessionStorage.getItem(SESSION_KEY);
     if (stored) {
       const parsed: StoredSession = JSON.parse(stored);
 
       if (isExpired(parsed)) {
         // Sesión vencida: la borramos y no la cargamos
-        localStorage.removeItem(SESSION_KEY);
+        sessionStorage.removeItem(SESSION_KEY);
         setSession(null);
       } else {
         setSession(parsed);
@@ -47,13 +47,14 @@ export function useSession() {
       ...newSession,
       expiresAt: Date.now() + SESSION_DURATION_MS,
     };
-    localStorage.setItem(SESSION_KEY, JSON.stringify(sessionWithExpiry));
+    sessionStorage.setItem(SESSION_KEY, JSON.stringify(sessionWithExpiry));
     setSession(sessionWithExpiry);
   }, []);
 
-  const logout = useCallback(() => {
-    localStorage.removeItem(SESSION_KEY);
+   const logout = useCallback(() => {
+    sessionStorage.removeItem(SESSION_KEY);
     setSession(null);
+    fetch("/api/auth/logout", { method: "POST" }).catch(() => {});
   }, []);
 
   return { session, loading, login, logout };
